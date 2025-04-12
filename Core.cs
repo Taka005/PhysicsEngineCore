@@ -1,0 +1,5 @@
+﻿namespace PhysicsEngineCore{
+    class Core{
+
+    }
+}
