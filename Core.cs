@@ -6,7 +6,7 @@ namespace PhysicsEngineCore{
         private int pps;
         private double gravity;
         private double friction;
-        private static readonly double CORRECTION_NUMBER = 0.000001d;
+        private static readonly double CORRECTION_NUMBER = 0.00000001d;
         private static readonly double ROTATION_STRENGTH = 50d;
         private static readonly double MAX_ROTATION = 500d;
 
