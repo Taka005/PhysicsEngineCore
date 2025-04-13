@@ -5,8 +5,10 @@ namespace PhysicsEngineCore{
     class Core{
         private int pps;
         private float gravity;
+        private float friction;
         private static readonly float CORRECTION_NUMBER = 0.000001f;
         private static readonly float ROTATION_STRENGTH = 50f;
+        private static readonly float MAX_ROTATION = 500f;
 
         protected void SolvePosition(Entity source, Entity target){
             float totalMass = source.invMass + target.invMass;
@@ -41,6 +43,42 @@ namespace PhysicsEngineCore{
             }
         }
 
+        protected void SolveGroundPosition(Entity entity,IGround ground){
+            if(entity.mass == 0) return;
+
+            Vector2 position = ground.SolvePosition(entity.position);
+
+            Vector2 difference = position - entity.position;
+            float distance = difference.Length();
+            if(distance > entity.radius + ground.thickness/2) return;
+
+            float move = (distance - (entity.radius + ground.thickness/2)) / (distance * entity.invMass + CORRECTION_NUMBER) * entity.stiffness;
+            Vector2 correction = difference * move;
+
+            entity.position += correction * entity.invMass;
+
+            float angle = -difference.X * entity.velocity.Y + difference.X * entity.velocity.X;
+
+            float rotate = (float)(Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
+
+            if(angle > 0){
+                entity.rotateSpeed -= rotate / ROTATION_STRENGTH;
+            }else if(angle < 0){
+                entity.rotateSpeed += rotate / ROTATION_STRENGTH;
+            }
+        }
+
+        protected void SolveSpeed(Entity entity){
+            float coefficient = entity.mass * entity.radius * this.friction;
+
+            entity.velocity -= entity.velocity * coefficient * (1 / this.pps);
+            entity.rotateSpeed -= entity.rotateSpeed * coefficient * (1 / this.pps);
+
+            if(Math.Abs(entity.rotateSpeed) > MAX_ROTATION){
+                entity.rotateSpeed = Math.Sign(entity.rotateSpeed) * MAX_ROTATION;
+            }
+        }
+
         protected void UpdateSpeed(Entity entity){
             entity.velocity.X = (entity.position.X - entity.previousPosition.X)/(1/this.pps);
             entity.velocity.Y = (entity.position.Y - entity.previousPosition.Y)/(1/this.pps);
@@ -60,5 +98,5 @@ namespace PhysicsEngineCore{
         protected void UpdateRotate(Entity entity){
             entity.rotate += entity.rotateSpeed * (1/this.pps);
         }
-}
+    }
 }
