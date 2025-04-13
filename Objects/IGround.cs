@@ -1,9 +1,13 @@
-﻿namespace PhysicsEngineCore.Objects{
+﻿using System.Numerics;
+
+namespace PhysicsEngineCore.Objects{
     interface IGround{
         public string name { get; }
 
         public string type { get; }
 
-        public (float posX, float posY) solvePosition(float posX, float posY);
+        public Vector2 solvePosition(Vector2 position);
+
+        public IGround clone();
     }
 }

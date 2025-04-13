@@ -3,6 +3,7 @@
 namespace PhysicsEngineCore{
     public class Engine{
         private int pps;
+        private int gravity;
         private bool isStarted = false;
         private bool isTrackingMode = false;
         private bool isDebugMode = false;
@@ -12,8 +13,9 @@ namespace PhysicsEngineCore{
         private int trackingCount = 0;
         private int trackingLimit;
 
-        public Engine(int pps, float playBackSpeed, float trackingInterval, int trackingLimit){
+        public Engine(int pps, int gravity, float playBackSpeed, float trackingInterval, int trackingLimit){
             this.pps = pps;
+            this.gravity = gravity;
             this.playBackSpeed = checkPlayBackSpeedValue(playBackSpeed);
             this.trackingInterval = checkTrackingIntervalValue(trackingInterval);
             this.trackingLimit = checkTrackingLimitValue(trackingLimit);
@@ -54,8 +56,6 @@ namespace PhysicsEngineCore{
         private void loop(Object state){
 
         }
-
-        
 
         private static float checkPlayBackSpeedValue(float playBackSpeed){
             if(playBackSpeed < 0) throw new Exception("再生速度(playBackSpeed)は0以上に設定する必要があります");
