@@ -6,9 +6,9 @@ namespace PhysicsEngineCore{
         private int pps;
         private double gravity;
         private double friction;
-        private static readonly double CORRECTION_NUMBER = 0.000001f;
-        private static readonly double ROTATION_STRENGTH = 50f;
-        private static readonly double MAX_ROTATION = 500f;
+        private static readonly double CORRECTION_NUMBER = 0.000001d;
+        private static readonly double ROTATION_STRENGTH = 50d;
+        private static readonly double MAX_ROTATION = 500d;
 
         protected void SolvePosition(Entity source, Entity target){
             double totalMass = source.invMass + target.invMass;
