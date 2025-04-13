@@ -1,8 +1,8 @@
-﻿using System.Numerics;
+﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     interface IGround{
-        float thickness { get; set; }
+        double thickness { get; set; }
 
         Vector2 SolvePosition(Vector2 position);
 

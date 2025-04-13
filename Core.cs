@@ -1,17 +1,17 @@
-﻿using System.Numerics;
+﻿using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore{
     class Core{
         private int pps;
-        private float gravity;
-        private float friction;
-        private static readonly float CORRECTION_NUMBER = 0.000001f;
-        private static readonly float ROTATION_STRENGTH = 50f;
-        private static readonly float MAX_ROTATION = 500f;
+        private double gravity;
+        private double friction;
+        private static readonly double CORRECTION_NUMBER = 0.000001f;
+        private static readonly double ROTATION_STRENGTH = 50f;
+        private static readonly double MAX_ROTATION = 500f;
 
         protected void SolvePosition(Entity source, Entity target){
-            float totalMass = source.invMass + target.invMass;
+            double totalMass = source.invMass + target.invMass;
             if(totalMass == 0) return;
 
             Vector2 difference = target.position - source.position;
@@ -21,18 +21,18 @@ namespace PhysicsEngineCore{
                 Math.Abs(difference.Y) >= source.radius + target.radius
             ) return;
 
-            float distance = difference.Length();
+            double distance = difference.Length();
             if(distance > source.radius + target.radius) return;
 
-            float move = (distance - (source.radius + target.radius)) / (distance * totalMass + CORRECTION_NUMBER) * source.stiffness;
+            double move = (distance - (source.radius + target.radius)) / (distance * totalMass + CORRECTION_NUMBER) * source.stiffness;
             Vector2 correction = difference * move;
 
             source.position += correction * source.invMass;
             target.position -= correction * target.invMass;
 
-            float angle = -difference.X * source.velocity.Y + difference.X * source.velocity.X;
+            double angle = -difference.X * source.velocity.Y + difference.X * source.velocity.X;
 
-            float rotate = (float)(Math.Acos(Vector2.Dot(difference,source.velocity) / (distance * source.velocity.Length())) * (180 / Math.PI));
+            double rotate = (Math.Acos(Vector2.Dot(difference,source.velocity) / (distance * source.velocity.Length())) * (180 / Math.PI));
 
             if(angle > 0){
                 source.rotateSpeed -= rotate / ROTATION_STRENGTH;
@@ -49,17 +49,17 @@ namespace PhysicsEngineCore{
             Vector2 position = ground.SolvePosition(entity.position);
 
             Vector2 difference = position - entity.position;
-            float distance = difference.Length();
+            double distance = difference.Length();
             if(distance > entity.radius + ground.thickness/2) return;
 
-            float move = (distance - (entity.radius + ground.thickness/2)) / (distance * entity.invMass + CORRECTION_NUMBER) * entity.stiffness;
+            double move = (distance - (entity.radius + ground.thickness/2)) / (distance * entity.invMass + CORRECTION_NUMBER) * entity.stiffness;
             Vector2 correction = difference * move;
 
             entity.position += correction * entity.invMass;
 
-            float angle = -difference.X * entity.velocity.Y + difference.X * entity.velocity.X;
+            double angle = -difference.X * entity.velocity.Y + difference.X * entity.velocity.X;
 
-            float rotate = (float)(Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
+            double rotate = (Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
 
             if(angle > 0){
                 entity.rotateSpeed -= rotate / ROTATION_STRENGTH;
@@ -69,7 +69,7 @@ namespace PhysicsEngineCore{
         }
 
         protected void SolveSpeed(Entity entity){
-            float coefficient = entity.mass * entity.radius * this.friction;
+            double coefficient = entity.mass * entity.radius * this.friction;
 
             entity.velocity -= entity.velocity * coefficient * (1 / this.pps);
             entity.rotateSpeed -= entity.rotateSpeed * coefficient * (1 / this.pps);
