@@ -3,8 +3,10 @@ using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore{
     class Core{
+        private int pps;
+        private float gravity;
         private static readonly float CORRECTION_NUMBER = 0.000001f;
-        private static readonly float ROTATION_STRENGTH = 50;
+        private static readonly float ROTATION_STRENGTH = 50f;
 
         protected void solvePosition(Entity source, Entity target){
             float totalMass = source.invMass + target.invMass;
@@ -38,5 +40,25 @@ namespace PhysicsEngineCore{
                 target.rotateSpeed -= rotate / ROTATION_STRENGTH;
             }
         }
-    }
+
+        protected void updateSpeed(Entity entity){
+            entity.velocity.X = (entity.position.X - entity.previousPosition.X)/(1/this.pps);
+            entity.velocity.Y = (entity.position.Y - entity.previousPosition.Y)/(1/this.pps);
+
+            if(entity.mass != 0){
+                entity.velocity.Y += this.gravity * (1/this.pps);
+            }
+        }
+
+        protected void updatePosition(Entity entity){
+            entity.savePosition();
+
+            entity.position.X += entity.velocity.X * (1/this.pps);
+            entity.position.Y += entity.velocity.Y * (1/this.pps);
+        }
+
+        protected void updateRotate(Entity entity){
+            entity.rotate += entity.rotateSpeed * (1/this.pps);
+        }
+}
 }
