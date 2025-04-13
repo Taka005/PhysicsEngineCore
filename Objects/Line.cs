@@ -2,19 +2,27 @@
 
 namespace PhysicsEngineCore.Objects{
     class Line: IGround{
-        public string name;
-        public string type = "line";
+        public readonly string name;
+        public readonly string type = "line";
         public string color;
         public Vector2 start;
         public Vector2 end;
-        public float thickness;
+        private float _thickness;
 
         public Line(string name, string color, float startX, float startY, float endX, float endY, float thickness){
             this.name = name;
             this.color = color;
             this.start = new Vector2(startX, startY);
             this.end = new Vector2(endX, endY);
-            this.thickness = thickness; 
+            this._thickness = CheckThicknessValue(thickness); 
+        }
+        public float thickness{
+            get{
+                return this._thickness;
+            }
+            set{
+                this._thickness = CheckThicknessValue(value);
+            }
         }
 
         public float lenght{
@@ -23,12 +31,12 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
-        public IGround clone(){
+        public IGround Clone(){
             return new Line(this.name, this.color, this.start.X, this.start.Y, this.end.X, this.end.Y, this.thickness);
         }
 
-        public Vector2 solvePosition(Vector2 position){
-            float flag = ((position.X - this.start.X) * (this.end.X - this.start.X) + (position.Y - this.start.Y) * (this.end.Y - this.start.Y)) / (float)Math.Pow(lenght,2);
+        public Vector2 SolvePosition(Vector2 position){
+            float flag = ((position.X - this.start.X) * (this.end.X - this.start.X) + (position.Y - this.start.Y) * (this.end.Y - this.start.Y)) / (float)Math.Pow(this.lenght,2);
 
             if(flag <= 0){
                 return this.start;
@@ -40,6 +48,12 @@ namespace PhysicsEngineCore.Objects{
 
                 return new Vector2(crossX, crossY);
             }
+        }
+
+        private static float CheckThicknessValue(float thickness){
+            if(thickness < 0) throw new Exception("厚さ(thickness)は0以上に設定する必要があります");
+
+            return thickness;
         }
     }
 }

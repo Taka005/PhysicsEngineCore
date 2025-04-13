@@ -8,7 +8,7 @@ namespace PhysicsEngineCore{
         private static readonly float CORRECTION_NUMBER = 0.000001f;
         private static readonly float ROTATION_STRENGTH = 50f;
 
-        protected void solvePosition(Entity source, Entity target){
+        protected void SolvePosition(Entity source, Entity target){
             float totalMass = source.invMass + target.invMass;
             if(totalMass == 0) return;
 
@@ -41,7 +41,7 @@ namespace PhysicsEngineCore{
             }
         }
 
-        protected void updateSpeed(Entity entity){
+        protected void UpdateSpeed(Entity entity){
             entity.velocity.X = (entity.position.X - entity.previousPosition.X)/(1/this.pps);
             entity.velocity.Y = (entity.position.Y - entity.previousPosition.Y)/(1/this.pps);
 
@@ -50,14 +50,14 @@ namespace PhysicsEngineCore{
             }
         }
 
-        protected void updatePosition(Entity entity){
-            entity.savePosition();
+        protected void UpdatePosition(Entity entity){
+            entity.SavePosition();
 
             entity.position.X += entity.velocity.X * (1/this.pps);
             entity.position.Y += entity.velocity.Y * (1/this.pps);
         }
 
-        protected void updateRotate(Entity entity){
+        protected void UpdateRotate(Entity entity){
             entity.rotate += entity.rotateSpeed * (1/this.pps);
         }
 }

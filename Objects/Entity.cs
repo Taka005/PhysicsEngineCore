@@ -11,7 +11,7 @@ namespace PhysicsEngineCore.Objects{
         public float rotateSpeed = rotateSpeed;
         public float radius = radius;
         public float mass = mass;
-        private float _stiffness = checkStiffnessValue(stiffness);
+        private float _stiffness = CheckStiffnessValue(stiffness);
         public string parentName = parentName;
         public Target[] targets = targets;
 
@@ -20,7 +20,7 @@ namespace PhysicsEngineCore.Objects{
                 return _stiffness;
             }
             set{
-                _stiffness = checkStiffnessValue(value);
+                _stiffness = CheckStiffnessValue(value);
             }
         }
 
@@ -38,11 +38,11 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
-        public void savePosition(){
+        public void SavePosition(){
             this.previousPosition = this.position;
         }
 
-        private static float checkStiffnessValue(float stiffness){
+        private static float CheckStiffnessValue(float stiffness){
             if(stiffness < 0|| stiffness >= 1) throw new Exception("剛性(stiffness)は0以上1以下に設定する必要があります");
 
             return stiffness;

@@ -2,12 +2,10 @@
 
 namespace PhysicsEngineCore.Objects{
     interface IGround{
-        public string name { get; }
+        float thickness { get; set; }
 
-        public string type { get; }
+        Vector2 SolvePosition(Vector2 position);
 
-        public Vector2 solvePosition(Vector2 position);
-
-        public IGround clone();
+        IGround Clone();
     }
 }
