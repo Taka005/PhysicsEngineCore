@@ -11,7 +11,7 @@ namespace PhysicsEngineCore.Objects{
         public double _radius = CheckRadiusValue(radius);
         public double _mass = CheckMassValue(mass);
         private double _stiffness = CheckStiffnessValue(stiffness);
-        public ConnectionManager ConnectionManager = new ConnectionManager(targets);
+        public ConnectionManager connection = new ConnectionManager(targets);
         public string parentName = parentName;
 
         public double radius{

@@ -74,8 +74,31 @@ namespace PhysicsEngineCore{
             }
         }
 
-        protected void SolveConnection(Entity entity,List<Target> targets){
+        protected void SolveConnection(Entity entity, Target target){
+            double totalMass = entity.invMass + target.entity.invMass;
+            if(totalMass == 0) return;
 
+            Vector2 difference = target.entity.position - entity.position;
+
+            double distance = difference.Length();
+
+            double move = (distance - target.distance) / (distance * totalMass + CORRECTION_NUMBER) * target.stiffness;
+            Vector2 correction = difference * move;
+
+            entity.position += correction * entity.invMass;
+            target.entity.position -= correction * target.entity.invMass;
+
+            double angle = -difference.X * entity.velocity.Y + difference.X * entity.velocity.X;
+
+            double rotateAngle = (Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
+
+            if(angle > 0){
+                entity.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
+                target.entity.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
+            }else if(angle < 0){
+                entity.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
+                target.entity.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
+            }
         }
 
         protected void SolveSpeed(Entity entity){
