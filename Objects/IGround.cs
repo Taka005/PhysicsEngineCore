@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    interface IGround{
+    public interface IGround{
         double thickness { get; set; }
 
         Vector2 SolvePosition(Vector2 position);

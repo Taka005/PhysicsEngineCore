@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore.Utils{
-    class ConnectionManager{
+    public class ConnectionManager{
         public List<Target> targets = [];
 
         public Target? Get(string entityName){

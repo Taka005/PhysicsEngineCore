@@ -2,10 +2,10 @@
 using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore{
-    class Core{
-        private int pps;
-        private double gravity;
-        private double friction;
+    public class Core{
+        public int pps;
+        public double gravity;
+        public double friction;
         private static readonly double CORRECTION_NUMBER = 0.00000001d;
         private static readonly double ROTATION_STRENGTH = 50d;
         private static readonly double MAX_ROTATION = 500d;
@@ -38,14 +38,14 @@ namespace PhysicsEngineCore{
 
             double angle = -difference.X * source.velocity.Y + difference.X * source.velocity.X;
 
-            double rotate = (Math.Acos(Vector2.Dot(difference,source.velocity) / (distance * source.velocity.Length())) * (180 / Math.PI));
+            double rotateAngle = (Math.Acos(Vector2.Dot(difference,source.velocity) / (distance * source.velocity.Length())) * (180 / Math.PI));
 
             if(angle > 0){
-                source.rotateSpeed -= rotate / ROTATION_STRENGTH;
-                target.rotateSpeed += rotate / ROTATION_STRENGTH;
+                source.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
+                target.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
             }else if(angle < 0){
-                source.rotateSpeed += rotate / ROTATION_STRENGTH;
-                target.rotateSpeed -= rotate / ROTATION_STRENGTH;
+                source.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
+                target.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
             }
         }
 
@@ -65,12 +65,12 @@ namespace PhysicsEngineCore{
 
             double angle = -difference.X * entity.velocity.Y + difference.X * entity.velocity.X;
 
-            double rotate = (Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
+            double rotateAngle = (Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
 
             if(angle > 0){
-                entity.rotateSpeed -= rotate / ROTATION_STRENGTH;
+                entity.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
             }else if(angle < 0){
-                entity.rotateSpeed += rotate / ROTATION_STRENGTH;
+                entity.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
             }
         }
 

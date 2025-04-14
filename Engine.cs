@@ -1,9 +1,7 @@
 ﻿using System.Threading;
 
 namespace PhysicsEngineCore{
-    public class Engine{
-        private int pps;
-        private int gravity;
+    public class Engine: Core{
         private bool isStarted = false;
         private bool isTrackingMode = false;
         private bool isDebugMode = false;
@@ -13,9 +11,7 @@ namespace PhysicsEngineCore{
         private int trackingCount = 0;
         private int trackingLimit;
 
-        public Engine(int pps, int gravity, float playBackSpeed, float trackingInterval, int trackingLimit){
-            this.pps = pps;
-            this.gravity = gravity;
+        public Engine(int pps, double gravity, double friction, float playBackSpeed, float trackingInterval, int trackingLimit): base(pps, gravity, friction){
             this.playBackSpeed = CheckPlayBackSpeedValue(playBackSpeed);
             this.trackingInterval = CheckTrackingIntervalValue(trackingInterval);
             this.trackingLimit = CheckTrackingLimitValue(trackingLimit);

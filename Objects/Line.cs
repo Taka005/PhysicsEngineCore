@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    class Line: IGround{
+    public class Line: IGround{
         public readonly string name;
         public readonly string type = "line";
         public string color;

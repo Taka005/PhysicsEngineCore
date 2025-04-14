@@ -1,5 +1,5 @@
 ﻿namespace PhysicsEngineCore.Utils{
-    class IdGenerator{
+    public class IdGenerator{
         private static readonly string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         private static readonly Random random = new Random();
 
