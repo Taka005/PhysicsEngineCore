@@ -1,8 +1,8 @@
 ﻿using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore.Utils{
-    public class ConnectionManager{
-        public List<Target> targets = [];
+    public class ConnectionManager(List<Target>? targets){
+        public List<Target> targets = targets ?? [];
 
         public Target? Get(string entityName){
             return this.targets.FirstOrDefault(target => target.entity.name == entityName);

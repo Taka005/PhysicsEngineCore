@@ -166,7 +166,7 @@
             return $"({this.X:0.###}, {this.Y:0.###})";
         }
 
-        public override bool Equals(object obj){
+        public override bool Equals(object? obj){
             if(obj is Vector2 vector){
                 return this == vector;
             }

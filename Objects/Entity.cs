@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    public class Entity(string name, double posX, double posY, double velocityX, double velocityY, double rotateAngle, double rotateSpeed, double radius, double mass, double stiffness, string parentName){
+    public class Entity(string name, double posX, double posY, double velocityX, double velocityY, double rotateAngle, double rotateSpeed, double radius, double mass, double stiffness, string parentName, List<Target>? targets){
         public readonly string name = name;
         public Vector2 position = new Vector2(posX, posY);
         public Vector2 previousPosition = new Vector2(posX, posY);
@@ -11,6 +11,7 @@ namespace PhysicsEngineCore.Objects{
         public double _radius = CheckRadiusValue(radius);
         public double _mass = CheckMassValue(mass);
         private double _stiffness = CheckStiffnessValue(stiffness);
+        public ConnectionManager ConnectionManager = new ConnectionManager(targets);
         public string parentName = parentName;
 
         public double radius{
@@ -59,7 +60,7 @@ namespace PhysicsEngineCore.Objects{
         }
 
         private static double CheckStiffnessValue(double stiffness){
-            if(stiffness < 0|| stiffness >= 1) throw new Exception("剛性(stiffness)は0以上1以下に設定する必要があります");
+            if(stiffness < 0|| stiffness >= 1) throw new Exception("剛性(stiffness)は0超過かつ1以下に設定する必要があります");
 
             return stiffness;
         }

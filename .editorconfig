@@ -5,3 +5,6 @@ dotnet_style_coalesce_expression = false
 
 # IDE0290: プライマリ コンストラクターの使用
 csharp_style_prefer_primary_constructors = false
+
+# IDE0251: メンバーを 'readonly' にする
+csharp_style_prefer_readonly_struct_member = false

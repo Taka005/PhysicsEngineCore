@@ -74,6 +74,10 @@ namespace PhysicsEngineCore{
             }
         }
 
+        protected void SolveConnection(Entity entity,List<Target> targets){
+
+        }
+
         protected void SolveSpeed(Entity entity){
             double coefficient = entity.mass * entity.radius * this.friction;
 
