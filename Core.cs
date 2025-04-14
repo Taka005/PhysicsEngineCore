@@ -10,6 +10,12 @@ namespace PhysicsEngineCore{
         private static readonly double ROTATION_STRENGTH = 50d;
         private static readonly double MAX_ROTATION = 500d;
 
+        public Core(int pps, double gravity, double friction){
+            this.pps = pps;
+            this.gravity = gravity;
+            this.friction = friction;
+        }
+
         protected void SolvePosition(Entity source, Entity target){
             double totalMass = source.invMass + target.invMass;
             if(totalMass == 0) return;
@@ -96,7 +102,7 @@ namespace PhysicsEngineCore{
         }
 
         protected void UpdateRotate(Entity entity){
-            entity.rotate += entity.rotateSpeed * (1/this.pps);
+            entity.rotateAngle += entity.rotateSpeed * (1/this.pps);
         }
     }
 }

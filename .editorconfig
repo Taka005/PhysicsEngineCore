@@ -1,0 +1,7 @@
+﻿[*.{cs,vb}]
+
+# IDE0270: coalesce 式を使用します
+dotnet_style_coalesce_expression = false
+
+# IDE0290: プライマリ コンストラクターの使用
+csharp_style_prefer_primary_constructors = false
