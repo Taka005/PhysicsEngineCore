@@ -1,20 +1,18 @@
 ﻿using PhysicsEngineCore.Utils;
-using static System.Formats.Asn1.AsnWriter;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PhysicsEngineCore.Objects{
     class Curve: IGround{
         public readonly string name;
-        public readonly string type = "line";
+        public readonly string type = "curve";
         public string color;
-        public Vector2 start;
-        public Vector2 middle;
-        public Vector2 center;
-        public Vector2 end;
-        public double radius;
+        public readonly Vector2 start;
+        public readonly Vector2 middle;
+        public readonly Vector2 center;
+        public readonly Vector2 end;
+        public readonly double radius;
         private double _thickness;
 
-        public Curve(string name, string color, double startX, double startY, double middleX, double middleY, double endX, double endY, double thickness) {
+        public Curve(string name, string color, double startX, double startY, double middleX, double middleY, double endX, double endY, double thickness){
             this.name = name;
             this.color = color;
             this.start = new Vector2(startX, startY);
@@ -41,11 +39,43 @@ namespace PhysicsEngineCore.Objects{
                 this._thickness = CheckThicknessValue(value);
             }
         }
-        public Vector2 SolvePosition(){
 
+        public IGround Clone(){
+            return new Curve(this.name, this.color, this.start.X, this.start.Y, this.middle.X, this.middle.Y, this.end.X, this.end.Y, this.thickness);
         }
 
-        private bool isAngleBetween(double angle, double start, double end, bool clockwise){
+        public Vector2 SolvePosition(Vector2 position){
+            Vector2 difference = position - this.center;
+
+            double distance = difference.Length();
+            if(distance == 0) return this.start;
+
+            double scale = this.radius / distance;
+
+            Vector2 cross = this.center + difference * scale;
+
+            double startAngle = NormalizeAngle(Math.Atan2(this.start.Y - this.center.Y, this.start.X - this.center.X));
+            double midAngle = NormalizeAngle(Math.Atan2(this.middle.Y - this.center.Y, this.middle.X - this.center.X));
+            double endAngle = NormalizeAngle(Math.Atan2(this.end.Y - this.center.Y, this.end.X - this.center.X));
+            double crossAngle = NormalizeAngle(Math.Atan2(cross.Y - this.center.Y, cross.X - this.center.X));
+
+            bool clockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
+
+            if(!IsAngleBetween(crossAngle, startAngle, endAngle, clockwise)){
+                double startDistance = Vector2.DistanceSquared(this.start, position);
+                double endDistance = Vector2.DistanceSquared(this.end, position);
+
+                if(startDistance < endDistance){
+                    return this.start;
+                }else{
+                    return this.end;
+                }
+            }
+
+            return cross;
+        }
+
+        private static bool IsAngleBetween(double angle, double start, double end, bool clockwise){
             if(clockwise){
                 return (angle >= start&&angle <= end)||(start > end&&(angle >= start||angle <= end));
             }else{
@@ -53,11 +83,11 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
-        private double normalizeAngle(double angle){
+        private static double NormalizeAngle(double angle){
             return (angle + 2 * Math.PI) % (2 * Math.PI);
         }
 
-        private static double CheckThicknessValue(double thickness) {
+        private static double CheckThicknessValue(double thickness){
             if(thickness < 0) throw new Exception("厚さ(thickness)は0以上に設定する必要があります");
 
             return thickness;
