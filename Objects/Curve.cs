@@ -5,11 +5,11 @@ namespace PhysicsEngineCore.Objects{
         public readonly string name;
         public readonly string type = "curve";
         public string color;
-        public readonly Vector2 start;
-        public readonly Vector2 middle;
-        public readonly Vector2 center;
-        public readonly Vector2 end;
-        public readonly double radius;
+        public Vector2 start;
+        public Vector2 middle;
+        public Vector2 center;
+        public Vector2 end;
+        public double radius;
         private double _thickness;
 
         public Curve(string name, string color, double startX, double startY, double middleX, double middleY, double endX, double endY, double thickness){
