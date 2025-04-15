@@ -1,5 +1,7 @@
-﻿namespace PhysicsEngineCore.Objects{
-    class Circle{
+﻿using PhysicsEngineCore.Utils;
+
+namespace PhysicsEngineCore.Objects{
+    public class Circle: BaseObject{
         public readonly string type = "circle";
         public readonly string name;
         public double radius;
@@ -7,5 +9,13 @@
         public double stiffness;
         public string color;
 
+        public Circle(string type, string name, double posX, double posY, double radius, double mass, double stiffness, string color, List<Entity>? entities): base(entities){
+            this.type = type;
+            this.name = name;
+            this.radius = radius;
+            this.mass = mass;
+            this.stiffness = stiffness;
+            this.color = color;
+        }
     }
 }

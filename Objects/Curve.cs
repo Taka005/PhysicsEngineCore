@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    class Curve: IGround{
+    public class Curve: IGround{
         public readonly string name;
         public readonly string type = "curve";
         public string color;
