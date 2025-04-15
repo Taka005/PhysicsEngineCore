@@ -9,13 +9,19 @@ namespace PhysicsEngineCore.Objects{
         public double stiffness;
         public string color;
 
-        public Circle(string type, string name, double posX, double posY, double radius, double mass, double stiffness, string color, List<Entity>? entities): base(entities){
+        public Circle(string type, string name, double posX, double posY, double radius, double mass, double stiffness, string color, double velocityX, double velocityY, List<Entity>? entities = null): base(entities){
             this.type = type;
             this.name = name;
             this.radius = radius;
             this.mass = mass;
             this.stiffness = stiffness;
             this.color = color;
+
+            if(entities != null){
+                this.AddAllEntities(entities);
+            }else{
+
+            }
         }
     }
 }

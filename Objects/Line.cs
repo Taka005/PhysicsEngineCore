@@ -16,6 +16,7 @@ namespace PhysicsEngineCore.Objects{
             this.end = new Vector2(endX, endY);
             this._thickness = CheckThicknessValue(thickness); 
         }
+
         public double thickness{
             get{
                 return this._thickness;

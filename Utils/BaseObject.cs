@@ -13,9 +13,19 @@ namespace PhysicsEngineCore.Utils{
         protected Vector2 position{
             get{
                 double averagePosX = entities.Average(entity => entity.position.X);
-                double averatePosY = entities.Average(entity => entity.position.Y);
+                double averagePosY = entities.Average(entity => entity.position.Y);
 
-                return new Vector2(averagePosX, averatePosY);
+                return new Vector2(averagePosX, averagePosY);
+            }
+        }
+
+        protected void AddEntity(Entity entity){
+            entities.Add(entity);
+        }
+
+        protected void AddAllEntities(List<Entity> entities){
+            foreach(Entity entity in entities){
+                this.entities.Add(entity);
             }
         }
     }

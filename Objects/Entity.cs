@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    public class Entity(string name, double posX, double posY, double velocityX, double velocityY, double rotateAngle, double rotateSpeed, double radius, double mass, double stiffness, string parentName, List<Target>? targets){
+    public class Entity(string name, double posX, double posY, double radius, double mass, double stiffness, string parentName, double velocityX = 0, double velocityY = 0, double rotateAngle = 0, double rotateSpeed = 0, List<Target>? targets = null){
         public readonly string name = name;
         public Vector2 position = new Vector2(posX, posY);
         public Vector2 previousPosition = new Vector2(posX, posY);
@@ -15,19 +15,19 @@ namespace PhysicsEngineCore.Objects{
         public string parentName = parentName;
 
         public double radius{
-            get {
+            get{
                 return _radius;
             }
-            set {
+            set{
                 _radius = CheckRadiusValue(value);
             }
         }
 
         public double mass{
-            get {
+            get{
                 return _mass;
             }
-            set {
+            set{
                 _mass = CheckMassValue(value);
             }
         }
