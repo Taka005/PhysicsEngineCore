@@ -1,18 +1,20 @@
-﻿using PhysicsEngineCore.Utils;
+﻿using System.Text.Json;
+using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    public class Entity(string name, double posX, double posY, double radius, double mass, double stiffness, string parentName, double velocityX = 0, double velocityY = 0, double rotateAngle = 0, double rotateSpeed = 0, List<Target>? targets = null){
-        public readonly string name = name;
-        public Vector2 position = new Vector2(posX, posY);
-        public Vector2 previousPosition = new Vector2(posX, posY);
-        public Vector2 velocity = new Vector2(velocityX, velocityY);
-        public double rotateAngle = rotateAngle;
-        public double rotateSpeed = rotateSpeed;
-        public double _radius = CheckRadiusValue(radius);
-        public double _mass = CheckMassValue(mass);
-        private double _stiffness = CheckStiffnessValue(stiffness);
-        public ConnectionManager connection = new ConnectionManager(targets);
-        public string parentName = parentName;
+    public class Entity(EntityOption option){
+        public readonly string id = option.id ?? throw new ArgumentException(nameof(option.id));
+        public Vector2 position = new Vector2(option.posX, option.posY);
+        public Vector2 previousPosition = new Vector2(option.posX, option.posY);
+        public Vector2 velocity = new Vector2(option.velocityX, option.velocityY);
+        public double rotateAngle = option.rotateAngle;
+        public double rotateSpeed = option.rotateSpeed;
+        public double _radius = CheckRadiusValue(option.radius);
+        public double _mass = CheckMassValue(option.mass);
+        private double _stiffness = CheckStiffnessValue(option.stiffness);
+        public ConnectionManager connection = new ConnectionManager(option.targets);
+        public string parentName = option.parentName ?? throw new ArgumentException(nameof(option.parentName));
 
         public double radius{
             get{
@@ -57,6 +59,10 @@ namespace PhysicsEngineCore.Objects{
 
         public void SavePosition(){
             this.previousPosition = this.position;
+        }
+
+        public string toJSON(){
+            
         }
 
         private static double CheckStiffnessValue(double stiffness){
