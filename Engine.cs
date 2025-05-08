@@ -57,6 +57,13 @@
 
         }
 
+        public void Import(string saveData){
+
+        }
+        public string Export(){
+            return "";
+        }
+
         private static float CheckPlayBackSpeedValue(float playBackSpeed){
             if(playBackSpeed < 0) throw new Exception("再生速度(playBackSpeed)は0以上に設定する必要があります");
 

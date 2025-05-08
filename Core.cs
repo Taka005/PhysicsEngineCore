@@ -8,6 +8,7 @@ namespace PhysicsEngineCore{
         public double friction;
         private static readonly double CORRECTION_NUMBER = 0.00000001d;
         private static readonly double ROTATION_STRENGTH = 50d;
+        private static readonly double FRICTION_STRENGTH = 0.1d;
         private static readonly double MAX_ROTATION = 500d;
 
         public Core(int pps, double gravity, double friction){
@@ -102,7 +103,7 @@ namespace PhysicsEngineCore{
         }
 
         protected void SolveSpeed(Entity entity){
-            double coefficient = entity.mass * entity.radius * this.friction;
+            double coefficient = entity.mass * entity.radius * this.friction*FRICTION_STRENGTH;
 
             entity.velocity -= entity.velocity * coefficient * (1 / this.pps);
             entity.rotateSpeed -= entity.rotateSpeed * coefficient * (1 / this.pps);

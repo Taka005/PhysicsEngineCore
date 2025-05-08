@@ -20,7 +20,9 @@ namespace PhysicsEngineCore.Objects{
             if(entities != null){
                 this.AddAllEntities(entities);
             }else{
+                Entity entity = new Entity(name, posX, posY, radius, mass, stiffness, type, velocityX, velocityY);
 
+                this.AddEntity(entity);
             }
         }
     }
