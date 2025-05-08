@@ -1,26 +1,38 @@
-﻿using PhysicsEngineCore.Utils;
+﻿using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class Circle: BaseObject{
         public readonly string type = "circle";
-        public readonly string name;
+        public readonly string id;
         public double radius;
         public double mass;
         public double stiffness;
         public string color;
 
-        public Circle(string type, string name, double posX, double posY, double radius, double mass, double stiffness, string color, double velocityX, double velocityY, List<Entity>? entities = null): base(entities){
-            this.type = type;
-            this.name = name;
-            this.radius = radius;
-            this.mass = mass;
-            this.stiffness = stiffness;
-            this.color = color;
+        public Circle(CircleOption option): base(option.entities){
+            this.type = option.type;
+            this.id = option.id ?? throw new ArgumentException(nameof(option.id));
+            this.radius = option.radius;
+            this.mass = option.mass;
+            this.stiffness = option.stiffness;
+            this.color = option.color;
 
             if(entities != null){
                 this.AddAllEntities(entities);
             }else{
-                Entity entity = new Entity(name, posX, posY, radius, mass, stiffness, type, velocityX, velocityY);
+                EntityOption entityOption = new EntityOption{
+                    id = IdGenerator.CreateId(10),
+                    posX = option.posX,
+                    posY = option.posY,
+                    radius = option.radius,
+                    mass = option.mass,
+                    stiffness = option.stiffness,
+                    velocityX = option.velocityX,
+                    velocityY = option.velocityY,
+                };
+
+                Entity entity = new Entity(entityOption);
 
                 this.AddEntity(entity);
             }
