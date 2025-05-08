@@ -6,12 +6,12 @@ namespace PhysicsEngineCore.Objects{
     public class Entity(EntityOption option){
         public readonly string id = option.id ?? throw new ArgumentException(nameof(option.id));
         public Vector2 position = new Vector2(option.posX, option.posY);
-        public Vector2 previousPosition = new Vector2(option.posX, option.posY);
+        public Vector2 previousPosition = new Vector2(option.prePosX, option.prePosY);
         public Vector2 velocity = new Vector2(option.velocityX, option.velocityY);
         public double rotateAngle = option.rotateAngle;
         public double rotateSpeed = option.rotateSpeed;
-        public double _radius = CheckRadiusValue(option.radius);
-        public double _mass = CheckMassValue(option.mass);
+        private double _radius = CheckRadiusValue(option.radius);
+        private double _mass = CheckMassValue(option.mass);
         private double _stiffness = CheckStiffnessValue(option.stiffness);
         public ConnectionManager connection = new ConnectionManager(option.targets);
         public string parentName = option.parentName ?? throw new ArgumentException(nameof(option.parentName));
@@ -62,7 +62,23 @@ namespace PhysicsEngineCore.Objects{
         }
 
         public string toJSON(){
-            
+            EntityOption option = new EntityOption{
+                id = this.id,
+                posX = this.position.X,
+                posY = this.position.Y,
+                prePosX = this.previousPosition.X,
+                prePosY = this.previousPosition.Y,
+                mass = this.mass,
+                stiffness = this.stiffness,
+                radius = this.radius,
+                velocityX = this.velocity.X,
+                velocityY = this.velocity.Y,
+                rotateAngle = this.rotateAngle,
+                rotateSpeed = this.rotateSpeed,
+                parentName = this.parentName
+            };
+
+            return JsonSerializer.Serialize(option);
         }
 
         private static double CheckStiffnessValue(double stiffness){

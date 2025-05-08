@@ -5,6 +5,8 @@ namespace PhysicsEngineCore.Options{
         public string? id { get; set; }
         public double posX { get; set; }
         public double posY { get; set; }
+        public double prePosX { get; set; } = 0;
+        public double prePosY { get; set; } = 0;
         public double radius { get; set; }
         public double mass { get; set; }
         public double stiffness { get; set; }
