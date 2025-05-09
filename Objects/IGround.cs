@@ -2,7 +2,7 @@
 
 namespace PhysicsEngineCore.Objects{
     public interface IGround{
-        double thickness { get; set; }
+        double width { get; set; }
 
         Vector2 SolvePosition(Vector2 position);
 

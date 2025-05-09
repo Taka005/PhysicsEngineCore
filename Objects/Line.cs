@@ -1,28 +1,29 @@
-﻿using PhysicsEngineCore.Utils;
+﻿using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class Line: IGround{
-        public readonly string name;
+        public readonly string id;
         public readonly string type = "line";
         public string color;
         public Vector2 start;
         public Vector2 end;
-        private double _thickness;
+        private double _width;
 
-        public Line(string name, string color, double startX, double startY, double endX, double endY, double thickness){
-            this.name = name;
-            this.color = color;
-            this.start = new Vector2(startX, startY);
-            this.end = new Vector2(endX, endY);
-            this._thickness = CheckThicknessValue(thickness); 
+        public Line(LineOption option){
+            this.id = option.id ?? throw new ArgumentException(nameof(option.id));
+            this.color = option.color;
+            this.start = new Vector2(option.startX, option.startY);
+            this.end = new Vector2(option.endX, option.endY);
+            this._width = CheckWidthValue(option.width); 
         }
 
-        public double thickness{
+        public double width{
             get{
-                return this._thickness;
+                return this._width;
             }
             set{
-                this._thickness = CheckThicknessValue(value);
+                this._width = CheckWidthValue(value);
             }
         }
 
@@ -33,7 +34,17 @@ namespace PhysicsEngineCore.Objects{
         }
 
         public IGround Clone(){
-            return new Line(this.name, this.color, this.start.X, this.start.Y, this.end.X, this.end.Y, this.thickness);
+            LineOption lineOption = new LineOption{
+                id = this.id,
+                color = this.color,
+                startX = this.start.X,
+                startY = this.start.Y,
+                endX = this.end.X,
+                endY = this.end.Y,
+                width = this.width,
+            };
+
+            return new Line(lineOption);
         }
 
         public Vector2 SolvePosition(Vector2 position){
@@ -51,10 +62,10 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
-        private static double CheckThicknessValue(double thickness){
-            if(thickness < 0) throw new Exception("厚さ(thickness)は0以上に設定する必要があります");
+        private static double CheckWidthValue(double width){
+            if(width < 0) throw new Exception("厚さ(width)は0以上に設定する必要があります");
 
-            return thickness;
+            return width;
         }
     }
 }
