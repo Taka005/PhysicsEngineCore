@@ -37,5 +37,17 @@ namespace PhysicsEngineCore.Objects{
                 this.AddEntity(entity);
             }
         }
+
+        public Circle Clone(){
+            CircleOption option = new CircleOption{
+                id = this.id,
+                radius = this.radius,
+                mass = this.mass,
+                stiffness = this.stiffness,
+                color = this.color
+            };
+
+            return new Circle(option);
+        }
     }
 }

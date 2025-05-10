@@ -61,7 +61,7 @@ namespace PhysicsEngineCore.Objects{
             this.previousPosition = this.position;
         }
 
-        public string toJSON(){
+        public string Clone(){
             EntityOption option = new EntityOption{
                 id = this.id,
                 posX = this.position.X,
