@@ -1,8 +1,9 @@
-﻿using PhysicsEngineCore.Utils;
+﻿using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class Curve: IGround{
-        public readonly string name;
+        public readonly string id;
         public readonly string type = "curve";
         public string color;
         public Vector2 start;
@@ -10,20 +11,20 @@ namespace PhysicsEngineCore.Objects{
         public Vector2 center;
         public Vector2 end;
         public double radius;
-        private double _thickness;
+        public double _width;
 
-        public Curve(string name, string color, double startX, double startY, double middleX, double middleY, double endX, double endY, double thickness){
-            this.name = name;
-            this.color = color;
-            this.start = new Vector2(startX, startY);
-            this.middle = new Vector2(middleX, middleY);
-            this.end = new Vector2(endX, endY);
-            this._thickness = CheckThicknessValue(thickness);
+        public Curve(CurveOption option){
+            this.id = option.id ?? throw new ArgumentException(nameof(option.id));
+            this.color = option.color;
+            this.start = new Vector2(option.startX, option.startY);
+            this.middle = new Vector2(option.middleX, option.middleY);
+            this.end = new Vector2(option.endX, option.endY);
+            this._width = CheckWidthValue(option.width);
 
-            double slope1 = (middleX - startX) / (startY - middleY);
-            double slope2 = (endX - middleX) / (middleY - endY);
-            double equat1 = (startY + middleY) / 2 - slope1 * ((startX + middleX) / 2);
-            double equat2 = (middleY + endY) / 2 - slope2 * ((middleX + endX) / 2);
+            double slope1 = (option.middleX - option.startX) / (option.startY - option.middleY);
+            double slope2 = (option.endX - option.middleX) / (option.middleY - option.endY);
+            double equat1 = (option.startY + option.middleY) / 2 - slope1 * ((option.startX + option.middleX) / 2);
+            double equat2 = (option.middleY + option.endY) / 2 - slope2 * ((option.middleX + option.endX) / 2);
 
             double centerX = (equat2 - equat1) / (slope1 - slope2);
             double centerY = slope1 * centerX + equat1;
@@ -31,17 +32,30 @@ namespace PhysicsEngineCore.Objects{
             this.center = new Vector2(centerX, centerY);
             this.radius = Vector2.Distance(this.start,this.center);
         }
-        public double thickness{
+
+        public double width{
             get{
-                return this._thickness;
+                return this._width;
             }
             set{
-                this._thickness = CheckThicknessValue(value);
+                this._width = CheckWidthValue(value);
             }
         }
 
         public IGround Clone(){
-            return new Curve(this.name, this.color, this.start.X, this.start.Y, this.middle.X, this.middle.Y, this.end.X, this.end.Y, this.thickness);
+            CurveOption option = new CurveOption{
+                id = this.id,
+                color = this.color,
+                startX = this.start.X,
+                startY = this.start.Y,
+                middleX = this.middle.X,
+                middleY = this.middle.Y,
+                endX = this.end.X,
+                endY = this.end.Y,
+                width = this.width
+            };
+
+            return new Curve(option);
         }
 
         public Vector2 SolvePosition(Vector2 position){
@@ -87,7 +101,7 @@ namespace PhysicsEngineCore.Objects{
             return (angle + 2 * Math.PI) % (2 * Math.PI);
         }
 
-        private static double CheckThicknessValue(double thickness){
+        private static double CheckWidthValue(double thickness){
             if(thickness < 0) throw new Exception("厚さ(thickness)は0以上に設定する必要があります");
 
             return thickness;

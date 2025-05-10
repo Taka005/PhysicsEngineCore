@@ -57,9 +57,9 @@ namespace PhysicsEngineCore{
 
             Vector2 difference = position - entity.position;
             double distance = difference.Length();
-            if(distance > entity.radius + ground.thickness/2) return;
+            if(distance > entity.radius + ground.width/2) return;
 
-            double move = (distance - (entity.radius + ground.thickness/2)) / (distance * entity.invMass + CORRECTION_NUMBER) * entity.stiffness;
+            double move = (distance - (entity.radius + ground.width/2)) / (distance * entity.invMass + CORRECTION_NUMBER) * entity.stiffness;
             Vector2 correction = difference * move;
 
             entity.position += correction * entity.invMass;

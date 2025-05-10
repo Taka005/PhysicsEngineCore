@@ -18,8 +18,8 @@ namespace PhysicsEngineCore.Objects{
             this.stiffness = option.stiffness;
             this.color = option.color;
 
-            if(entities != null){
-                this.AddAllEntities(entities);
+            if(option.entities != null){
+                this.AddAllEntities(option.entities);
             }else{
                 EntityOption entityOption = new EntityOption{
                     id = IdGenerator.CreateId(10),
