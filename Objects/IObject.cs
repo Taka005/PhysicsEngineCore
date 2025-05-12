@@ -1,16 +1,13 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    public interface IGround{
-        double id { get; set; }
-        string type { get; set; }
-        string color { get; set; }
+    public interface IObject{
         double width { get; set; }
 
         Vector2 SolvePosition(Vector2 position);
 
         IGround Clone();
 
-        string ToJson();
+        public List<Entity> entities { get; set; }
     }
 }

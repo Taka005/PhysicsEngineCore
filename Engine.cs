@@ -13,8 +13,9 @@ namespace PhysicsEngineCore{
         private int trackingCount = 0;
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
+        private List<IGround> grounds = [];
 
-        Engine(EngineOption? option): base(option.pps, option.gravity, option.friction){
+        Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){
             if(option == null) throw new ArgumentNullException(nameof(option));
 
             this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
