@@ -47,5 +47,15 @@ namespace PhysicsEngineCore.Objects{
 
             return new Circle(option);
         }
+
+        public CircleOption ToOption(){
+            return new CircleOption {
+                id = this.id,
+                radius = this.radius,
+                mass = this.mass,
+                stiffness = this.stiffness,
+                color = this.color
+            };
+        }
     }
 }

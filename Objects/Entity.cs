@@ -61,8 +61,12 @@ namespace PhysicsEngineCore.Objects{
             this.previousPosition = this.position;
         }
 
-        public string Clone(){
-            EntityOption option = new EntityOption{
+        public string ToJson(){
+            return JsonSerializer.Serialize(this.ToOption());
+        }
+
+        public EntityOption ToOption(){
+            return new EntityOption{
                 id = this.id,
                 posX = this.position.X,
                 posY = this.position.Y,
@@ -77,8 +81,6 @@ namespace PhysicsEngineCore.Objects{
                 rotateSpeed = this.rotateSpeed,
                 parentId = this.parentId
             };
-
-            return JsonSerializer.Serialize(option);
         }
 
         private static double CheckStiffnessValue(double stiffness){
