@@ -16,7 +16,7 @@ namespace PhysicsEngineCore{
         private List<IGround> grounds = [];
 
         Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){
-            if(option == null) throw new ArgumentNullException(nameof(option));
+            ArgumentNullException.ThrowIfNull(option);
 
             this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
             this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
