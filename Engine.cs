@@ -1,4 +1,6 @@
-﻿namespace PhysicsEngineCore{
+﻿using PhysicsEngineCore.Options;
+
+namespace PhysicsEngineCore{
     public class Engine: Core{
         private bool isStarted = false;
         public bool isTrackingMode = false;
@@ -10,11 +12,11 @@
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
 
-        public Engine(int pps, double gravity, double friction, float playBackSpeed, float trackingInterval, int trackingLimit, int movementLimit): base(pps, gravity, friction) {
-            this.playBackSpeed = CheckPlayBackSpeedValue(playBackSpeed);
-            this.trackingInterval = CheckTrackingIntervalValue(trackingInterval);
-            this.trackingLimit = CheckTrackingLimitValue(trackingLimit);
-            this.movementLimit = CheckMovementLimitValue(movementLimit);
+        public Engine(EngineOption option): base(option.pps, option.gravity, option.friction) {
+            this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
+            this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
+            this.trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
+            this.movementLimit = CheckMovementLimitValue(option.movementLimit);
             this.loopTimer = new Timer(this.Loop!, null, 0, (int)((1000 / this.pps) / this.playBackSpeed));
         }
 
