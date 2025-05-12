@@ -1,4 +1,6 @@
-﻿using PhysicsEngineCore.Options;
+﻿using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore{
     public class Engine: Core{
@@ -12,7 +14,9 @@ namespace PhysicsEngineCore{
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
 
-        public Engine(EngineOption option): base(option.pps, option.gravity, option.friction) {
+        Engine(EngineOption? option): base(option.pps, option.gravity, option.friction){
+            if(option == null) throw new ArgumentNullException(nameof(option));
+
             this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
             this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
             this.trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
@@ -64,6 +68,23 @@ namespace PhysicsEngineCore{
         }
         public string Export(){
             return "";
+        }
+
+        public List<Entity> getEntitiesAt(double posX,double posY){
+            Vector2 position = new Vector2(posX,posY);
+            List<Entity> targets = [];
+
+            this.entities.forEach(entity=>{
+                Vector2 difference = entity.position - position;
+
+                double distance = difference.Length();
+
+                if(distance > entity.size) return;
+
+                targets.push(entity);
+            });
+
+            return targets;
         }
 
         private static float CheckPlayBackSpeedValue(float playBackSpeed){

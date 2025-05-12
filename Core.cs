@@ -11,7 +11,7 @@ namespace PhysicsEngineCore{
         private static readonly double FRICTION_STRENGTH = 0.1d;
         private static readonly double MAX_ROTATION = 500d;
 
-        public Core(int pps, double gravity, double friction){
+        public Core(int pps = 180, double gravity = 500, double friction = 0.0001){
             this.pps = pps;
             this.gravity = gravity;
             this.friction = friction;
