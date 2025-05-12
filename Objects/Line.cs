@@ -10,7 +10,7 @@ namespace PhysicsEngineCore.Objects{
         public Vector2 end;
         private double _width;
 
-        public Line(LineOption option){
+        Line(LineOption option){
             this.id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.color = option.color;
             this.start = new Vector2(option.startX, option.startY);

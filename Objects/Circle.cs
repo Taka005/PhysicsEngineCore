@@ -10,7 +10,7 @@ namespace PhysicsEngineCore.Objects{
         public double stiffness;
         public string color;
 
-        public Circle(CircleOption option): base(option.entities){
+        Circle(CircleOption option): base(option.entities){
             this.type = option.type;
             this.id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.radius = option.radius;
