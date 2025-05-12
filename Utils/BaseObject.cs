@@ -1,8 +1,13 @@
 ﻿using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Utils{
-    public class BaseObject(List<Entity>? entities){
-        public List<Entity> entities = entities ?? [];
+    public class BaseObject{
+        public List<Entity> entities = [];
+
+        public BaseObject(List<EntityOption>? entities){
+            this.AddAllEntities(entities ?? []);
+        }
 
         protected bool isStop{
             get{
@@ -19,13 +24,13 @@ namespace PhysicsEngineCore.Utils{
             }
         }
 
-        protected void AddEntity(Entity entity){
-            entities.Add(entity);
+        protected void AddEntity(EntityOption entity){
+            entities.Add(new Entity(entity));
         }
 
-        protected void AddAllEntities(List<Entity> entities){
-            foreach(Entity entity in entities){
-                this.entities.Add(entity);
+        protected void AddAllEntities(List<EntityOption> entities){
+            foreach(EntityOption entity in entities){
+                this.AddEntity(entity);
             }
         }
     }

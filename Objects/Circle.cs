@@ -32,9 +32,7 @@ namespace PhysicsEngineCore.Objects{
                     velocityY = option.velocityY,
                 };
 
-                Entity entity = new Entity(entityOption);
-
-                this.AddEntity(entity);
+                this.AddEntity(entityOption);
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using PhysicsEngineCore.Objects;
+﻿using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Options{
     class CircleOption(){
@@ -12,6 +12,6 @@ namespace PhysicsEngineCore.Options{
         public double velocityX { get; set; } = 0;
         public double velocityY { get; set; } = 0;
         public string color { get; set; } = "red";
-        public List<Entity>? entities { get; set; }
+        public List<EntityOption>? entities { get; set; }
     }
 }
