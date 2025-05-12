@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Options;
+﻿using System.Text.Json;
+using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
@@ -42,8 +43,16 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        public string ToJson(){
+            return JsonSerializer.Serialize(this.ToOption());
+        }
+
         public IGround Clone(){
-            CurveOption option = new CurveOption{
+            return new Curve(this.ToOption());
+        }
+
+        private CurveOption ToOption(){
+            return new CurveOption {
                 id = this.id,
                 color = this.color,
                 startX = this.start.X,
@@ -54,8 +63,6 @@ namespace PhysicsEngineCore.Objects{
                 endY = this.end.Y,
                 width = this.width
             };
-
-            return new Curve(option);
         }
 
         public Vector2 SolvePosition(Vector2 position){

@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Options;
+﻿using System.Text.Json;
+using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
@@ -34,7 +35,15 @@ namespace PhysicsEngineCore.Objects{
         }
 
         public IGround Clone(){
-            LineOption lineOption = new LineOption{
+            return new Line(this.ToOption());
+        }
+
+        public string ToJson(){
+            return JsonSerializer.Serialize(this.ToOption());
+        }
+
+        private LineOption ToOption(){
+            return new LineOption {
                 id = this.id,
                 color = this.color,
                 startX = this.start.X,
@@ -43,8 +52,6 @@ namespace PhysicsEngineCore.Objects{
                 endY = this.end.Y,
                 width = this.width,
             };
-
-            return new Line(lineOption);
         }
 
         public Vector2 SolvePosition(Vector2 position){

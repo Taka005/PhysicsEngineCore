@@ -7,5 +7,7 @@ namespace PhysicsEngineCore.Objects{
         Vector2 SolvePosition(Vector2 position);
 
         IGround Clone();
+
+        string ToJson();
     }
 }

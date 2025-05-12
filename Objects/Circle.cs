@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Options;
+﻿using System.Text.Json;
+using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
@@ -36,19 +37,15 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
-        public Circle Clone(){
-            CircleOption option = new CircleOption{
-                id = this.id,
-                radius = this.radius,
-                mass = this.mass,
-                stiffness = this.stiffness,
-                color = this.color
-            };
-
-            return new Circle(option);
+        public string ToJson(){
+            return JsonSerializer.Serialize(this.ToOption());
         }
 
-        public CircleOption ToOption(){
+        public Circle Clone(){
+            return new Circle(this.ToOption());
+        }
+
+        private CircleOption ToOption(){
             return new CircleOption {
                 id = this.id,
                 radius = this.radius,
