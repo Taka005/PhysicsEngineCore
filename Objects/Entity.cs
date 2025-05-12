@@ -14,7 +14,7 @@ namespace PhysicsEngineCore.Objects{
         private double _mass = CheckMassValue(option.mass);
         private double _stiffness = CheckStiffnessValue(option.stiffness);
         public ConnectionManager connection = new ConnectionManager(option.targets);
-        public string parentName = option.parentName ?? throw new ArgumentException(nameof(option.parentName));
+        public string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
 
         public double radius{
             get{
@@ -75,7 +75,7 @@ namespace PhysicsEngineCore.Objects{
                 velocityY = this.velocity.Y,
                 rotateAngle = this.rotateAngle,
                 rotateSpeed = this.rotateSpeed,
-                parentName = this.parentName
+                parentId = this.parentId
             };
 
             return JsonSerializer.Serialize(option);

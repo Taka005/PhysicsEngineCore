@@ -10,7 +10,7 @@ namespace PhysicsEngineCore.Options{
         public double radius { get; set; }
         public double mass { get; set; }
         public double stiffness { get; set; }
-        public string? parentName { get; set; }
+        public string? parentId { get; set; }
         public double velocityX { get; set; } = 0;
         public double velocityY { get; set; } = 0;
         public double rotateAngle { get; set; } = 0;
