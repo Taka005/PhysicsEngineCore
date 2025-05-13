@@ -2,20 +2,26 @@
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    public class BaseObject{
-        protected List<Entity> _entities = [];
+    public class BaseObject: IBaseObject{
+        private List<Entity> _entities = [];
+
+        public List<Entity> entities{
+            get{
+                return _entities;
+            }
+        }
 
         public BaseObject(List<EntityOption>? entities){
             this.AddAllEntities(entities ?? []);
         }
 
-        protected bool isStop{
+        public bool isStop{
             get{
                 return _entities.All(entity => entity.isStop);
             }
         }
 
-        protected Vector2 position{
+        public Vector2 position{
             get{
                 double averagePosX = _entities.Average(entity => entity.position.X);
                 double averagePosY = _entities.Average(entity => entity.position.Y);

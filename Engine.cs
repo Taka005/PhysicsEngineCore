@@ -15,6 +15,7 @@ namespace PhysicsEngineCore{
         private int movementLimit = 10000;
         private readonly List<IObject> objects = [];
         private readonly List<IGround> grounds = [];
+        private readonly List<IObject> tracks = [];
 
         public Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){
             if(option != null){
@@ -53,6 +54,18 @@ namespace PhysicsEngineCore{
             this.movementLimit = CheckMovementLimitValue(value);
         }
 
+        public void Clear(bool force = false){
+            this.objects.Clear();
+
+            if(force){
+                this.grounds.Clear();
+            }
+        }
+
+        public void ClearTrack(){
+            this.tracks.Clear();
+        }
+
         public void Start(){
             if(this.isStarted) throw new Exception("既にシステムは開始されています");
 
@@ -70,6 +83,53 @@ namespace PhysicsEngineCore{
 
         private void Loop(Object state){
 
+        }
+
+        public void Step(){
+            this.trackingCount++;
+
+            if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)){
+                this.objects
+                  .Where(obj => !obj.isStop)
+                  .ToList()
+                  .ForEach(obj=>{
+                      this.tracks.Add(obj.Clone());
+                  });
+
+                while(this.tracks.Count > this.trackingLimit){
+                    this.tracks.RemoveAt(0);
+                }
+
+                this.trackingCount = 0;
+            }
+
+            this.Update();
+        }
+
+        private void Update(){
+            this.entities.ForEach(entity => {
+                this.UpdatePosition(entity);
+                this.UpdateRotate(entity);
+            });
+
+            this.entities.ForEach(entity => {
+                int index = this.entities.IndexOf(entity);
+
+                this.grounds.ForEach(ground=>{
+                    this.SolveGroundPosition(entity, ground);
+                });
+
+                this.entities.Skip(index + 1).ToList().ForEach(target => {
+                    this.SolvePosition(entity, target);
+                });
+            });
+
+            this.entities.ForEach(entity => {
+                this.UpdateSpeed(entity);
+                this.SolveSpeed(entity);
+            });
+
+            //移動範囲の処理
         }
 
         public void Import(string saveData){

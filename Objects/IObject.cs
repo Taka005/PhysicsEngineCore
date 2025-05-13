@@ -1,5 +1,5 @@
 ﻿namespace PhysicsEngineCore.Objects{
-    public interface IObject{
+    public interface IObject: IBaseObject{
         string id { get; }
         string type { get; }
         string color { get; set; }
@@ -7,7 +7,5 @@
         IObject Clone();
 
         string ToJson();
-
-        List<Entity> entities { get; }
     }
 }
