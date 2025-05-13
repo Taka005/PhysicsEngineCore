@@ -13,8 +13,8 @@ namespace PhysicsEngineCore{
         private int trackingCount = 0;
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
-        private List<IObject> objects = [];
-        private List<IGround> grounds = [];
+        private readonly List<IObject> objects = [];
+        private readonly List<IGround> grounds = [];
 
         public Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){
             if(option != null){
@@ -79,7 +79,47 @@ namespace PhysicsEngineCore{
             return "";
         }
 
-        public List<Entity> getEntitiesAt(double posX,double posY){
+        public List<IObject> GetObjectsAt(double posX,double posY){
+            Vector2 position = new Vector2(posX, posY);
+            List<IObject> targets = [];
+
+            this.objects.ForEach(obj=>{
+                List<Entity> entities = [..obj.entities.Where(entity =>{
+                    Vector2 difference = entity.position - position;
+
+                    double distance = difference.Length();
+
+                    return distance <= entity.radius;
+                })];
+
+                if(entities.Count == 0) return;
+
+                targets.Add(obj);
+            });
+
+            return targets;
+        }
+
+        public List<IGround> GetGroundsAt(double posX,double posY){
+            Vector2 position = new Vector2(posX, posY);
+            List<IGround> targets = [];
+
+            this.grounds.ForEach(ground => {
+                Vector2 crossPosition = ground.SolvePosition(position);
+
+                Vector2 difference = crossPosition - position;
+
+                double distance = difference.Length();
+
+                if(distance > ground.width / 2) return;
+
+                targets.Add(ground);
+            });
+
+            return targets;
+        }
+
+        public List<Entity> GetEntitiesAt(double posX,double posY){
             Vector2 position = new Vector2(posX,posY);
             List<Entity> targets = [];
 

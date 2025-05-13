@@ -37,7 +37,11 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
-        public List<Entity> entities => base.entities;
+        public List<Entity> entities{
+            get{
+                return _entities;
+            }
+        }
 
         public string id{
             get{

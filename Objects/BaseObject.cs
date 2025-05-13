@@ -3,13 +3,7 @@ using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class BaseObject{
-        private List<Entity> _entities = [];
-
-        public List<Entity> entities{
-            get{
-                return _entities;
-            }
-        }
+        protected List<Entity> _entities = [];
 
         public BaseObject(List<EntityOption>? entities){
             this.AddAllEntities(entities ?? []);
