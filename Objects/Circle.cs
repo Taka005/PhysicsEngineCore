@@ -11,7 +11,7 @@ namespace PhysicsEngineCore.Objects{
         public double stiffness;
         private string _color;
 
-        Circle(CircleOption option): base(option.entities){
+        public Circle(CircleOption option): base(option.entities){
             this._type = option.type;
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.radius = option.radius;
@@ -36,6 +36,8 @@ namespace PhysicsEngineCore.Objects{
                 this.AddEntity(entityOption);
             }
         }
+
+        public List<Entity> entities => base.entities;
 
         public string id{
             get{

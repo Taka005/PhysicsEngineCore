@@ -16,16 +16,23 @@ namespace PhysicsEngineCore{
         private List<IObject> objects = [];
         private List<IGround> grounds = [];
 
-        Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){
-            ArgumentNullException.ThrowIfNull(option);
-
-            this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
-            this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
-            this.trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
-            this.movementLimit = CheckMovementLimitValue(option.movementLimit);
+        public Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){
+            if(option != null){
+                this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
+                this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
+                this.trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
+                this.movementLimit = CheckMovementLimitValue(option.movementLimit);
+            }
+  
             this.loopTimer = new Timer(this.Loop!, null, 0, (int)((1000 / this.pps) / this.playBackSpeed));
         }
 
+        private List<Entity> entities{
+            get{
+                return [.. this.objects.SelectMany(obj => obj.entities)];
+            }
+        }
+        
         public void SetPlayBackSpeed(float value){
             this.playBackSpeed = CheckPlayBackSpeedValue(value);
 
@@ -76,14 +83,14 @@ namespace PhysicsEngineCore{
             Vector2 position = new Vector2(posX,posY);
             List<Entity> targets = [];
 
-            this.entities.forEach(entity=>{
+            this.entities.ForEach(entity=>{
                 Vector2 difference = entity.position - position;
 
                 double distance = difference.Length();
 
-                if(distance > entity.size) return;
+                if(distance > entity.radius) return;
 
-                targets.push(entity);
+                targets.Add(entity);
             });
 
             return targets;

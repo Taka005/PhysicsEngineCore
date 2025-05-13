@@ -1,5 +1,5 @@
 ﻿namespace PhysicsEngineCore.Options{
-    class LineOption{
+    public class LineOption{
         public string? id {  get; set; }
         public string color { get; set; } = "red";
         public double startX { get; set; }

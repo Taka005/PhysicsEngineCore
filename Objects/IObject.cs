@@ -5,5 +5,9 @@
         string color { get; set; }
 
         IObject Clone();
+
+        string ToJson();
+
+        List<Entity> entities { get; }
     }
 }

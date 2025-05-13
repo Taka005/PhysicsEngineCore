@@ -1,9 +1,15 @@
-﻿using PhysicsEngineCore.Objects;
-using PhysicsEngineCore.Options;
+﻿using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
-namespace PhysicsEngineCore.Utils{
+namespace PhysicsEngineCore.Objects{
     public class BaseObject{
-        public List<Entity> entities = [];
+        private List<Entity> _entities = [];
+
+        public List<Entity> entities{
+            get{
+                return _entities;
+            }
+        }
 
         public BaseObject(List<EntityOption>? entities){
             this.AddAllEntities(entities ?? []);
@@ -11,21 +17,21 @@ namespace PhysicsEngineCore.Utils{
 
         protected bool isStop{
             get{
-                return entities.All(entity => entity.isStop);
+                return _entities.All(entity => entity.isStop);
             }
         }
 
         protected Vector2 position{
             get{
-                double averagePosX = entities.Average(entity => entity.position.X);
-                double averagePosY = entities.Average(entity => entity.position.Y);
+                double averagePosX = _entities.Average(entity => entity.position.X);
+                double averagePosY = _entities.Average(entity => entity.position.Y);
 
                 return new Vector2(averagePosX, averagePosY);
             }
         }
 
         protected void AddEntity(EntityOption entity){
-            entities.Add(new Entity(entity));
+            this._entities.Add(new Entity(entity));
         }
 
         protected void AddAllEntities(List<EntityOption> entities){

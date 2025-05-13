@@ -1,5 +1,5 @@
 ﻿namespace PhysicsEngineCore.Options{
-    class EngineOption{
+    public class EngineOption{
         public int pps { get; set; } = 180;
         public double gravity { get; set; } = 500;
         public double friction { get; set; } = 0.0001;

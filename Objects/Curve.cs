@@ -14,7 +14,7 @@ namespace PhysicsEngineCore.Objects{
         public double radius;
         private double _width;
 
-        Curve(CurveOption option){
+        public Curve(CurveOption option){
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this._color = option.color;
             this.start = new Vector2(option.startX, option.startY);

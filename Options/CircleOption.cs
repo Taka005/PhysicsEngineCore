@@ -1,5 +1,5 @@
 ﻿namespace PhysicsEngineCore.Options{
-    class CircleOption(){
+    public class CircleOption(){
         public string type { get; set; } = "circle";
         public string? id { get; set; }
         public double posX { get; set; }
