@@ -2,8 +2,8 @@
 
 namespace PhysicsEngineCore.Objects{
     public interface IGround{
-        double id { get; set; }
-        string type { get; set; }
+        string id { get; }
+        string type { get; }
         string color { get; set; }
         double width { get; set; }
 

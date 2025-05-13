@@ -4,16 +4,16 @@ using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class Line: IGround{
-        public readonly string id;
-        public readonly string type = "line";
-        public string color;
+        private readonly string _id;
+        private readonly string _type = "line";
+        private string _color;
         public Vector2 start;
         public Vector2 end;
         private double _width;
 
         Line(LineOption option){
-            this.id = option.id ?? throw new ArgumentException(nameof(option.id));
-            this.color = option.color;
+            this._id = option.id ?? throw new ArgumentException(nameof(option.id));
+            this._color = option.color;
             this.start = new Vector2(option.startX, option.startY);
             this.end = new Vector2(option.endX, option.endY);
             this._width = CheckWidthValue(option.width); 
@@ -25,6 +25,27 @@ namespace PhysicsEngineCore.Objects{
             }
             set{
                 this._width = CheckWidthValue(value);
+            }
+        }
+
+        public string id{
+            get{
+                return this._id;
+            }
+        }
+
+        public string type{
+            get{
+                return this._type;
+            }
+        }
+
+        public string color{
+            get{
+                return this._color;
+            }
+            set{
+                this._color = value;
             }
         }
 

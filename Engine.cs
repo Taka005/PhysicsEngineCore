@@ -13,6 +13,7 @@ namespace PhysicsEngineCore{
         private int trackingCount = 0;
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
+        private List<IObject> objects = [];
         private List<IGround> grounds = [];
 
         Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){

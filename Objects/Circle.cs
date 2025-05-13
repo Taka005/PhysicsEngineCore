@@ -3,21 +3,21 @@ using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-    public class Circle: BaseObject{
-        public readonly string type = "circle";
-        public readonly string id;
+    public class Circle: BaseObject, IObject{
+        private readonly string _type = "circle";
+        private readonly string _id;
         public double radius;
         public double mass;
         public double stiffness;
-        public string color;
+        private string _color;
 
         Circle(CircleOption option): base(option.entities){
-            this.type = option.type;
-            this.id = option.id ?? throw new ArgumentException(nameof(option.id));
+            this._type = option.type;
+            this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.radius = option.radius;
             this.mass = option.mass;
             this.stiffness = option.stiffness;
-            this.color = option.color;
+            this._color = option.color;
 
             if(option.entities != null){
                 this.AddAllEntities(option.entities);
@@ -37,11 +37,32 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        public string id{
+            get{
+                return _id;
+            }
+        }
+
+        public string type{
+            get {
+                return _type;
+            }
+        }
+
+        public string color{
+            get{
+                return this._color;
+            }
+            set{
+                this._color = value;
+            }
+        }
+
         public string ToJson(){
             return JsonSerializer.Serialize(this.ToOption());
         }
 
-        public Circle Clone(){
+        public IObject Clone(){
             return new Circle(this.ToOption());
         }
 
