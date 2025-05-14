@@ -140,9 +140,21 @@ namespace PhysicsEngineCore {
                     Math.Abs(obj.position.X) > this.movementLimit||
                     Math.Abs(obj.position.Y) > this.movementLimit
                 ){
-                    //消滅処理
+                    this.DeSpawnObject(obj.id);
                 }
             });
+        }
+
+        public IObject? SpawnObject(){
+
+        }
+
+        public void DeSpawnObject(string id){
+            this.objects.RemoveAll(obj => obj.id == id);
+        }
+
+        public void DeSpawnGround(string id){
+            this.grounds.RemoveAll(obj => obj.id == id);
         }
 
         public IObject? GetObject(string id){
