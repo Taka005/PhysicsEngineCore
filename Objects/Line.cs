@@ -63,7 +63,7 @@ namespace PhysicsEngineCore.Objects{
             return JsonSerializer.Serialize(this.ToOption());
         }
 
-        private LineOption ToOption(){
+        public LineOption ToOption(){
             return new LineOption {
                 id = this.id,
                 color = this.color,

@@ -72,7 +72,7 @@ namespace PhysicsEngineCore.Objects{
             return new Curve(this.ToOption());
         }
 
-        private CurveOption ToOption(){
+        public CurveOption ToOption(){
             return new CurveOption {
                 id = this.id,
                 color = this.color,

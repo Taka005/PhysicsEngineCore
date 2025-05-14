@@ -65,7 +65,7 @@ namespace PhysicsEngineCore.Objects{
             return JsonSerializer.Serialize(this.ToOption());
         }
 
-        private EntityOption ToOption(){
+        public EntityOption ToOption(){
             return new EntityOption{
                 id = this.id,
                 posX = this.position.X,

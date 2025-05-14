@@ -66,7 +66,7 @@ namespace PhysicsEngineCore.Objects{
             return new Circle(this.ToOption());
         }
 
-        private CircleOption ToOption(){
+        public CircleOption ToOption(){
             return new CircleOption {
                 id = this.id,
                 radius = this.radius,

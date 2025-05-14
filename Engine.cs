@@ -201,21 +201,38 @@ namespace PhysicsEngineCore {
 
             if(saveData.version != Engine.SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{Engine.SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
-            this.objects = saveData.objects;
-            this.grounds = saveData.grounds;
+            saveData.objects.circles.ForEach(obj=>{
+                this.SpawnObject(obj.id);
+            });
 
-            if(saveData.engine != null) {
-                this.pps = saveData.engine.pps;
-                this.gravity = saveData.engine.gravity;
-                this.friction = saveData.engine.friction;
-                this.playBackSpeed = saveData.engine.playBackSpeed;
-                this.trackingInterval = saveData.engine.trackingInterval;
-                this.trackingLimit = saveData.engine.trackingLimit;
-                this.movementLimit = saveData.engine.movementLimit;
-            }
+            saveData.objects.lines.ForEach(obj=>{
+                this.SpawnObject(obj.id);
+            });
+
+            saveData.objects.curves.ForEach(obj=>{
+                this.SpawnObject(obj.id);
+            });
+
+            this.pps = saveData.engine.pps;
+            this.gravity = saveData.engine.gravity;
+            this.friction = saveData.engine.friction;
+            this.playBackSpeed = saveData.engine.playBackSpeed;
+            this.trackingInterval = saveData.engine.trackingInterval;
+            this.trackingLimit = saveData.engine.trackingLimit;
+            this.movementLimit = saveData.engine.movementLimit;
         }
 
-        public string Export() {
+        public string Export(){
+            List<CircleOption> circleOptions = [..this.objects.OfType<Circle>().Select(obj=>obj.ToOption())];
+            List<LineOption> lineOptions = [.. this.objects.OfType<Line>().Select(obj => obj.ToOption())];
+            List<CurveOption> curveOptions = [.. this.objects.OfType<Curve>().Select(obj => obj.ToOption())];
+
+            ObjectSaveData objectSaveData = new ObjectSaveData{
+                circles = circleOptions,
+                lines = lineOptions,
+                curves = curveOptions
+            };
+
             EngineOption engineOption = new EngineOption {
                 pps = this.pps,
                 gravity = this.gravity,
@@ -229,8 +246,7 @@ namespace PhysicsEngineCore {
             SaveData saveData = new SaveData {
                 saveAt = DateTime.Now,
                 engine = engineOption,
-                objects = this.objects,
-                grounds = this.grounds
+                objects = objectSaveData
             };
 
             return JsonSerializer.Serialize(saveData);
