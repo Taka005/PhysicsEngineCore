@@ -4,7 +4,6 @@ using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class Circle: BaseObject, IObject{
-        private readonly string _type = "circle";
         private readonly string _id;
         public double radius;
         public double mass;
@@ -12,7 +11,6 @@ namespace PhysicsEngineCore.Objects{
         private string _color;
 
         public Circle(CircleOption option): base(option.entities){
-            this._type = option.type;
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.radius = option.radius;
             this.mass = option.mass;
@@ -40,12 +38,6 @@ namespace PhysicsEngineCore.Objects{
         public string id{
             get{
                 return _id;
-            }
-        }
-
-        public string type{
-            get {
-                return _type;
             }
         }
 

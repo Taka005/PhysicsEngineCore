@@ -79,7 +79,8 @@ namespace PhysicsEngineCore.Objects{
                 velocityY = this.velocity.Y,
                 rotateAngle = this.rotateAngle,
                 rotateSpeed = this.rotateSpeed,
-                parentId = this.parentId
+                parentId = this.parentId,
+                targets = this.connection.targets,
             };
         }
 

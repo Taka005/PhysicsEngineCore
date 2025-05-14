@@ -5,7 +5,6 @@ using PhysicsEngineCore.Utils;
 namespace PhysicsEngineCore.Objects{
     public class Curve: IGround{
         private readonly string _id;
-        private readonly string _type = "curve";
         private string _color;
         public Vector2 start;
         public Vector2 middle;
@@ -37,12 +36,6 @@ namespace PhysicsEngineCore.Objects{
         public string id{
             get{
                 return this._id;
-            }
-        }
-
-        public string type{
-            get{
-                return this._type;
             }
         }
 
