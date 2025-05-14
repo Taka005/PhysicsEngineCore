@@ -138,12 +138,20 @@ namespace PhysicsEngineCore{
             SaveData? saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
             if(saveData == null) throw new Exception("破損したセーブデータです");
 
+            if(saveData.version != Engine.SAVE_DATA_VERSION) throw new Exception("セーブデータのバージョンが異なります");
+
             this.objects = saveData.objects;
             this.grounds = saveData.grounds;
 
             if(saveData.engine != null){
                 this.pps = saveData.engine.pps;
-            }   
+                this.gravity = saveData.engine.gravity;
+                this.friction = saveData.engine.friction;
+                this.playBackSpeed = saveData.engine.playBackSpeed;
+                this.trackingInterval = saveData.engine.trackingInterval;
+                this.trackingLimit = saveData.engine.trackingLimit;
+                this.movementLimit = saveData.engine.movementLimit;
+            }
         }
 
         public string Export(){
