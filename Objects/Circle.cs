@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using PhysicsEngineCore.Options;
-using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class Circle: BaseObject, IObject{
@@ -11,7 +10,7 @@ namespace PhysicsEngineCore.Objects{
         private string _color;
 
         public Circle(CircleOption option): base(option.entities){
-            this._id = option.id ?? throw new ArgumentException(nameof(option.id));
+            this._id = option.id;
             this.radius = option.radius;
             this.mass = option.mass;
             this.stiffness = option.stiffness;
@@ -21,7 +20,6 @@ namespace PhysicsEngineCore.Objects{
                 this.AddAllEntities(option.entities);
             }else{
                 EntityOption entityOption = new EntityOption{
-                    id = IdGenerator.CreateId(10),
                     posX = option.posX,
                     posY = option.posY,
                     radius = option.radius,

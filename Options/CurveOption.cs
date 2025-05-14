@@ -1,6 +1,8 @@
-﻿namespace PhysicsEngineCore.Options{
+﻿using PhysicsEngineCore.Utils;
+
+namespace PhysicsEngineCore.Options{
     public class CurveOption{
-        public string? id { get; set; }
+        public string id { get; set; } = IdGenerator.CreateId(10);
         public string color { get; set; } = "red";
         public double startX { get; set; }
         public double startY { get; set; }

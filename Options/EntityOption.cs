@@ -2,7 +2,7 @@
 
 namespace PhysicsEngineCore.Options{
     public class EntityOption(){
-        public string? id { get; set; }
+        public string id { get; set; } = IdGenerator.CreateId(10);
         public double posX { get; set; }
         public double posY { get; set; }
         public double prePosX { get; set; } = 0;
