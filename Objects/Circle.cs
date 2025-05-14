@@ -19,7 +19,7 @@ namespace PhysicsEngineCore.Objects{
             this.stiffness = option.stiffness;
             this._color = option.color;
 
-            if(option.entities != null){
+            if(option.entities.Count == 0){
                 this.AddAllEntities(option.entities);
             }else{
                 EntityOption entityOption = new EntityOption{
@@ -72,7 +72,8 @@ namespace PhysicsEngineCore.Objects{
                 radius = this.radius,
                 mass = this.mass,
                 stiffness = this.stiffness,
-                color = this.color
+                color = this.color,
+                entities = [..this.entities.Select(entity =>entity.ToOption())]
             };
         }
     }

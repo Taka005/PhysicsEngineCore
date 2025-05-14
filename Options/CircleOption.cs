@@ -10,6 +10,6 @@
         public double velocityX { get; set; } = 0;
         public double velocityY { get; set; } = 0;
         public string color { get; set; } = "red";
-        public List<EntityOption>? entities { get; set; }
+        public List<EntityOption> entities { get; set; } = [];
     }
 }

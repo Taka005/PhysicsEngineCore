@@ -3,16 +3,16 @@ using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     public class BaseObject: IBaseObject{
-        private List<Entity> _entities = [];
-
-        public List<Entity> entities{
-            get{
-                return _entities;
-            }
-        }
+        private readonly List<Entity> _entities = [];
 
         public BaseObject(List<EntityOption>? entities){
             this.AddAllEntities(entities ?? []);
+        }
+
+        public List<Entity> entities {
+            get {
+                return _entities;
+            }
         }
 
         public bool isStop{
