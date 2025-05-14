@@ -5,6 +5,7 @@ using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore{
     public class Engine: Core{
+        public readonly static string SAVE_DATA_VERSION = "1";
         private bool isStarted = false;
         public bool isTrackingMode = false;
         public bool isDebugMode = false;
@@ -14,8 +15,8 @@ namespace PhysicsEngineCore{
         private int trackingCount = 0;
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
-        private readonly List<IObject> objects = [];
-        private readonly List<IGround> grounds = [];
+        private List<IObject> objects = [];
+        private List<IGround> grounds = [];
         private readonly List<IObject> tracks = [];
 
         public Engine(EngineOption? option): base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001){
@@ -25,7 +26,7 @@ namespace PhysicsEngineCore{
                 this.trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
                 this.movementLimit = CheckMovementLimitValue(option.movementLimit);
             }
- 
+
             this.loopTimer = new Timer(this.Loop!, null, 0, (int)((1000 / this.pps) / this.playBackSpeed));
         }
 
@@ -137,7 +138,12 @@ namespace PhysicsEngineCore{
             SaveData? saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
             if(saveData == null) throw new Exception("破損したセーブデータです");
 
+            this.objects = saveData.objects;
+            this.grounds = saveData.grounds;
 
+            if(saveData.engine != null){
+                this.pps = saveData.engine.pps;
+            }   
         }
 
         public string Export(){
