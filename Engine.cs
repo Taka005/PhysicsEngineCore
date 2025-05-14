@@ -145,8 +145,34 @@ namespace PhysicsEngineCore {
             });
         }
 
-        public IObject? SpawnObject(){
+        public IObject? SpawnObject<T>(T option){
+            IObject? obj = null;
 
+            if(option is CircleOption circleOption){
+                obj =  new Circle(circleOption);
+            }
+
+            if(obj == null) throw new Exception("無効な物体が指定されています");
+
+            this.objects.Add(obj);
+
+            return obj;
+        }
+
+        public IGround? SpawnGround<T>(T option){
+            IGround? ground = null;
+
+            if(option is LineOption lineOption){
+                ground = new Line(lineOption);
+            }else if(option is CurveOption curveOption){
+                ground = new Curve(curveOption);
+            }
+
+            if(ground == null) throw new Exception("無効な物体が指定されています");
+
+            this.grounds.Add(ground);
+
+            return ground;
         }
 
         public void DeSpawnObject(string id){
@@ -173,7 +199,7 @@ namespace PhysicsEngineCore {
             SaveData? saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
             if(saveData == null) throw new Exception("破損したセーブデータです");
 
-            if(saveData.version != Engine.SAVE_DATA_VERSION) throw new Exception("セーブデータのバージョンが異なります");
+            if(saveData.version != Engine.SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{Engine.SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
             this.objects = saveData.objects;
             this.grounds = saveData.grounds;
