@@ -23,8 +23,8 @@ namespace PhysicsEngineCore.Objects{
 
         public Vector2 position{
             get{
-                double averagePosX = _entities.Average(entity => entity.position.X);
-                double averagePosY = _entities.Average(entity => entity.position.Y);
+                double averagePosX = _entities.Select(entity => entity.position.X).DefaultIfEmpty(0).Average();
+                double averagePosY = _entities.Select(entity => entity.position.Y).DefaultIfEmpty(0).Average();
 
                 return new Vector2(averagePosX, averagePosY);
             }
