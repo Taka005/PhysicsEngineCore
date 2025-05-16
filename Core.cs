@@ -1,12 +1,13 @@
 ﻿using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Objects;
+using System.Diagnostics;
 
 namespace PhysicsEngineCore{
     public class Core{
         public int pps;
         public double gravity;
         public double friction;
-        private static readonly double CORRECTION_NUMBER = 0.00000001d;
+        private static readonly double CORRECTION_NUMBER = 0.0000001d;
         private static readonly double ROTATION_STRENGTH = 50d;
         private static readonly double FRICTION_STRENGTH = 0.1d;
         private static readonly double MAX_ROTATION = 500d;
@@ -15,6 +16,12 @@ namespace PhysicsEngineCore{
             this.pps = pps;
             this.gravity = gravity;
             this.friction = friction;
+        }
+
+        protected double deltaTime{
+            get{
+                return 1 / (double)this.pps;
+            }
         }
 
         protected void SolvePosition(Entity source, Entity target){
@@ -105,8 +112,8 @@ namespace PhysicsEngineCore{
         protected void SolveSpeed(Entity entity){
             double coefficient = entity.mass * entity.radius * this.friction*FRICTION_STRENGTH;
 
-            entity.velocity -= entity.velocity * coefficient * (1 / this.pps);
-            entity.rotateSpeed -= entity.rotateSpeed * coefficient * (1 / this.pps);
+            entity.velocity -= entity.velocity * coefficient * this.deltaTime;
+            entity.rotateSpeed -= entity.rotateSpeed * coefficient * this.deltaTime;
 
             if(Math.Abs(entity.rotateSpeed) > MAX_ROTATION){
                 entity.rotateSpeed = Math.Sign(entity.rotateSpeed) * MAX_ROTATION;
@@ -114,23 +121,23 @@ namespace PhysicsEngineCore{
         }
 
         protected void UpdateSpeed(Entity entity){
-            entity.velocity.X = (entity.position.X - entity.previousPosition.X)/(1/this.pps);
-            entity.velocity.Y = (entity.position.Y - entity.previousPosition.Y)/(1/this.pps);
+            entity.velocity.X = (entity.position.X - entity.previousPosition.X)/ this.deltaTime;
+            entity.velocity.Y = (entity.position.Y - entity.previousPosition.Y)/ this.deltaTime;
 
             if(entity.mass != 0){
-                entity.velocity.Y += this.gravity * (1/this.pps);
+                entity.velocity.Y += this.gravity * this.deltaTime;
             }
         }
 
         protected void UpdatePosition(Entity entity){
             entity.SavePosition();
 
-            entity.position.X += entity.velocity.X * (1/this.pps);
-            entity.position.Y += entity.velocity.Y * (1/this.pps);
+            entity.position.X += entity.velocity.X * this.deltaTime;
+            entity.position.Y += entity.velocity.Y * this.deltaTime;
         }
 
         protected void UpdateRotate(Entity entity){
-            entity.rotateAngle += entity.rotateSpeed * (1/this.pps);
+            entity.rotateAngle += entity.rotateSpeed * this.deltaTime;
         }
     }
 }

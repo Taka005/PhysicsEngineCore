@@ -13,8 +13,8 @@ namespace PhysicsEngineCore.Objects{
         private double _radius = CheckRadiusValue(option.radius);
         private double _mass = CheckMassValue(option.mass);
         private double _stiffness = CheckStiffnessValue(option.stiffness);
-        public ConnectionManager connection = new ConnectionManager(option.targets);
-        public string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
+        public readonly ConnectionManager connection = new ConnectionManager(option.targets);
+        public readonly string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
 
         public double radius{
             get{
@@ -80,12 +80,12 @@ namespace PhysicsEngineCore.Objects{
                 rotateAngle = this.rotateAngle,
                 rotateSpeed = this.rotateSpeed,
                 parentId = this.parentId,
-                targets = this.connection.targets,
+                targets = this.connection.targets
             };
         }
 
         private static double CheckStiffnessValue(double stiffness){
-            if(stiffness < 0|| stiffness >= 1) throw new Exception("剛性(stiffness)は0超過かつ1以下に設定する必要があります");
+            if(stiffness < 0|| stiffness > 1) throw new Exception("剛性(stiffness)は0超過かつ1以下に設定する必要があります");
 
             return stiffness;
         }
