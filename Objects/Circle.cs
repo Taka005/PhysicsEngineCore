@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Objects{
@@ -16,7 +17,7 @@ namespace PhysicsEngineCore.Objects{
             this.stiffness = option.stiffness;
             this._color = option.color;
 
-            if(option.entities.Count == 0){
+            if(option.entities.Count != 0){
                 this.AddAllEntities(option.entities);
             }else{
                 EntityOption entityOption = new EntityOption{
@@ -27,6 +28,7 @@ namespace PhysicsEngineCore.Objects{
                     stiffness = option.stiffness,
                     velocityX = option.velocityX,
                     velocityY = option.velocityY,
+                    parentId = this.id
                 };
 
                 this.AddEntity(entityOption);

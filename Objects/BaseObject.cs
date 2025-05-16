@@ -23,8 +23,10 @@ namespace PhysicsEngineCore.Objects{
 
         public Vector2 position{
             get{
-                double averagePosX = _entities.Select(entity => entity.position.X).DefaultIfEmpty(0).Average();
-                double averagePosY = _entities.Select(entity => entity.position.Y).DefaultIfEmpty(0).Average();
+                if(_entities.Count == 0) return Vector2.Zero;
+
+                double averagePosX = _entities.Select(entity => entity.position.X).Average();
+                double averagePosY = _entities.Select(entity => entity.position.Y).Average();
 
                 return new Vector2(averagePosX, averagePosY);
             }
@@ -35,9 +37,7 @@ namespace PhysicsEngineCore.Objects{
         }
 
         protected void AddAllEntities(List<EntityOption> entities){
-            foreach(EntityOption entity in entities){
-                this.AddEntity(entity);
-            }
+            entities.ForEach(this.AddEntity);
         }
     }
 }

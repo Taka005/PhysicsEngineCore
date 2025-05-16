@@ -113,6 +113,7 @@
         public Vector2 Rotate(double radians){
             double cos = Math.Cos(radians);
             double sin = Math.Sin(radians);
+
             return new Vector2(this.X * cos - this.Y * sin, this.X * sin + this.Y * cos);
         }
 
