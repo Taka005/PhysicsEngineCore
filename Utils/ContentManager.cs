@@ -52,6 +52,8 @@ namespace PhysicsEngineCore.Utils{
                 }else if(obj.command == CommandType.Remove){
                     this.objects.Remove(obj.target);
                 }
+
+                this.queueObjects.Remove(obj);
             });
 
             this.queueGrounds.ForEach(obj=>{
@@ -62,6 +64,8 @@ namespace PhysicsEngineCore.Utils{
                 }else if(obj.command == CommandType.Remove){
                     this.grounds.Remove(obj.target);
                 }
+
+                this.queueGrounds.Remove(obj);
             });
         }
     }
