@@ -60,6 +60,8 @@ namespace PhysicsEngineCore.Objects{
         public CircleOption ToOption(){
             return new CircleOption {
                 id = this.id,
+                posX = this.position.X,
+                posY = this.position.Y,
                 radius = this.radius,
                 mass = this.mass,
                 stiffness = this.stiffness,

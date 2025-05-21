@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using PhysicsEngineCore.Objects;
+﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Utils{
