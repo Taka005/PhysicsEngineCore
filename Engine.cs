@@ -64,6 +64,8 @@ namespace PhysicsEngineCore {
         public void Start() {
             if(this.isStarted) throw new Exception("既にシステムは開始されています");
 
+            this.content.Sync();
+
             this.isStarted = true;
             this.loopTimer.Change(0, (int)((1000 / this.pps) / this.playBackSpeed));
         }
@@ -175,11 +177,17 @@ namespace PhysicsEngineCore {
         }
 
         public void DeSpawnObject(string id){
-            this.content.objects.RemoveAll(obj => obj.id == id);
+            IObject? obj = this.GetObject(id);
+            if(obj == null) return;
+
+            this.content.RemoveObject(obj);
         }
 
         public void DeSpawnGround(string id){
-            this.content.objects.RemoveAll(obj => obj.id == id);
+            IGround? ground = this.GetGround(id);
+            if(ground == null) return;
+
+            this.content.RemoveGround(ground);
         }
 
         public IObject? GetObject(string id){

@@ -50,7 +50,7 @@ namespace PhysicsEngineCore.Utils{
         }
 
         public void Sync(){
-            this.queueObjects.ForEach(obj =>{
+            this.queueObjects.ToList().ForEach(obj =>{
                 if(obj.target == null) return;
 
                 if(obj.command == CommandType.Add){
@@ -62,7 +62,7 @@ namespace PhysicsEngineCore.Utils{
                 this.queueObjects.Remove(obj);
             });
 
-            this.queueGrounds.ForEach(obj=>{
+            this.queueGrounds.ToList().ForEach(obj=>{
                 if(obj.target == null) return;
 
                 if(obj.command == CommandType.Add){
