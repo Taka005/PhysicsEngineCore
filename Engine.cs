@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
@@ -26,7 +27,7 @@ namespace PhysicsEngineCore {
                 this.movementLimit = CheckMovementLimitValue(option.movementLimit);
             }
 
-            this.loopTimer = new Timer(this.Loop!, null, 0, (int)((1000 / this.pps) / this.playBackSpeed));
+            this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public void SetPlayBackSpeed(float value) {
@@ -54,10 +55,11 @@ namespace PhysicsEngineCore {
 
             if(force) {
                 this.content.grounds.Clear();
+                this.ClearTrack();
             }
         }
 
-        public void ClearTrack() {
+        public void ClearTrack(){
             this.tracks.Clear();
         }
 
@@ -74,7 +76,6 @@ namespace PhysicsEngineCore {
             if(!this.isStarted) throw new Exception("既にシステムは停止しています");
 
             this.isStarted = false;
-            this.trackingCount = 0;
             this.loopTimer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
