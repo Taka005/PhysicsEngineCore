@@ -1,11 +1,17 @@
 ﻿using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Utils{
     class ContentManager{
-        private readonly List<IObject> objects = [];
-        private readonly List<IGround> grounds = [];
+        internal readonly List<IObject> objects = [];
+        internal readonly List<IGround> grounds = [];
         private readonly List<QueueObject> queueObjects = [];
         private readonly List<QueueGround> queueGrounds = [];
+        public List<Entity> entities{
+            get{
+                return [.. this.objects.SelectMany(obj => obj.entities)];
+            }
+        }
 
         public void AddObject(IObject target){
             QueueObject queue = new QueueObject{
@@ -26,7 +32,7 @@ namespace PhysicsEngineCore.Utils{
         }
 
         public void AddGround(IGround target){
-            QueueGround queue = new QueueGround {
+            QueueGround queue = new QueueGround{
                 command = CommandType.Add,
                 target = target
             };
@@ -67,6 +73,18 @@ namespace PhysicsEngineCore.Utils{
 
                 this.queueGrounds.Remove(obj);
             });
+        }
+
+        public ContentManagerOption ToOption(){
+            List<CircleOption> circleOptions = [.. this.objects.OfType<Circle>().Select(obj => obj.ToOption())];
+            List<LineOption> lineOptions = [.. this.grounds.OfType<Line>().Select(obj => obj.ToOption())];
+            List<CurveOption> curveOptions = [.. this.grounds.OfType<Curve>().Select(obj => obj.ToOption())];
+
+            return new ContentManagerOption {
+                circles = circleOptions,
+                lines = lineOptions,
+                curves = curveOptions
+            };
         }
     }
 

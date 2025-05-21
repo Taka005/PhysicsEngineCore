@@ -15,9 +15,8 @@ namespace PhysicsEngineCore {
         private int trackingCount = 0;
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
-        private List<IObject> objects = [];
-        private List<IGround> grounds = [];
         private readonly List<IObject> tracks = [];
+        private readonly ContentManager content = new ContentManager();
 
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
             if(option != null) {
@@ -28,12 +27,6 @@ namespace PhysicsEngineCore {
             }
 
             this.loopTimer = new Timer(this.Loop!, null, 0, (int)((1000 / this.pps) / this.playBackSpeed));
-        }
-
-        private List<Entity> entities {
-            get {
-                return [.. this.objects.SelectMany(obj => obj.entities)];
-            }
         }
 
         public void SetPlayBackSpeed(float value) {
@@ -57,10 +50,10 @@ namespace PhysicsEngineCore {
         }
 
         public void Clear(bool force = false) {
-            this.objects.Clear();
+            this.content.objects.Clear();
 
             if(force) {
-                this.grounds.Clear();
+                this.content.grounds.Clear();
             }
         }
 
@@ -91,7 +84,7 @@ namespace PhysicsEngineCore {
             this.trackingCount++;
 
             if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)) {
-                this.objects
+                this.content.objects
                   .Where(obj => !obj.isStop)
                   .ToList()
                   .ForEach(obj => {
@@ -109,19 +102,21 @@ namespace PhysicsEngineCore {
         }
 
         private void Update(){
-            this.entities.ForEach(entity =>{
+            this.content.Sync();
+
+            this.content.entities.ForEach(entity =>{
                 this.UpdatePosition(entity);
                 this.UpdateRotate(entity);
             });
 
-            this.entities.ForEach(entity =>{
-                int index = this.entities.IndexOf(entity);
+            this.content.entities.ForEach(entity =>{
+                int index = this.content.entities.IndexOf(entity);
 
-                this.grounds.ForEach(ground =>{
+                this.content.grounds.ForEach(ground =>{
                     this.SolveGroundPosition(entity, ground);
                 });
 
-                this.entities.Skip(index + 1).ToList().ForEach(target=>{
+                this.content.entities.Skip(index + 1).ToList().ForEach(target=>{
                     this.SolvePosition(entity, target);
                 });
 
@@ -130,12 +125,12 @@ namespace PhysicsEngineCore {
                 });
             });
 
-            this.entities.ForEach(entity => {
+            this.content.entities.ForEach(entity => {
                 this.UpdateSpeed(entity);
                 this.SolveSpeed(entity);
             });
 
-            this.objects.ForEach(obj=>{
+            this.content.objects.ForEach(obj=>{
                 if(
                     Math.Abs(obj.position.X) > this.movementLimit||
                     Math.Abs(obj.position.Y) > this.movementLimit
@@ -154,7 +149,9 @@ namespace PhysicsEngineCore {
 
             if(obj == null) throw new Exception("無効な物体が指定されています");
 
-            this.objects.Add(obj);
+            this.content.AddObject(obj);
+
+            if(!this.isStarted) this.content.Sync();
 
             return obj;
         }
@@ -170,29 +167,31 @@ namespace PhysicsEngineCore {
 
             if(ground == null) throw new Exception("無効な物体が指定されています");
 
-            this.grounds.Add(ground);
+            this.content.AddGround(ground);
+
+            if(!this.isStarted) this.content.Sync();
 
             return ground;
         }
 
         public void DeSpawnObject(string id){
-            this.objects.RemoveAll(obj => obj.id == id);
+            this.content.objects.RemoveAll(obj => obj.id == id);
         }
 
         public void DeSpawnGround(string id){
-            this.grounds.RemoveAll(obj => obj.id == id);
+            this.content.objects.RemoveAll(obj => obj.id == id);
         }
 
         public IObject? GetObject(string id){
-            return this.objects.Find(obj => obj.id == id);
+            return this.content.objects.Find(obj => obj.id == id);
         }
 
         public IGround? GetGround(string id){
-            return this.grounds.Find(obj => obj.id == id);
+            return this.content.grounds.Find(obj => obj.id == id);
         }
 
         public Entity? GetEntity(string id){
-            return this.entities.Find(obj => obj.id == id);
+            return this.content.entities.Find(obj => obj.id == id);
         }
 
         public void Import(string rawSaveData) {
@@ -206,11 +205,11 @@ namespace PhysicsEngineCore {
             });
 
             saveData.objects.lines.ForEach(obj=>{
-                this.SpawnObject(obj.id);
+                this.SpawnGround(obj.id);
             });
 
             saveData.objects.curves.ForEach(obj=>{
-                this.SpawnObject(obj.id);
+                this.SpawnGround(obj.id);
             });
 
             this.pps = saveData.engine.pps;
@@ -223,16 +222,6 @@ namespace PhysicsEngineCore {
         }
 
         public string Export(){
-            List<CircleOption> circleOptions = [..this.objects.OfType<Circle>().Select(obj=>obj.ToOption())];
-            List<LineOption> lineOptions = [.. this.objects.OfType<Line>().Select(obj => obj.ToOption())];
-            List<CurveOption> curveOptions = [.. this.objects.OfType<Curve>().Select(obj => obj.ToOption())];
-
-            ObjectSaveData objectSaveData = new ObjectSaveData{
-                circles = circleOptions,
-                lines = lineOptions,
-                curves = curveOptions
-            };
-
             EngineOption engineOption = new EngineOption {
                 pps = this.pps,
                 gravity = this.gravity,
@@ -246,7 +235,7 @@ namespace PhysicsEngineCore {
             SaveData saveData = new SaveData {
                 saveAt = DateTime.Now,
                 engine = engineOption,
-                objects = objectSaveData
+                objects = this.content.ToOption()
             };
 
             return JsonSerializer.Serialize(saveData);
@@ -256,7 +245,7 @@ namespace PhysicsEngineCore {
             Vector2 position = new Vector2(posX, posY);
             List<IObject> targets = [];
 
-            this.objects.ForEach(obj => {
+            this.content.objects.ForEach(obj => {
                 List<Entity> entities = [..obj.entities.Where(entity =>{
                     Vector2 difference = entity.position - position;
 
@@ -277,7 +266,7 @@ namespace PhysicsEngineCore {
             Vector2 position = new Vector2(posX, posY);
             List<IGround> targets = [];
 
-            this.grounds.ForEach(ground => {
+            this.content.grounds.ForEach(ground => {
                 Vector2 crossPosition = ground.SolvePosition(position);
 
                 Vector2 difference = crossPosition - position;
@@ -296,7 +285,7 @@ namespace PhysicsEngineCore {
             Vector2 position = new Vector2(posX, posY);
             List<Entity> targets = [];
 
-            this.entities.ForEach(entity => {
+            this.content.entities.ForEach(entity => {
                 Vector2 difference = entity.position - position;
 
                 double distance = difference.Length();
