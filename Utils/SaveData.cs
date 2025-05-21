@@ -6,6 +6,12 @@ namespace PhysicsEngineCore.Utils{
         public string version { get; set; } = Engine.SAVE_DATA_VERSION;
 
         public EngineOption engine { get; set; } = new EngineOption();
-        public ContentManagerOption objects { get; set; } = new ContentManagerOption();
+        public ObjectSaveData objects { get; set; } = new ObjectSaveData();
+    }
+
+    class ObjectSaveData {
+        public List<CircleOption> circles { get; set; } = [];
+        public List<LineOption> lines { get; set; } = [];
+        public List<CurveOption> curves { get; set; } = [];
     }
 }

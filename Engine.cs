@@ -132,14 +132,14 @@ namespace PhysicsEngineCore {
                 this.SolveSpeed(entity);
             });
 
-            this.content.objects.ForEach(obj=>{
-                if(
-                    Math.Abs(obj.position.X) > this.movementLimit||
-                    Math.Abs(obj.position.Y) > this.movementLimit
-                ){
-                    this.DeSpawnObject(obj.id);
-                }
-            });
+            //this.content.objects.ForEach(obj=>{
+            //    if(
+            //        Math.Abs(obj.position.X) > this.movementLimit||
+            //        Math.Abs(obj.position.Y) > this.movementLimit
+            //    ){
+            //        this.DeSpawnObject(obj.id);
+            //    }
+            //});
         }
 
         public IObject? SpawnObject<T>(T option){
@@ -209,15 +209,15 @@ namespace PhysicsEngineCore {
             if(saveData.version != Engine.SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{Engine.SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
             saveData.objects.circles.ForEach(obj=>{
-                this.SpawnObject(obj.id);
+                this.SpawnObject(obj);
             });
 
             saveData.objects.lines.ForEach(obj=>{
-                this.SpawnGround(obj.id);
+                this.SpawnGround(obj);
             });
 
             saveData.objects.curves.ForEach(obj=>{
-                this.SpawnGround(obj.id);
+                this.SpawnGround(obj);
             });
 
             this.pps = saveData.engine.pps;
@@ -243,7 +243,7 @@ namespace PhysicsEngineCore {
             SaveData saveData = new SaveData {
                 saveAt = DateTime.Now,
                 engine = engineOption,
-                objects = this.content.ToOption()
+                objects = this.content.ToData()
             };
 
             return JsonSerializer.Serialize(saveData);
