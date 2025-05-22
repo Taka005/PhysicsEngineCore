@@ -51,7 +51,8 @@ namespace PhysicsEngineCore.Utils{
         }
 
         public void Sync(){
-            //if(this.queueObjects.Count == 0 || this.queueGrounds.Count == 0) return; あとから考慮
+            if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
+
             this.queueObjects.ToList().ForEach(obj =>{
                 if(obj.target == null) return;
 

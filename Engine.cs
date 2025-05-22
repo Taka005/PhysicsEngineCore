@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
@@ -124,7 +123,12 @@ namespace PhysicsEngineCore {
                 });
 
                 entity.connection.targets.ForEach(target =>{
-                    this.SolveConnection(entity,target);
+                    Entity? targetEntity = GetEntity(target.entityId);
+                    if(targetEntity == null){
+                        entity.connection.Remove(target.entityId);
+                    }else{
+                        this.SolveConnection(entity, targetEntity, target.distance, target.stiffness);
+                    }
                 });
             });
 
@@ -133,14 +137,14 @@ namespace PhysicsEngineCore {
                 this.SolveSpeed(entity);
             });
 
-            //this.content.objects.ForEach(obj=>{
-            //    if(
-            //        Math.Abs(obj.position.X) > this.movementLimit||
-            //        Math.Abs(obj.position.Y) > this.movementLimit
-            //    ){
-            //        this.DeSpawnObject(obj.id);
-            //    }
-            //});
+            this.content.objects.ForEach(obj => {
+                if(
+                    Math.Abs(obj.position.X) > this.movementLimit ||
+                    Math.Abs(obj.position.Y) > this.movementLimit
+                ) {
+                    this.DeSpawnObject(obj.id);
+                }
+            });
         }
 
         public IObject? SpawnObject<T>(T option){
@@ -182,6 +186,8 @@ namespace PhysicsEngineCore {
             if(obj == null) return;
 
             this.content.RemoveObject(obj);
+
+            if(!this.isStarted) this.content.Sync();
         }
 
         public void DeSpawnGround(string id){
@@ -189,6 +195,8 @@ namespace PhysicsEngineCore {
             if(ground == null) return;
 
             this.content.RemoveGround(ground);
+
+            if(!this.isStarted) this.content.Sync();
         }
 
         public IObject? GetObject(string id){

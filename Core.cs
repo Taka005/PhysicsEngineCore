@@ -82,30 +82,30 @@ namespace PhysicsEngineCore{
             }
         }
 
-        protected void SolveConnection(Entity entity, Target target){
-            double totalMass = entity.invMass + target.entity.invMass;
+        protected void SolveConnection(Entity source, Entity target,double connectDistance, double connectStiffness){
+            double totalMass = source.invMass + target.invMass;
             if(totalMass == 0) return;
 
-            Vector2 difference = target.entity.position - entity.position;
+            Vector2 difference = target.position - source.position;
 
             double distance = difference.Length();
 
-            double move = (distance - target.distance) / (distance * totalMass + CORRECTION_NUMBER) * target.stiffness;
+            double move = (distance - connectDistance) / (distance * totalMass + CORRECTION_NUMBER) * connectStiffness;
             Vector2 correction = difference * move;
 
-            entity.position += correction * entity.invMass;
-            target.entity.position -= correction * target.entity.invMass;
+            source.position += correction * source.invMass;
+            target.position -= correction * target.invMass;
 
-            double angle = -difference.X * entity.velocity.Y + difference.X * entity.velocity.X;
+            double angle = -difference.X * source.velocity.Y + difference.X * source.velocity.X;
 
-            double rotateAngle = (Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
+            double rotateAngle = (Math.Acos(Vector2.Dot(difference, source.velocity) / (distance * source.velocity.Length())) * (180 / Math.PI));
 
             if(angle > 0){
-                entity.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
-                target.entity.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
+                source.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
+                target.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
             }else if(angle < 0){
-                entity.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
-                target.entity.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
+                source.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
+                target.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
             }
         }
 
