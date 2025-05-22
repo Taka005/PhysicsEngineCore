@@ -152,6 +152,8 @@ namespace PhysicsEngineCore {
 
             if(option is CircleOption circleOption){
                 obj =  new Circle(circleOption);
+            }else if(option is RopeOption ropeOption){
+                obj =new Rope(ropeOption);
             }
 
             if(obj == null) throw new Exception("無効な物体が指定されています");
@@ -215,7 +217,7 @@ namespace PhysicsEngineCore {
             SaveData? saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
             if(saveData == null) throw new Exception("破損したセーブデータです");
 
-            if(saveData.version != Engine.SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{Engine.SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
+            if(saveData.version != SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
             saveData.objects.circles.ForEach(obj=>{
                 this.SpawnObject(obj);

@@ -43,12 +43,16 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
-        protected void AddEntity(EntityOption entity){
-            this._entities.Add(new Entity(entity));
+        protected Entity AddEntity(EntityOption entityOption){
+            Entity entity = new Entity(entityOption);
+
+            this._entities.Add(entity);
+
+            return entity;
         }
 
         protected void AddAllEntities(List<EntityOption> entities){
-            entities.ForEach(this.AddEntity);
+            entities.ForEach(entityOption => this.AddEntity(entityOption));
         }
     }
 }
