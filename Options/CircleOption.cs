@@ -5,7 +5,7 @@ namespace PhysicsEngineCore.Options{
         public string id { get; set; } = IdGenerator.CreateId(10);
         public double posX { get; set; }
         public double posY { get; set; }
-        public double radius { get; set; }
+        public double diameter { get; set; }
         public double mass { get; set; }
         public double stiffness { get; set; }
         public double velocityX { get; set; } = 0;

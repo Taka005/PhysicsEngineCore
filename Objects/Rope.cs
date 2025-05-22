@@ -32,7 +32,7 @@ namespace PhysicsEngineCore.Objects{
                     EntityOption entityOption = new EntityOption {
                         posX = posX,
                         posY = posY,
-                        radius = option.width / 2,
+                        diameter = option.width,
                         mass = option.mass,
                         stiffness = option.stiffness,
                         velocityX = option.velocityX,

@@ -10,18 +10,24 @@ namespace PhysicsEngineCore.Objects{
         public Vector2 velocity = new Vector2(option.velocityX, option.velocityY);
         public double rotateAngle = option.rotateAngle;
         public double rotateSpeed = option.rotateSpeed;
-        private double _radius = CheckRadiusValue(option.radius);
+        private double _diameter = CheckDiameterValue(option.diameter);
         private double _mass = CheckMassValue(option.mass);
         private double _stiffness = CheckStiffnessValue(option.stiffness);
         public readonly ConnectionManager connection = new ConnectionManager(option.targets);
         public readonly string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
 
-        public double radius{
+        public double diameter {
             get{
-                return _radius;
+                return _diameter;
             }
             set{
-                _radius = CheckRadiusValue(value);
+                _diameter = CheckDiameterValue(value);
+            }
+        }
+
+        public double radius{
+            get{
+                return this._diameter / 2;
             }
         }
 
@@ -74,7 +80,7 @@ namespace PhysicsEngineCore.Objects{
                 prePosY = this.previousPosition.Y,
                 mass = this.mass,
                 stiffness = this.stiffness,
-                radius = this.radius,
+                diameter = this.diameter,
                 velocityX = this.velocity.X,
                 velocityY = this.velocity.Y,
                 rotateAngle = this.rotateAngle,
@@ -90,10 +96,10 @@ namespace PhysicsEngineCore.Objects{
             return stiffness;
         }
 
-        private static double CheckRadiusValue(double radius){
-            if(radius < 0) throw new Exception("半径(radius)は0以上に設定する必要があります");
+        private static double CheckDiameterValue(double diameter) {
+            if(diameter < 0) throw new Exception("直径(diameter)は0以上に設定する必要があります");
 
-            return radius;
+            return diameter;
         }
 
         private static double CheckMassValue(double mass){
