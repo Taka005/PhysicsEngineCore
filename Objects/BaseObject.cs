@@ -32,6 +32,17 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        public Vector2 velocity{
+            get{
+                if(_entities.Count == 0) return Vector2.Zero;
+
+                double averageVelocityX = _entities.Select(entity => entity.velocity.X).Average();
+                double averageVelocityY = _entities.Select(entity => entity.velocity.Y).Average();
+
+                return new Vector2(averageVelocityX, averageVelocityY);
+            }
+        }
+
         protected void AddEntity(EntityOption entity){
             this._entities.Add(new Entity(entity));
         }

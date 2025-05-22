@@ -62,6 +62,8 @@ namespace PhysicsEngineCore.Objects{
                 id = this.id,
                 posX = this.position.X,
                 posY = this.position.Y,
+                velocityX = this.velocity.X,
+                velocityY = this.velocity.Y,
                 radius = this.radius,
                 mass = this.mass,
                 stiffness = this.stiffness,
