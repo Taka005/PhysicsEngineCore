@@ -151,9 +151,11 @@ namespace PhysicsEngineCore {
             IObject? obj = null;
 
             if(option is CircleOption circleOption){
-                obj =  new Circle(circleOption);
+                obj = new Circle(circleOption);
             }else if(option is RopeOption ropeOption){
-                obj =new Rope(ropeOption);
+                obj = new Rope(ropeOption);
+            } else if(option is SquareOption squareOption){
+                obj = new Square(squareOption);
             }
 
             if(obj == null) throw new Exception("無効な物体が指定されています");
@@ -168,9 +170,9 @@ namespace PhysicsEngineCore {
         public IGround? SpawnGround<T>(T option){
             IGround? ground = null;
 
-            if(option is LineOption lineOption){
+            if(option is LineOption lineOption) {
                 ground = new Line(lineOption);
-            }else if(option is CurveOption curveOption){
+            } else if(option is CurveOption curveOption) {
                 ground = new Curve(curveOption);
             }
 
