@@ -8,7 +8,6 @@ namespace PhysicsEngineCore {
         public readonly static string SAVE_DATA_VERSION = "1";
         private bool isStarted = false;
         public bool isTrackingMode = false;
-        public bool isDebugMode = false;
         private readonly Timer loopTimer;
         private float playBackSpeed = 1;
         private float trackingInterval = 100;
@@ -242,7 +241,7 @@ namespace PhysicsEngineCore {
             this.movementLimit = saveData.engine.movementLimit;
         }
 
-        public string Export(){
+        public SaveData toSaveData(){
             EngineOption engineOption = new EngineOption {
                 pps = this.pps,
                 gravity = this.gravity,
@@ -259,7 +258,11 @@ namespace PhysicsEngineCore {
                 objects = this.content.ToData()
             };
 
-            return JsonSerializer.Serialize(saveData);
+            return saveData;
+        }
+
+        public string Export(){
+            return JsonSerializer.Serialize(this.toSaveData());
         }
 
         public List<IObject> GetObjectsAt(double posX, double posY) {

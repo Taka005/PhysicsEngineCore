@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Utils{
-    class SaveData{
+    public class SaveData{
         public DateTime saveAt { get; set; }
         public string version { get; set; } = Engine.SAVE_DATA_VERSION;
 
@@ -9,7 +9,7 @@ namespace PhysicsEngineCore.Utils{
         public ObjectSaveData objects { get; set; } = new ObjectSaveData();
     }
 
-    class ObjectSaveData {
+     public class ObjectSaveData {
         public List<CircleOption> circles { get; set; } = [];
         public List<SquareOption> squares { get; set; } = [];
         public List<RopeOption> ropes { get; set; } = [];
