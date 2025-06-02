@@ -8,6 +8,7 @@ namespace PhysicsEngineCore {
         public readonly static string SAVE_DATA_VERSION = "1";
         private bool isStarted = false;
         public bool isTrackingMode = false;
+        public bool isDebugMode = false;
         private readonly Timer loopTimer;
         private float playBackSpeed = 1;
         private float trackingInterval = 100;

@@ -1,6 +1,5 @@
 ﻿using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Objects;
-using System.Diagnostics;
 
 namespace PhysicsEngineCore{
     public class Core{
