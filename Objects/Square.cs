@@ -12,8 +12,11 @@ namespace PhysicsEngineCore.Objects{
         private readonly string _id;
         public double size;
         private string _color;
-        private readonly DrawingVisual _visual = new DrawingVisual();
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="option">四角の初期化クラス</param>
         public Square(SquareOption option) : base(option.entities) {
             this._id = option.id;
             this.size = option.size;
@@ -65,15 +68,6 @@ namespace PhysicsEngineCore.Objects{
         }
 
         /// <summary>
-        /// 描画インスタンス
-        /// </summary>
-        public DrawingVisual visual{
-            get{
-                return _visual;
-            }
-        }
-
-        /// <summary>
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
@@ -90,7 +84,7 @@ namespace PhysicsEngineCore.Objects{
         /// オブジェクトを描画します
         /// </summary>
         public void Draw() {
-            DrawingContext context = _visual.RenderOpen();
+            DrawingContext context = this.visual.RenderOpen();
 
             Brush brush = Utility.ParseColor(this._color);
         }

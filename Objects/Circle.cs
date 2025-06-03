@@ -11,7 +11,6 @@ namespace PhysicsEngineCore.Objects{
     public class Circle: BaseObject, IObject{
         private readonly string _id;
         public double diameter;
-        private readonly DrawingVisual _visual = new DrawingVisual();
         private string _color;
 
         /// <summary>
@@ -51,15 +50,6 @@ namespace PhysicsEngineCore.Objects{
         }
 
         /// <summary>
-        /// 描画インスタンス
-        /// </summary>
-        public DrawingVisual visual{
-            get{
-                return _visual;
-            }
-        }
-
-        /// <summary>
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
@@ -85,7 +75,7 @@ namespace PhysicsEngineCore.Objects{
         /// オブジェクトを描画します
         /// </summary>
         public void Draw(){
-            DrawingContext context = _visual.RenderOpen();
+            DrawingContext context = this.visual.RenderOpen();
 
             Brush brush = Utility.ParseColor(this._color);
 

@@ -19,6 +19,10 @@ namespace PhysicsEngineCore.Objects{
         private double _width;
         private readonly DrawingVisual _visual = new DrawingVisual();
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="option">曲線の初期化クラス</param>
         public Curve(CurveOption option){
             this._id = option.id;
             this._color = option.color;

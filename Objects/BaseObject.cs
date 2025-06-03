@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Options;
+﻿using System.Windows.Media;
+using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
@@ -8,7 +9,12 @@ namespace PhysicsEngineCore.Objects{
     /// </summary>
     public class BaseObject: IBaseObject{
         private readonly List<Entity> _entities = [];
+        private readonly DrawingVisual _visual = new DrawingVisual();
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="entities">全てのエンティティーのリスト</param>
         public BaseObject(List<EntityOption>? entities){
             this.AddAllEntities(entities ?? []);
         }
@@ -19,6 +25,15 @@ namespace PhysicsEngineCore.Objects{
         public List<Entity> entities {
             get {
                 return _entities;
+            }
+        }
+
+        /// <summary>
+        /// 描画インスタンス
+        /// </summary>
+        public DrawingVisual visual {
+            get {
+                return _visual;
             }
         }
 
