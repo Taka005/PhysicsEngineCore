@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Windows.Media;
+using System.Windows;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -87,6 +88,28 @@ namespace PhysicsEngineCore.Objects{
             DrawingContext context = _visual.RenderOpen();
 
             Brush brush = Utility.ParseColor(this._color);
+
+            context.DrawLine(
+                new Pen(brush, this.width),
+                new Point(this.start.X,this.start.Y),
+                new Point(this.end.X,this.end.Y)
+            );
+
+            context.DrawEllipse(
+                brush,
+                null,
+                new Point(this.start.X,this.start.Y),
+                this.width/2,
+                this.width/2
+            );
+
+            context.DrawEllipse(
+                brush,
+                null,
+                new Point(this.end.X, this.end.Y),
+                this.width/2,
+                this.width/2
+            );
         }
 
         /// <summary>
