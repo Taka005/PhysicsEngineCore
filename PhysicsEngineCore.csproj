@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
 	<UseWPF>true</UseWPF>
   </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PhysicsEngineRender">
+      <HintPath>..\..\..\..\Desktop\code\PhysicsEngineRender\bin\Debug\net8.0-windows\PhysicsEngineRender.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

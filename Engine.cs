@@ -2,6 +2,7 @@
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
+using PhysicsEngineRender;
 
 namespace PhysicsEngineCore {
     public class Engine : Core {
@@ -17,6 +18,7 @@ namespace PhysicsEngineCore {
         private int movementLimit = 10000;
         private readonly List<IObject> tracks = [];
         private readonly ContentManager content = new ContentManager();
+        private readonly Render render = new Render();
 
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
             if(option != null) {
