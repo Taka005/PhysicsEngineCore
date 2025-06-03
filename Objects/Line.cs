@@ -54,6 +54,10 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// オブジェクトの色
+        /// Hexの値です
+        /// </summary>
         public string color{
             get{
                 return this._color;
@@ -70,6 +74,15 @@ namespace PhysicsEngineCore.Objects{
             get{
                 return Vector2.Distance(this.start,this.end);
             }
+        }
+
+        /// <summary>
+        /// オブジェクトを描画します
+        /// </summary>
+        public void Draw() {
+            DrawingContext context = _visual.RenderOpen();
+
+            Brush brush = Utility.ParseColor(this._color);
         }
 
         /// <summary>

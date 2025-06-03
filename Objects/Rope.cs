@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Windows.Media;
 using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
 
@@ -72,6 +73,10 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// オブジェクトの色
+        /// Hexの値です
+        /// </summary>
         public string color{
             get{
                 return this._color;
@@ -79,6 +84,15 @@ namespace PhysicsEngineCore.Objects{
             set{
                 this._color = value;
             }
+        }
+
+        /// <summary>
+        /// オブジェクトを描画します
+        /// </summary>
+        public void Draw() {
+            DrawingContext context = _visual.RenderOpen();
+
+            Brush brush = Utility.ParseColor(this._color);
         }
 
         /// <summary>

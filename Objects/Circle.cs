@@ -81,6 +81,9 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// オブジェクトを描画します
+        /// </summary>
         public void Draw(){
             DrawingContext context = _visual.RenderOpen();
 
