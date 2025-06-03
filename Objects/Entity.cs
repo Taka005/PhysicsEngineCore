@@ -3,6 +3,12 @@ using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
+
+    /// <summary>
+    /// エンティティーを表す
+    /// これは物理エンジンにおける最小単位です
+    /// </summary>
+    /// <param name="option">エンティティーの初期化引数</param>
     public class Entity(EntityOption option){
         public readonly string id = option.id;
         public Vector2 position = new Vector2(option.posX, option.posY);
@@ -16,6 +22,9 @@ namespace PhysicsEngineCore.Objects{
         public readonly ConnectionManager connection = new ConnectionManager(option.targets);
         public readonly string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
 
+        /// <summary>
+        /// エンティティーの直径
+        /// </summary>
         public double diameter {
             get{
                 return _diameter;
@@ -25,12 +34,18 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// エンティティーの半径
+        /// </summary>
         public double radius{
             get{
                 return this._diameter / 2;
             }
         }
 
+        /// <summary>
+        /// エンティティーの質量
+        /// </summary>
         public double mass{
             get{
                 return _mass;
@@ -40,6 +55,10 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// エンティティーの剛性
+        /// 0超過かつ1以下の値のみをとる
+        /// </summary>
         public double stiffness{
             get{
                 return _stiffness;
@@ -49,6 +68,10 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// エンティティーの質量の逆数
+        /// 質量が0の場合は0です
+        /// </summary>
         public double invMass{
             get{
                 if(this.mass == 0) return 0;
@@ -57,20 +80,34 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// エンティティーが静止しているかを判定します
+        /// </summary>
         public bool isStop{
             get{
                 return position.Equals(previousPosition);
             }
         }
 
+        /// <summary>
+        /// エンティティーの位置を保存します
+        /// </summary>
         public void SavePosition(){
             this.previousPosition = this.position;
         }
 
+        /// <summary>
+        /// クラスのデータをJSON形式の文字列に変換します
+        /// </summary>
+        /// <returns>JSON形式の文字列</returns>
         public string ToJson(){
             return JsonSerializer.Serialize(this.ToOption());
         }
 
+        /// <summary>
+        /// クラスの引数に変換します
+        /// </summary>
+        /// <returns>クラスの引数</returns>
         public EntityOption ToOption(){
             return new EntityOption{
                 id = this.id,
@@ -90,18 +127,36 @@ namespace PhysicsEngineCore.Objects{
             };
         }
 
+        /// <summary>
+        /// 剛性が正しい値かチェックします
+        /// </summary>
+        /// <param name="stiffness">剛性値</param>
+        /// <returns>正しい剛性値</returns>
+        /// <exception cref="Exception">0超過かつ1以下の値ではないときに例外</exception>
         private static double CheckStiffnessValue(double stiffness){
-            if(stiffness < 0|| stiffness > 1) throw new Exception("剛性(stiffness)は0超過かつ1以下に設定する必要があります");
+            if(stiffness <= 0|| stiffness > 1) throw new Exception("剛性(stiffness)は0超過かつ1以下に設定する必要があります");
 
             return stiffness;
         }
 
+        /// <summary>
+        /// 直径が正しい値かチェックします
+        /// </summary>
+        /// <param name="diameter">直径</param>
+        /// <returns>正しい直径</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
         private static double CheckDiameterValue(double diameter) {
             if(diameter < 0) throw new Exception("直径(diameter)は0以上に設定する必要があります");
 
             return diameter;
         }
 
+        /// <summary>
+        /// 質量が正しい値かチェックします
+        /// </summary>
+        /// <param name="mass">質量</param>
+        /// <returns>正しい質量</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
         private static double CheckMassValue(double mass){
             if(mass < 0) throw new Exception("質量(mass)は0以上に設定する必要があります");
 

@@ -3,6 +3,10 @@ using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
+
+    /// <summary>
+    /// 曲線を表すクラス
+    /// </summary>
     public class Curve: IGround{
         private readonly string _id;
         private string _color;
@@ -33,6 +37,9 @@ namespace PhysicsEngineCore.Objects{
             this.radius = Vector2.Distance(this.start,this.center);
         }
 
+        /// <summary>
+        /// オブジェクトの固有ID
+        /// </summary>
         public string id{
             get{
                 return this._id;
@@ -48,6 +55,9 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// 線の幅
+        /// </summary>
         public double width{
             get{
                 return this._width;
@@ -57,14 +67,26 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// クラスのデータをJSON形式の文字列に変換します
+        /// </summary>
+        /// <returns>JSON形式の文字列</returns>
         public string ToJson(){
             return JsonSerializer.Serialize(this.ToOption());
         }
 
+        /// <summary>
+        /// 同じ状態のクラスを複製します
+        /// </summary>
+        /// <returns>複製されたクラス</returns>
         public IGround Clone(){
             return new Curve(this.ToOption());
         }
 
+        /// <summary>
+        /// クラスの引数に変換します
+        /// </summary>
+        /// <returns>クラスの引数</returns>
         public CurveOption ToOption(){
             return new CurveOption {
                 id = this.id,

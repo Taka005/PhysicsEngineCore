@@ -18,6 +18,9 @@ namespace PhysicsEngineCore.Objects{
             this._width = CheckWidthValue(option.width); 
         }
 
+        /// <summary>
+        /// 線の幅
+        /// </summary>
         public double width{
             get{
                 return this._width;
@@ -27,6 +30,9 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// オブジェクトの固有ID
+        /// </summary>
         public string id{
             get{
                 return this._id;
