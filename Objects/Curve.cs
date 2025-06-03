@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Windows.Media;
+using System.Windows;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -89,10 +90,49 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// オブジェクトを描画します
         /// </summary>
-        public void Draw() {
+        public void Draw(){
             DrawingContext context = _visual.RenderOpen();
-
             Brush brush = Utility.ParseColor(this._color);
+
+            double startAngle = NormalizeAngle(Math.Atan2(this.start.Y - this.center.Y, this.start.X - this.center.X));
+            double endAngle = NormalizeAngle(Math.Atan2(this.end.Y - this.center.Y, this.end.X - this.center.X));
+            double midAngle = NormalizeAngle(Math.Atan2(this.middle.Y - this.center.Y, this.middle.X - this.center.X));
+            bool clockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
+
+            StreamGeometry arcGeometry = new StreamGeometry();
+            StreamGeometryContext sgc = arcGeometry.Open();
+
+            sgc.BeginFigure(
+                new Point(this.center.X + radius * Math.Cos(startAngle),this.center.Y + radius * Math.Sin(startAngle)),
+                false,
+                false
+            );
+
+            sgc.ArcTo(
+                new Point(this.center.X + radius * Math.Cos(endAngle),this.center.Y + radius * Math.Sin(endAngle)),
+                new Size(this.radius, this.radius),
+                0,
+                clockwise,
+                SweepDirection.Clockwise,
+                true,
+                true
+            );
+
+            context.DrawGeometry(null, new Pen(brush, this.width), arcGeometry);
+
+            context.DrawEllipse(
+                brush,
+                null,
+                new Point(this.start.X, this.start.Y),
+                this.width / 2, this.width / 2
+            );
+
+            context.DrawEllipse(
+                brush,
+                null,
+                new Point(this.end.X, this.end.Y),
+                this.width / 2, this.width / 2
+            );
         }
 
         /// <summary>
@@ -129,6 +169,13 @@ namespace PhysicsEngineCore.Objects{
             };
         }
 
+
+        /// <summary>
+        /// ある点から曲線に垂直で下した時の交点を返します
+        /// 曲線の端のほうが近い場合は、端の座標を返します
+        /// </summary>
+        /// <param name="position">任意の座標</param>
+        /// <returns>交差した座標</returns>
         public Vector2 SolvePosition(Vector2 position){
             Vector2 difference = position - this.center;
 
@@ -144,9 +191,9 @@ namespace PhysicsEngineCore.Objects{
             double endAngle = NormalizeAngle(Math.Atan2(this.end.Y - this.center.Y, this.end.X - this.center.X));
             double crossAngle = NormalizeAngle(Math.Atan2(cross.Y - this.center.Y, cross.X - this.center.X));
 
-            bool clockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
+            bool isClockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
 
-            if(!IsAngleBetween(crossAngle, startAngle, endAngle, clockwise)){
+            if(!IsAngleBetween(crossAngle, startAngle, endAngle, isClockwise)){
                 double startDistance = Vector2.DistanceSquared(this.start, position);
                 double endDistance = Vector2.DistanceSquared(this.end, position);
 
@@ -160,22 +207,41 @@ namespace PhysicsEngineCore.Objects{
             return cross;
         }
 
-        private static bool IsAngleBetween(double angle, double start, double end, bool clockwise){
-            if(clockwise){
+        /// <summary>
+        /// 指定された角度に入っているかをチェックします
+        /// </summary>
+        /// <param name="angle">判定する角度</param>
+        /// <param name="start">開始角度</param>
+        /// <param name="end">終了角度</param>
+        /// <param name="isClockwise">時計周りかどうか</param>
+        /// <returns>時計回りなら真を返す</returns>
+        private static bool IsAngleBetween(double angle, double start, double end, bool isClockwise){
+            if(isClockwise){
                 return (angle >= start&&angle <= end)||(start > end&&(angle >= start||angle <= end));
             }else{
                 return (angle <= start&&angle >= end)||(start < end&&(angle <= start||angle >= end));
             }
         }
 
+        /// <summary>
+        /// 角度を正規化します
+        /// </summary>
+        /// <param name="angle">正規化する角度</param>
+        /// <returns>正規化された角度</returns>
         private static double NormalizeAngle(double angle){
             return (angle + 2 * Math.PI) % (2 * Math.PI);
         }
 
-        private static double CheckWidthValue(double thickness){
-            if(thickness < 0) throw new Exception("厚さ(thickness)は0以上に設定する必要があります");
+        /// <summary>
+        /// 幅が正しい値かチェックします
+        /// </summary>
+        /// <param name="width">幅</param>
+        /// <returns>正しい幅</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
+        private static double CheckWidthValue(double width) {
+            if(width < 0) throw new Exception("厚さ(width)は0以上に設定する必要があります");
 
-            return thickness;
+            return width;
         }
     }
 }
