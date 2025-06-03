@@ -5,15 +5,11 @@ namespace PhysicsEngineCore.Objects{
     public class Rope: BaseObject, IObject{
         private readonly string _id;
         public double width;
-        public double mass;
-        public double stiffness;
         private string _color;
 
         public Rope(RopeOption option): base(option.entities){
             this._id = option.id;
             this.width = option.width;
-            this.mass = option.mass;
-            this.stiffness = option.stiffness;
             this._color = option.color;
 
             if(option.entities.Count != 0) {
@@ -43,9 +39,8 @@ namespace PhysicsEngineCore.Objects{
                     Entity target = this.AddEntity(entityOption);
 
                     if(entity != null){
-                        entity.connection.Add(target, this.width * 2, this.stiffness);
-
-                        target.connection.Add(entity, this.width * 2, this.stiffness);
+                        entity.connection.Add(target, this.width * 2, option.stiffness);
+                        target.connection.Add(entity, this.width * 2, option.stiffness);
                     }
 
                     entity = target;

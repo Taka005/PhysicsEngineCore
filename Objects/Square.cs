@@ -6,15 +6,11 @@ namespace PhysicsEngineCore.Objects{
     public class Square : BaseObject, IObject{
         private readonly string _id;
         public double size;
-        public double mass;
-        public double stiffness;
         private string _color;
 
         public Square(SquareOption option) : base(option.entities) {
             this._id = option.id;
             this.size = option.size;
-            this.mass = option.mass;
-            this.stiffness = option.stiffness;
             this._color = option.color;
 
             if(option.entities.Count != 0){

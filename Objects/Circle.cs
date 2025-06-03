@@ -5,15 +5,11 @@ namespace PhysicsEngineCore.Objects{
     public class Circle: BaseObject, IObject{
         private readonly string _id;
         public double diameter;
-        public double mass;
-        public double stiffness;
         private string _color;
 
         public Circle(CircleOption option): base(option.entities){
             this._id = option.id;
             this.diameter = option.diameter;
-            this.mass = option.mass;
-            this.stiffness = option.stiffness;
             this._color = option.color;
 
             if(option.entities.Count != 0){
@@ -22,7 +18,7 @@ namespace PhysicsEngineCore.Objects{
                 EntityOption entityOption = new EntityOption{
                     posX = option.posX,
                     posY = option.posY,
-                    diameter = this.diameter,
+                    diameter = option.diameter,
                     mass = option.mass,
                     stiffness = option.stiffness,
                     velocityX = option.velocityX,
