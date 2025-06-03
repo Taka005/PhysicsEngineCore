@@ -3,6 +3,10 @@ using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
+
+    /// <summary>
+    /// 四角を表すクラス
+    /// </summary>
     public class Square : BaseObject, IObject{
         private readonly string _id;
         public double size;
@@ -49,6 +53,9 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// オブジェクトの固有ID
+        /// </summary>
         public string id {
             get {
                 return _id;
@@ -64,14 +71,26 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// 同じ状態のクラスを複製します
+        /// </summary>
+        /// <returns>複製されたクラス</returns>
         public string ToJson() {
             return JsonSerializer.Serialize(this.ToOption());
         }
 
+        /// <summary>
+        /// 同じ状態のクラスを複製します
+        /// </summary>
+        /// <returns>複製されたクラス</returns>
         public IObject Clone() {
             return new Square(this.ToOption());
         }
 
+        /// <summary>
+        /// クラスの引数に変換します
+        /// </summary>
+        /// <returns>クラスの引数</returns>
         public SquareOption ToOption() {
             return new SquareOption {
                 id = this.id,

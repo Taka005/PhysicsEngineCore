@@ -3,6 +3,10 @@ using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
+
+    /// <summary>
+    /// 線を表すクラス
+    /// </summary>
     public class Line: IGround{
         private readonly string _id;
         private string _color;
@@ -48,20 +52,35 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// 線の長さ
+        /// </summary>
         public double lenght{
             get{
                 return Vector2.Distance(this.start,this.end);
             }
         }
 
+        /// <summary>
+        /// クラスのデータをJSON形式の文字列に変換します
+        /// </summary>
+        /// <returns>JSON形式の文字列</returns>
         public IGround Clone(){
             return new Line(this.ToOption());
         }
 
+        /// <summary>
+        /// 同じ状態のクラスを複製します
+        /// </summary>
+        /// <returns>複製されたクラス</returns>
         public string ToJson(){
             return JsonSerializer.Serialize(this.ToOption());
         }
 
+        /// <summary>
+        /// クラスの引数に変換します
+        /// </summary>
+        /// <returns>クラスの引数</returns>
         public LineOption ToOption(){
             return new LineOption {
                 id = this.id,
@@ -74,6 +93,12 @@ namespace PhysicsEngineCore.Objects{
             };
         }
 
+        /// <summary>
+        /// ある点から線に垂直で下した時の交点を返します
+        /// 線の端のほうが近い場合は、端の座標を返します
+        /// </summary>
+        /// <param name="position">任意の座標</param>
+        /// <returns>交差した座標</returns>
         public Vector2 SolvePosition(Vector2 position){
             double flag = ((position.X - this.start.X) * (this.end.X - this.start.X) + (position.Y - this.start.Y) * (this.end.Y - this.start.Y)) / Vector2.DistanceSquared(this.start, this.end);
 
@@ -89,6 +114,12 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// 幅が正しい値かチェックします
+        /// </summary>
+        /// <param name="width">幅</param>
+        /// <returns>正しい幅</returns>
+        /// <exception cref="Exception">0未満であった時に例外</exception>
         private static double CheckWidthValue(double width){
             if(width < 0) throw new Exception("厚さ(width)は0以上に設定する必要があります");
 
