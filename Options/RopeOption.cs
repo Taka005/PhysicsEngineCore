@@ -12,7 +12,7 @@ namespace PhysicsEngineCore.Options{
         public double stiffness { get; set; }
         public double velocityX { get; set; } = 0;
         public double velocityY { get; set; } = 0;
-        public string color { get; set; } = "red";
+        public string color { get; set; } = "#F00000";
         public List<EntityOption> entities { get; set; } = [];
     }
 }

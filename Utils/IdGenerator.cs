@@ -12,6 +12,5 @@
 
             return new string(id);
         }
-
     }
 }

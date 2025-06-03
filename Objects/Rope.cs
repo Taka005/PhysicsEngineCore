@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Windows.Media;
 using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Objects{
@@ -10,6 +11,7 @@ namespace PhysicsEngineCore.Objects{
         private readonly string _id;
         public double width;
         private string _color;
+        private readonly DrawingVisual _visual = new DrawingVisual();
 
         public Rope(RopeOption option): base(option.entities){
             this._id = option.id;
@@ -58,6 +60,15 @@ namespace PhysicsEngineCore.Objects{
         public string id{
             get{
                 return _id;
+            }
+        }
+
+        /// <summary>
+        /// 描画インスタンス
+        /// </summary>
+        public DrawingVisual visual{
+            get{
+                return _visual;
             }
         }
 

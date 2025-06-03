@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Windows.Media;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -13,6 +14,7 @@ namespace PhysicsEngineCore.Objects{
         public Vector2 start;
         public Vector2 end;
         private double _width;
+        private readonly DrawingVisual _visual = new DrawingVisual();
 
         public Line(LineOption option){
             this._id = option.id;
@@ -40,6 +42,15 @@ namespace PhysicsEngineCore.Objects{
         public string id{
             get{
                 return this._id;
+            }
+        }
+
+        /// <summary>
+        /// 描画インスタンス
+        /// </summary>
+        public DrawingVisual visual{
+            get{
+                return _visual;
             }
         }
 

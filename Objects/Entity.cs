@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects{
     /// エンティティーを表す
     /// これは物理エンジンにおける最小単位です
     /// </summary>
-    /// <param name="option">エンティティーの初期化引数</param>
+    /// <param name="option">エンティティーの初期化クラス</param>
     public class Entity(EntityOption option){
         public readonly string id = option.id;
         public Vector2 position = new Vector2(option.posX, option.posY);

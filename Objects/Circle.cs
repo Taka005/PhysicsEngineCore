@@ -1,5 +1,8 @@
 ﻿using System.Text.Json;
+using System.Windows;
+using System.Windows.Media;
 using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     /// <summary>
@@ -8,8 +11,13 @@ namespace PhysicsEngineCore.Objects{
     public class Circle: BaseObject, IObject{
         private readonly string _id;
         public double diameter;
+        private readonly DrawingVisual _visual = new DrawingVisual();
         private string _color;
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="option">円の初期化クラス</param>
         public Circle(CircleOption option): base(option.entities){
             this._id = option.id;
             this.diameter = option.diameter;
@@ -42,6 +50,19 @@ namespace PhysicsEngineCore.Objects{
             }
         }
 
+        /// <summary>
+        /// 描画インスタンス
+        /// </summary>
+        public DrawingVisual visual{
+            get{
+                return _visual;
+            }
+        }
+
+        /// <summary>
+        /// オブジェクトの色
+        /// Hexの値です
+        /// </summary>
         public string color{
             get{
                 return this._color;
@@ -58,6 +79,20 @@ namespace PhysicsEngineCore.Objects{
             get{
                 return this.diameter/2;
             }
+        }
+
+        public void Draw(){
+            DrawingContext context = _visual.RenderOpen();
+
+            Brush brush = Utility.ParseColor(this._color);
+
+            context.DrawEllipse(
+                brush,
+                new Pen(brush, 1),
+                new Point(this.position.X, this.position.Y),
+                this.radius,
+                this.radius
+            );
         }
 
         /// <summary>
