@@ -6,20 +6,75 @@ using PhysicsEngineRender;
 
 namespace PhysicsEngineCore {
     public class Engine : Core {
+        /// <summary>
+        /// セーブデータのバージョン
+        /// </summary>
         public readonly static string SAVE_DATA_VERSION = "1";
+
+        /// <summary>
+        /// スタートしているかどうか
+        /// </summary>
         private bool isStarted = false;
+
+        /// <summary>
+        /// トラッキングモードが有効かどうか
+        /// </summary>
         public bool isTrackingMode = false;
+
+        /// <summary>
+        /// デバッグモードが有効かどうか
+        /// </summary>
         public bool isDebugMode = false;
+
+        /// <summary>
+        /// ループ用タイマー
+        /// </summary>
         private readonly Timer loopTimer;
+
+        /// <summary>
+        /// 再生速度
+        /// </summary>
         private float playBackSpeed = 1;
+
+        /// <summary>
+        /// トラッキング間隔
+        /// </summary>
         private float trackingInterval = 100;
+
+        /// <summary>
+        /// トラッキング回数
+        /// </summary>
         private int trackingCount = 0;
+
+        /// <summary>
+        /// トラッキングの制限数
+        /// </summary>
         private int trackingLimit = 50000;
+
+        /// <summary>
+        /// 移動範囲
+        /// </summary>
         private int movementLimit = 10000;
+
+        /// <summary>
+        /// トラッキングされたオブジェクトのリスト
+        /// </summary>
         private readonly List<IObject> tracks = [];
+
+        /// <summary>
+        /// レンダー
+        /// </summary>
         public readonly Render render = new Render();
+
+        /// <summary>
+        /// コンテンツマネージャー
+        /// </summary>
         private readonly ContentManager content = new ContentManager();
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="option">エンジンの初期化クラス</param>
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
             if(option != null) {
                 this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
@@ -111,6 +166,10 @@ namespace PhysicsEngineCore {
             this.loopTimer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
+        /// <summary>
+        /// ループさせます
+        /// </summary>
+        /// <param name="state">ステート</param>
         private void Loop(Object state) {
             this.Step();
         }
@@ -142,6 +201,12 @@ namespace PhysicsEngineCore {
             
         }
 
+        /// <summary>
+        /// レンダリングを行いいます
+        /// このメソッドはUIスレッドで実行する必要があります
+        /// </summary>
+        /// <param name="sender">データ</param>
+        /// <param name="e">イベント</param>
         public void OnRendering(object? sender, EventArgs e){
             this.render.DrawObject(this.content.objects);
             this.render.DrawGround(this.content.grounds);
@@ -324,6 +389,12 @@ namespace PhysicsEngineCore {
             return JsonSerializer.Serialize(this.toSaveData());
         }
 
+        /// <summary>
+        /// 指定した位置にあるオブジェクトを取得します
+        /// </summary>
+        /// <param name="posX">対象のX座標</param>
+        /// <param name="posY">対象のX座標</param>
+        /// <returns>存在したオブジェクトのリスト</returns>
         public List<IObject> GetObjectsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
             List<IObject> targets = [];
@@ -345,6 +416,12 @@ namespace PhysicsEngineCore {
             return targets;
         }
 
+        /// <summary>
+        /// 指定した位置にあるグランドを取得します
+        /// </summary>
+        /// <param name="posX">対象のX座標</param>
+        /// <param name="posY">対象のX座標</param>
+        /// <returns>存在したグランドのリスト</returns>
         public List<IGround> GetGroundsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
             List<IGround> targets = [];
@@ -364,6 +441,12 @@ namespace PhysicsEngineCore {
             return targets;
         }
 
+        /// <summary>
+        /// 指定した位置にあるエンティティーを取得します
+        /// </summary>
+        /// <param name="posX">対象のX座標</param>
+        /// <param name="posY">対象のX座標</param>
+        /// <returns>存在したエンティティーのリスト</returns>
         public List<Entity> GetEntitiesAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
             List<Entity> targets = [];
