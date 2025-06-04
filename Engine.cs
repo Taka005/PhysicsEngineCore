@@ -73,10 +73,12 @@ namespace PhysicsEngineCore {
         /// <param name="force">真の場合に地面と履歴も削除</param>
         public void Clear(bool force = false) {
             this.content.objects.Clear();
+            this.render.DrawObject(this.content.objects);
 
             if(force) {
                 this.content.grounds.Clear();
                 this.ClearTrack();
+                this.render.DrawGround(this.content.grounds);
             }
         }
 
@@ -207,7 +209,10 @@ namespace PhysicsEngineCore {
 
             this.content.AddObject(obj);
 
-            if(!this.isStarted) this.content.Sync();
+            if(!this.isStarted) {
+                this.content.Sync();
+                this.render.DrawObject(this.content.objects);
+            }
 
             return obj;
         }
@@ -225,7 +230,10 @@ namespace PhysicsEngineCore {
 
             this.content.AddGround(ground);
 
-            if(!this.isStarted) this.content.Sync();
+            if(!this.isStarted) {
+                this.content.Sync();
+                this.render.DrawGround(this.content.grounds);
+            }
 
             return ground;
         }
@@ -236,7 +244,10 @@ namespace PhysicsEngineCore {
 
             this.content.RemoveObject(obj);
 
-            if(!this.isStarted) this.content.Sync();
+            if(!this.isStarted) {
+                this.content.Sync();
+                this.render.DrawObject(this.content.objects);
+            }
         }
 
         public void DeSpawnGround(string id){
@@ -245,7 +256,10 @@ namespace PhysicsEngineCore {
 
             this.content.RemoveGround(ground);
 
-            if(!this.isStarted) this.content.Sync();
+            if(!this.isStarted) {
+                this.content.Sync();
+                this.render.DrawGround(this.content.grounds);
+            }
         }
 
         public IObject? GetObject(string id){
