@@ -197,11 +197,11 @@ namespace PhysicsEngineCore {
         /// 描画を更新します
         /// </summary>
         private void Draw(){
-            this.content.objects.ForEach(obj => {
+            this.content.objects.ToList().ForEach(obj => {
                 obj.Draw();
             });
 
-            this.content.grounds.ForEach(ground => {
+            this.content.grounds.ToList().ForEach(ground => {
                 ground.Draw();
             });
         }
