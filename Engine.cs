@@ -145,9 +145,7 @@ namespace PhysicsEngineCore {
         }
 
         public void OnRendering(object? sender, EventArgs e){
-            this.Draw();
-
-
+            this.render.UpdateAndDraw(this.content.objects);
         }
 
         /// <summary>
@@ -192,19 +190,6 @@ namespace PhysicsEngineCore {
                 ) {
                     this.DeSpawnObject(obj.id);
                 }
-            });
-        }
-
-        /// <summary>
-        /// 描画を更新します
-        /// </summary>
-        private void Draw(){
-            this.content.objects.ToList().ForEach(obj => {
-                obj.Draw();
-            });
-
-            this.content.grounds.ToList().ForEach(ground => {
-                ground.Draw();
             });
         }
 
