@@ -17,10 +17,12 @@ namespace PhysicsEngineCore {
         private int trackingLimit = 50000;
         private int movementLimit = 10000;
         private readonly List<IObject> tracks = [];
-        private readonly ContentManager content = new ContentManager();
         public readonly Render render = new Render();
+        private readonly ContentManager content;
 
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
+            this.content = new ContentManager(this.render);
+
             if(option != null) {
                 this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
                 this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
