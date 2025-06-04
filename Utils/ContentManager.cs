@@ -1,14 +1,12 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
-using PhysicsEngineRender;
 
 namespace PhysicsEngineCore.Utils{
 
     /// <summary>
     /// オブジェクトを管理します
     /// </summary>
-    class ContentManager(Render render){
-        private readonly Render render = render;
+    class ContentManager(){
         internal readonly List<IObject> objects = [];
         internal readonly List<IGround> grounds = [];
         private readonly List<QueueObject> queueObjects = [];
@@ -85,10 +83,8 @@ namespace PhysicsEngineCore.Utils{
                 if(obj.target == null) return;
 
                 if(obj.command == CommandType.Add){
-                    this.render.control.AddVisual(obj.target.visual);
                     this.objects.Add(obj.target);
                 }else if(obj.command == CommandType.Remove){
-                    this.render.control.RemoveVisual(obj.target.visual);
                     this.objects.RemoveAll(target => target.id == obj.id);
                 }
 
@@ -99,10 +95,8 @@ namespace PhysicsEngineCore.Utils{
                 if(obj.target == null) return;
 
                 if(obj.command == CommandType.Add){
-                    this.render.control.AddVisual(obj.target.visual);
                     this.grounds.Add(obj.target);
                 }else if(obj.command == CommandType.Remove){
-                    this.render.control.RemoveVisual(obj.target.visual);
                     this.grounds.RemoveAll(target => target.id == obj.id);
                 }
 

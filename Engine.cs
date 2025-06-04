@@ -21,7 +21,7 @@ namespace PhysicsEngineCore {
         private readonly ContentManager content;
 
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
-            this.content = new ContentManager(this.render);
+            this.content = new ContentManager();
 
             if(option != null) {
                 this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
@@ -147,7 +147,7 @@ namespace PhysicsEngineCore {
         public void OnRendering(object? sender, EventArgs e){
             this.Draw();
 
-            this.render.OnRendering(sender,e);
+
         }
 
         /// <summary>
