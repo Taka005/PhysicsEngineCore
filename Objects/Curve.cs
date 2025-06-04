@@ -215,7 +215,7 @@ namespace PhysicsEngineCore.Objects{
         /// <param name="end">終了角度</param>
         /// <param name="isClockwise">時計周りかどうか</param>
         /// <returns>時計回りなら真を返す</returns>
-        private static bool IsAngleBetween(double angle, double start, double end, bool isClockwise){
+        public static bool IsAngleBetween(double angle, double start, double end, bool isClockwise){
             if(isClockwise){
                 return (angle >= start&&angle <= end)||(start > end&&(angle >= start||angle <= end));
             }else{
@@ -228,7 +228,7 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="angle">正規化する角度</param>
         /// <returns>正規化された角度</returns>
-        private static double NormalizeAngle(double angle){
+        public static double NormalizeAngle(double angle){
             return (angle + 2 * Math.PI) % (2 * Math.PI);
         }
 
