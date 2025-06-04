@@ -145,7 +145,8 @@ namespace PhysicsEngineCore {
         }
 
         public void OnRendering(object? sender, EventArgs e){
-            this.render.UpdateAndDraw(this.content.objects);
+            this.render.DrawObject(this.content.objects);
+            this.render.DrawGround(this.content.grounds);
         }
 
         /// <summary>
