@@ -3,20 +3,56 @@ using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore{
     public class Core{
+        /// <summary>
+        /// 1秒間あたりの処理回数
+        /// </summary>
         public int pps;
+
+        /// <summary>
+        /// 重力加速度
+        /// </summary>
         public double gravity;
+
+        /// <summary>
+        /// 摩擦係数
+        /// </summary>
         public double friction;
+
+        /// <summary>
+        /// 0除算を防止するための値
+        /// </summary>
         private static readonly double CORRECTION_NUMBER = 0.0000001d;
+
+        /// <summary>
+        /// 回転の強さ
+        /// </summary>
         private static readonly double ROTATION_STRENGTH = 50d;
+
+        /// <summary>
+        /// 摩擦の強さ
+        /// </summary>
         private static readonly double FRICTION_STRENGTH = 0.1d;
+
+        /// <summary>
+        /// 最大回転数
+        /// </summary>
         private static readonly double MAX_ROTATION = 500d;
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="pps">1秒間あたりの処理回数</param>
+        /// <param name="gravity">重力加速度</param>
+        /// <param name="friction">摩擦係数</param>
         public Core(int pps, double gravity, double friction){
             this.pps = pps;
             this.gravity = gravity;
             this.friction = friction;
         }
 
+        /// <summary>
+        /// 処理する間隔
+        /// </summary>
         protected double deltaTime{
             get{
                 return 1 / (double)this.pps;
