@@ -18,7 +18,7 @@ namespace PhysicsEngineCore {
         private int movementLimit = 10000;
         private readonly List<IObject> tracks = [];
         private readonly ContentManager content = new ContentManager();
-        private readonly Render render = new Render();
+        public readonly Render render = new Render();
 
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
             if(option != null) {
@@ -31,6 +31,10 @@ namespace PhysicsEngineCore {
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+        /// <summary>
+        /// 再生速度を設定します
+        /// </summary>
+        /// <param name="value">設定する再生速度</param>
         public void SetPlayBackSpeed(float value) {
             this.playBackSpeed = CheckPlayBackSpeedValue(value);
 
@@ -39,18 +43,34 @@ namespace PhysicsEngineCore {
             }
         }
 
+        /// <summary>
+        /// トラッキング間隔を設定します
+        /// </summary>
+        /// <param name="value">設定するトラッキング間隔</param>
         public void SetTrackingInterval(float value) {
             this.trackingInterval = CheckTrackingIntervalValue(value);
         }
 
+        /// <summary>
+        /// トラッキング制限を設定します
+        /// </summary>
+        /// <param name="value">設定する回数</param>
         public void SetTrackingLimit(int value) {
             this.trackingLimit = CheckTrackingLimitValue(value);
         }
 
+        /// <summary>
+        /// 移動制限を設定します
+        /// </summary>
+        /// <param name="value">設定する距離</param>
         public void SetMovementLimit(int value) {
             this.movementLimit = CheckMovementLimitValue(value);
         }
 
+        /// <summary>
+        /// オブジェクトを全て削除します
+        /// </summary>
+        /// <param name="force">真の場合に地面と履歴も削除</param>
         public void Clear(bool force = false) {
             this.content.objects.Clear();
 
@@ -60,10 +80,17 @@ namespace PhysicsEngineCore {
             }
         }
 
+        /// <summary>
+        /// トラッキングを全て削除します
+        /// </summary>
         public void ClearTrack(){
             this.tracks.Clear();
         }
 
+        /// <summary>
+        /// シュミレーションを開始します
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void Start() {
             if(this.isStarted) throw new Exception("既にシステムは開始されています");
 
@@ -73,6 +100,10 @@ namespace PhysicsEngineCore {
             this.loopTimer.Change(0, (int)((1000 / this.pps) / this.playBackSpeed));
         }
 
+        /// <summary>
+        /// シュミレーションを停止します
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void Stop() {
             if(!this.isStarted) throw new Exception("既にシステムは停止しています");
 
@@ -84,7 +115,12 @@ namespace PhysicsEngineCore {
             this.Step();
         }
 
+        /// <summary>
+        /// シュミレーションを1フレーム進めます
+        /// </summary>
         public void Step(){
+            this.content.Sync();
+
             this.trackingCount++;
 
             if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)) {
@@ -103,11 +139,19 @@ namespace PhysicsEngineCore {
             }
 
             this.Update();
+            
         }
 
-        private void Update(){
-            this.content.Sync();
+        public void OnRendering(object? sender, EventArgs e){
+            this.Draw();
 
+            this.render.OnRendering(sender,e);
+        }
+
+        /// <summary>
+        /// オブジェクトを更新します
+        /// </summary>
+        private void Update(){
             this.content.entities.ForEach(entity =>{
                 this.UpdatePosition(entity);
                 this.UpdateRotate(entity);
@@ -146,6 +190,19 @@ namespace PhysicsEngineCore {
                 ) {
                     this.DeSpawnObject(obj.id);
                 }
+            });
+        }
+
+        /// <summary>
+        /// 描画を更新します
+        /// </summary>
+        private void Draw(){
+            this.content.objects.ForEach(obj => {
+                obj.Draw();
+            });
+
+            this.content.grounds.ForEach(ground => {
+                ground.Draw();
             });
         }
 
@@ -217,6 +274,11 @@ namespace PhysicsEngineCore {
             return this.content.entities.Find(obj => obj.id == id);
         }
 
+        /// <summary>
+        /// セーブデータを読み込みます
+        /// </summary>
+        /// <param name="rawSaveData">JSON形式のセーブデータ</param>
+        /// <exception cref="Exception">破損またはバージョンが異なる場合に例外</exception>
         public void Import(string rawSaveData) {
             SaveData? saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
             if(saveData == null) throw new Exception("破損したセーブデータです");
@@ -244,6 +306,10 @@ namespace PhysicsEngineCore {
             this.movementLimit = saveData.engine.movementLimit;
         }
 
+        /// <summary>
+        /// セーブデータクラスに変換します
+        /// </summary>
+        /// <returns>変換されたセーブデータクラス</returns>
         public SaveData toSaveData(){
             EngineOption engineOption = new EngineOption {
                 pps = this.pps,
@@ -264,6 +330,10 @@ namespace PhysicsEngineCore {
             return saveData;
         }
 
+        /// <summary>
+        /// JSON形式のセーブデータに変換します
+        /// </summary>
+        /// <returns>変換されたJSON形式のセーブデータ</returns>
         public string Export(){
             return JsonSerializer.Serialize(this.toSaveData());
         }
@@ -325,24 +395,48 @@ namespace PhysicsEngineCore {
             return targets;
         }
 
+        /// <summary>
+        /// 再生速度が正しい値かチェックします
+        /// </summary>
+        /// <param name="mass">再生速度</param>
+        /// <returns>正しい再生速度</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckPlayBackSpeedValue(float playBackSpeed) {
             if(playBackSpeed < 0) throw new Exception("再生速度(playBackSpeed)は0以上に設定する必要があります");
 
             return playBackSpeed;
         }
 
+        /// <summary>
+        /// トラッキング間隔が正しい値かチェックします
+        /// </summary>
+        /// <param name="mass">間隔</param>
+        /// <returns>正しい間隔</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckTrackingIntervalValue(float trackingInterval) {
             if(trackingInterval < 0) throw new Exception("トラッキング間隔(trackingInterval)は0以上に設定する必要があります");
 
             return trackingInterval;
         }
 
+        /// <summary>
+        /// トラッキング数が正しい値かチェックします
+        /// </summary>
+        /// <param name="mass">回数</param>
+        /// <returns>正しい回数</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
         private static int CheckTrackingLimitValue(int trackingLimit) {
             if(trackingLimit < 0) throw new Exception("トラッキング数(trackingLimit)は0以上に設定する必要があります");
 
             return trackingLimit;
         }
 
+        /// <summary>
+        /// 移動制限が正しい値かチェックします
+        /// </summary>
+        /// <param name="mass">距離</param>
+        /// <returns>正しい距離</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
         private static int CheckMovementLimitValue(int movementLimit) {
             if(movementLimit < 0) throw new Exception("マップの移動制限(movementLimit)は0以上に設定する必要があります");
 
