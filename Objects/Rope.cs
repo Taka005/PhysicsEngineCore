@@ -29,7 +29,7 @@ namespace PhysicsEngineCore.Objects{
                 double width = option.endX - option.startX;
                 double height = option.endY - option.startY;
 
-                double count = Math.Floor(Math.Sqrt(width * width + height * height) / (this.width * 2));
+                double count = Math.Floor(Math.Sqrt(width * width + height * height) / (this.width));
 
                 Entity? entity = null;
                 for(int i = 0;i <= count;i++) {
@@ -50,8 +50,8 @@ namespace PhysicsEngineCore.Objects{
                     Entity target = this.AddEntity(entityOption);
 
                     if(entity != null){
-                        entity.connection.Add(target, this.width * 2, option.stiffness);
-                        target.connection.Add(entity, this.width * 2, option.stiffness);
+                        entity.connection.Add(target, this.width, option.stiffness);
+                        target.connection.Add(entity, this.width, option.stiffness);
                     }
 
                     entity = target;
