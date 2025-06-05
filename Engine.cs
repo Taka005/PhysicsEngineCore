@@ -254,6 +254,12 @@ namespace PhysicsEngineCore {
             });
         }
 
+        /// <summary>
+        /// オブジェクトを生成します
+        /// </summary>
+        /// <param name="option">オブジェクトの初期化オプション</param>
+        /// <returns>生成したオブジェクト</returns>
+        /// <exception cref="Exception">存在しないオブジェクトのとき例外</exception>
         public IObject? SpawnObject(IOption option){
             if(option.id == null) option.id = IdGenerator.CreateId(10);
 
@@ -279,6 +285,12 @@ namespace PhysicsEngineCore {
             return obj;
         }
 
+        /// <summary>
+        /// グランドを生成します
+        /// </summary>
+        /// <param name="option">グラウンドの初期化オプション</param>
+        /// <returns>生成したグラウンド</returns>
+        /// <exception cref="Exception">存在しないグランドのとき例外</exception>
         public IGround? SpawnGround(IOption option){
             if(option.id == null) option.id = IdGenerator.CreateId(10);
 
@@ -302,6 +314,10 @@ namespace PhysicsEngineCore {
             return ground;
         }
 
+        /// <summary>
+        /// オブジェクトを削除します
+        /// </summary>
+        /// <param name="id">削除するオブジェクトのID</param>
         public void DeSpawnObject(string id){
             IObject? obj = this.GetObject(id);
             if(obj == null) return;
@@ -314,6 +330,10 @@ namespace PhysicsEngineCore {
             }
         }
 
+        /// <summary>
+        /// グランドを削除します
+        /// </summary>
+        /// <param name="id">削除するグランドのID</param>
         public void DeSpawnGround(string id){
             IGround? ground = this.GetGround(id);
             if(ground == null) return;
@@ -326,14 +346,29 @@ namespace PhysicsEngineCore {
             }
         }
 
+        /// <summary>
+        /// 指定したIDのオブジェクトを取得します
+        /// </summary>
+        /// <param name="id">取得するオブジェクトのID</param>
+        /// <returns>取得したオブジェクト</returns>
         public IObject? GetObject(string id){
             return this.content.objects.Find(obj => obj.id == id);
         }
 
+        /// <summary>
+        /// 指定したIDのグランドを取得します
+        /// </summary>
+        /// <param name="id">取得するグラウンドのID</param>
+        /// <returns>取得したグランド</returns>
         public IGround? GetGround(string id){
             return this.content.grounds.Find(obj => obj.id == id);
         }
 
+        /// <summary>
+        /// 指定したIDのエンティティーを取得します
+        /// </summary>
+        /// <param name="id">取得するエンティティーのID</param>
+        /// <returns>取得したエンティティー</returns>
         public Entity? GetEntity(string id){
             return this.content.entities.Find(obj => obj.id == id);
         }
