@@ -3,7 +3,6 @@ using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-
     /// <summary>
     /// 線を表すクラス
     /// </summary>

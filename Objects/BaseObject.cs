@@ -2,7 +2,6 @@
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-
     /// <summary>
     /// オブジェクトの基礎クラス
     /// </summary>

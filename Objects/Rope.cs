@@ -2,7 +2,6 @@
 using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Objects{
-
     /// <summary>
     /// ロープを表すクラス
     /// </summary>

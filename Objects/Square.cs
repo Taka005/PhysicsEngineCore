@@ -3,7 +3,6 @@ using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
-
     /// <summary>
     /// 四角を表すクラス
     /// </summary>

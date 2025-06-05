@@ -5,6 +5,9 @@ using PhysicsEngineCore.Utils;
 using PhysicsEngineRender;
 
 namespace PhysicsEngineCore {
+    /// <summary>
+    /// 物理エンジンのメインクラス
+    /// </summary>
     public class Engine : Core {
         /// <summary>
         /// セーブデータのバージョン

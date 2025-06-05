@@ -2,6 +2,9 @@
 using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore{
+    /// <summary>
+    /// 物理エンジンのコアクラス
+    /// </summary>
     public class Core{
         /// <summary>
         /// 1秒間あたりの処理回数
