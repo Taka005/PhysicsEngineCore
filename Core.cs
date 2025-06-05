@@ -181,8 +181,7 @@ namespace PhysicsEngineCore{
         /// </summary>
         /// <param name="entity">対象のエンティティー</param>
         protected void UpdateSpeed(Entity entity){
-            entity.velocity.X = (entity.position.X - entity.previousPosition.X)/ this.deltaTime;
-            entity.velocity.Y = (entity.position.Y - entity.previousPosition.Y)/ this.deltaTime;
+            entity.velocity = (entity.position - entity.previousPosition) / this.deltaTime;
 
             if(entity.mass != 0){
                 entity.velocity.Y += this.gravity * this.deltaTime;
@@ -196,8 +195,7 @@ namespace PhysicsEngineCore{
         protected void UpdatePosition(Entity entity){
             entity.SavePosition();
 
-            entity.position.X += entity.velocity.X * this.deltaTime;
-            entity.position.Y += entity.velocity.Y * this.deltaTime;
+            entity.position += entity.velocity * this.deltaTime;
         }
 
         /// <summary>
