@@ -259,7 +259,9 @@ namespace PhysicsEngineCore {
             });
         }
 
-        public IObject? SpawnObject<T>(T option){
+        public IObject? SpawnObject(IOption option){
+            if(option.id == null) option.id = IdGenerator.CreateId(10);
+
             IObject? obj = null;
 
             if(option is CircleOption circleOption){
@@ -282,7 +284,9 @@ namespace PhysicsEngineCore {
             return obj;
         }
 
-        public IGround? SpawnGround<T>(T option){
+        public IGround? SpawnGround(IOption option){
+            if(option.id == null) option.id = IdGenerator.CreateId(10);
+
             IGround? ground = null;
 
             if(option is LineOption lineOption) {

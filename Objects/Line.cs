@@ -22,7 +22,7 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="option">線の初期化クラス</param>
         public Line(LineOption option){
-            this._id = option.id;
+            this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this._color = option.color;
             this.start = new Vector2(option.startX, option.startY);
             this.end = new Vector2(option.endX, option.endY);

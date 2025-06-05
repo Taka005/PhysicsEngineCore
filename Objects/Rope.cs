@@ -19,7 +19,7 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="option">ロープの初期化クラス</param>
         public Rope(RopeOption option): base(option.entities){
-            this._id = option.id;
+            this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.width = option.width;
             this._color = option.color;
 

@@ -19,7 +19,7 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="option">四角の初期化クラス</param>
         public Square(SquareOption option) : base(option.entities) {
-            this._id = option.id;
+            this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.size = option.size;
             this._color = option.color;
 

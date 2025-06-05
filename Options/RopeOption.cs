@@ -1,8 +1,8 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Options{
-    public class RopeOption(){
-        public string id { get; set; } = IdGenerator.CreateId(10);
+    public class RopeOption() : IOption {
+        public string? id { get; set; }
         public double startX { get; set; }
         public double startY { get; set; }
         public double endX { get; set; }

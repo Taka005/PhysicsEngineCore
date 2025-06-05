@@ -1,8 +1,8 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Options{
-    public class CircleOption(){
-        public string id { get; set; } = IdGenerator.CreateId(10);
+    public class CircleOption(): IOption{
+        public string? id { get; set; }
         public double posX { get; set; }
         public double posY { get; set; }
         public double diameter { get; set; }

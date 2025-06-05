@@ -10,7 +10,7 @@ namespace PhysicsEngineCore.Objects{
     /// </summary>
     /// <param name="option">エンティティーの初期化クラス</param>
     public class Entity(EntityOption option){
-        public readonly string id = option.id;
+        public readonly string id = option.id ?? throw new ArgumentException(nameof(option.id));
         public Vector2 position = new Vector2(option.posX, option.posY);
         public Vector2 previousPosition = new Vector2(option.prePosX, option.prePosY);
         public Vector2 velocity = new Vector2(option.velocityX, option.velocityY);

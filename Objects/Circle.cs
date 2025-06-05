@@ -18,7 +18,7 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="option">円の初期化クラス</param>
         public Circle(CircleOption option): base(option.entities){
-            this._id = option.id;
+            this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.diameter = option.diameter;
             this._color = option.color;
 
