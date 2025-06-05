@@ -1,8 +1,5 @@
 ﻿using System.Text.Json;
-using System.Windows;
-using System.Windows.Media;
 using PhysicsEngineCore.Options;
-using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
     /// <summary>
@@ -69,23 +66,6 @@ namespace PhysicsEngineCore.Objects{
             get{
                 return this.diameter/2;
             }
-        }
-
-        /// <summary>
-        /// オブジェクトを描画します
-        /// </summary>
-        public void Draw(){
-            DrawingContext context = this.visual.RenderOpen();
-
-            Brush brush = Utility.ParseColor(this._color);
-
-            context.DrawEllipse(
-                brush,
-                new Pen(brush, 1),
-                new Point(this.position.X, this.position.Y),
-                this.radius,
-                this.radius
-            );
         }
 
         /// <summary>

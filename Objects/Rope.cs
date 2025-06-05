@@ -1,8 +1,5 @@
 ﻿using System.Text.Json;
-using System.Windows.Media;
-using System.Windows;
 using PhysicsEngineCore.Options;
-using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
 
@@ -79,48 +76,6 @@ namespace PhysicsEngineCore.Objects{
             set{
                 this._color = value;
             }
-        }
-
-        /// <summary>
-        /// オブジェクトを描画します
-        /// </summary>
-        public void Draw() {
-            DrawingContext context = this.visual.RenderOpen();
-
-            Brush brush = Utility.ParseColor(this._color);
-            Pen pen = new Pen(brush, this.width);
-
-            Entity? target = null;
-
-            this.entities.ForEach(entity=>{
-                if(target != null){
-                    context.DrawLine(
-                        pen,
-                        new Point(entity.position.X,entity.position.Y),
-                        new Point(target.position.X,target.position.Y)
-                    );
-
-                    context.DrawEllipse(
-                        brush,
-                        null,
-                        new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
-                    );
-                }
-
-                if(this.entities.IndexOf(entity) == this.entities.Count - 1){
-                    context.DrawEllipse(
-                        brush,
-                        null,
-                        new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
-                    );
-                }
-
-                target = entity;
-            });
         }
 
         /// <summary>

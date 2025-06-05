@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using System.Windows.Media;
-using System.Windows;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -15,7 +13,6 @@ namespace PhysicsEngineCore.Objects{
         public Vector2 start;
         public Vector2 end;
         private double _width;
-        private readonly DrawingVisual _visual = new DrawingVisual();
 
         /// <summary>
         /// 初期化
@@ -51,15 +48,6 @@ namespace PhysicsEngineCore.Objects{
         }
 
         /// <summary>
-        /// 描画インスタンス
-        /// </summary>
-        public DrawingVisual visual{
-            get{
-                return _visual;
-            }
-        }
-
-        /// <summary>
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
@@ -79,37 +67,6 @@ namespace PhysicsEngineCore.Objects{
             get{
                 return Vector2.Distance(this.start,this.end);
             }
-        }
-
-        /// <summary>
-        /// オブジェクトを描画します
-        /// </summary>
-        public void Draw() {
-            DrawingContext context = _visual.RenderOpen();
-
-            Brush brush = Utility.ParseColor(this._color);
-
-            context.DrawLine(
-                new Pen(brush, this.width),
-                new Point(this.start.X,this.start.Y),
-                new Point(this.end.X,this.end.Y)
-            );
-
-            context.DrawEllipse(
-                brush,
-                null,
-                new Point(this.start.X,this.start.Y),
-                this.width/2,
-                this.width/2
-            );
-
-            context.DrawEllipse(
-                brush,
-                null,
-                new Point(this.end.X, this.end.Y),
-                this.width/2,
-                this.width/2
-            );
         }
 
         /// <summary>

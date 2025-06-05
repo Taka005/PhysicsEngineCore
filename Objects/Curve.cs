@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using System.Windows.Media;
-using System.Windows;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -18,7 +16,6 @@ namespace PhysicsEngineCore.Objects{
         public Vector2 end;
         public double radius;
         private double _width;
-        private readonly DrawingVisual _visual = new DrawingVisual();
 
         /// <summary>
         /// 初期化
@@ -54,15 +51,6 @@ namespace PhysicsEngineCore.Objects{
         }
 
         /// <summary>
-        /// 描画インスタンス
-        /// </summary>
-        public DrawingVisual visual{
-            get{
-                return _visual;
-            }
-        }
-
-        /// <summary>
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
@@ -85,54 +73,6 @@ namespace PhysicsEngineCore.Objects{
             set{
                 this._width = CheckWidthValue(value);
             }
-        }
-
-        /// <summary>
-        /// オブジェクトを描画します
-        /// </summary>
-        public void Draw(){
-            DrawingContext context = _visual.RenderOpen();
-            Brush brush = Utility.ParseColor(this._color);
-
-            double startAngle = NormalizeAngle(Math.Atan2(this.start.Y - this.center.Y, this.start.X - this.center.X));
-            double endAngle = NormalizeAngle(Math.Atan2(this.end.Y - this.center.Y, this.end.X - this.center.X));
-            double midAngle = NormalizeAngle(Math.Atan2(this.middle.Y - this.center.Y, this.middle.X - this.center.X));
-            bool clockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
-
-            StreamGeometry arcGeometry = new StreamGeometry();
-            StreamGeometryContext sgc = arcGeometry.Open();
-
-            sgc.BeginFigure(
-                new Point(this.center.X + radius * Math.Cos(startAngle),this.center.Y + radius * Math.Sin(startAngle)),
-                false,
-                false
-            );
-
-            sgc.ArcTo(
-                new Point(this.center.X + radius * Math.Cos(endAngle),this.center.Y + radius * Math.Sin(endAngle)),
-                new Size(this.radius, this.radius),
-                0,
-                clockwise,
-                SweepDirection.Clockwise,
-                true,
-                true
-            );
-
-            context.DrawGeometry(null, new Pen(brush, this.width), arcGeometry);
-
-            context.DrawEllipse(
-                brush,
-                null,
-                new Point(this.start.X, this.start.Y),
-                this.width / 2, this.width / 2
-            );
-
-            context.DrawEllipse(
-                brush,
-                null,
-                new Point(this.end.X, this.end.Y),
-                this.width / 2, this.width / 2
-            );
         }
 
         /// <summary>

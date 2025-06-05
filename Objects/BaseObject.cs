@@ -1,6 +1,4 @@
-﻿using System.Windows.Media;
-using System.Windows;
-using PhysicsEngineCore.Options;
+﻿using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects{
@@ -10,7 +8,6 @@ namespace PhysicsEngineCore.Objects{
     /// </summary>
     public class BaseObject: IBaseObject{
         private readonly List<Entity> _entities = [];
-        private readonly DrawingVisual _visual = new DrawingVisual();
 
         /// <summary>
         /// 初期化
@@ -26,15 +23,6 @@ namespace PhysicsEngineCore.Objects{
         public List<Entity> entities {
             get {
                 return _entities;
-            }
-        }
-
-        /// <summary>
-        /// 描画インスタンス
-        /// </summary>
-        public DrawingVisual visual {
-            get {
-                return _visual;
             }
         }
 
@@ -123,18 +111,6 @@ namespace PhysicsEngineCore.Objects{
                     entity.stiffness = value / this.count;
                 });
             }
-        }
-
-        /// <summary>
-        /// 速度ベクトルを描画します
-        /// </summary>
-        public void DrawVector(){
-            DrawingContext context = this.visual.RenderOpen();
-
-            Point startPoint = new Point(this.position.X, this.position.Y);
-            Point endPoint = new Point(this.position.X + this.velocity.X, this.position.X + this.velocity.Y);
-
-            context.DrawLine(new Pen(Brushes.Black,1),startPoint,endPoint);
         }
 
         /// <summary>

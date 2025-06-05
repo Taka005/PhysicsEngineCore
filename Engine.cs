@@ -22,11 +22,6 @@ namespace PhysicsEngineCore {
         public bool isTrackingMode = false;
 
         /// <summary>
-        /// デバッグモードが有効かどうか
-        /// </summary>
-        public bool isDebugMode = false;
-
-        /// <summary>
         /// ループ用タイマー
         /// </summary>
         private readonly Timer loopTimer;
