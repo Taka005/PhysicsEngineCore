@@ -11,6 +11,7 @@ namespace PhysicsEngineCore.Utils{
         internal readonly List<IGround> grounds = [];
         private readonly List<QueueObject> queueObjects = [];
         private readonly List<QueueGround> queueGrounds = [];
+        private readonly object lockObject = new object();
 
         /// <summary>
         /// 全てのエンティティー
@@ -26,12 +27,16 @@ namespace PhysicsEngineCore.Utils{
         /// </summary>
         /// <param name="target">追加するオブジェクト</param>
         public void AddObject(IObject target){
+            if(target == null) throw new ArgumentNullException(nameof(target),"オブジェクトがNULLです");
+
             QueueObject queue = new QueueObject{
                 command = CommandType.Add,
                 target = target
             };
 
-            this.queueObjects.Add(queue);
+            lock(this.lockObject) {
+                this.queueObjects.Add(queue);
+            }
         }
 
         /// <summary>
@@ -39,12 +44,16 @@ namespace PhysicsEngineCore.Utils{
         /// </summary>
         /// <param name="target">削除するオブジェクト</param>
         public void RemoveObject(IObject target){
+            if(target == null) throw new ArgumentNullException(nameof(target), "オブジェクトがNULLです");
+
             QueueObject queue = new QueueObject{
                 command = CommandType.Remove,
                 target = target
             };
 
-            this.queueObjects.Add(queue);
+            lock(this.lockObject) {
+                this.queueObjects.Add(queue);
+            }
         }
         
         /// <summary>
@@ -52,12 +61,16 @@ namespace PhysicsEngineCore.Utils{
         /// </summary>
         /// <param name="target">追加するグラウンド</param>
         public void AddGround(IGround target){
+            if(target == null) throw new ArgumentNullException(nameof(target), "グラウンドがNULLです");
+
             QueueGround queue = new QueueGround{
                 command = CommandType.Add,
                 target = target
             };
 
-            this.queueGrounds.Add(queue);
+            lock(this.lockObject) {
+                this.queueGrounds.Add(queue);
+            }
         }
 
         /// <summary>
@@ -65,12 +78,16 @@ namespace PhysicsEngineCore.Utils{
         /// </summary>
         /// <param name="target">削除するグラウンド</param>
         public void RemoveGround(IGround target){
+            if(target == null) throw new ArgumentNullException(nameof(target), "グラウンドがNULLです");
+
             QueueGround queue = new QueueGround{
-                command = CommandType.Add,
+                command = CommandType.Remove,
                 target = target
             };
 
-            this.queueGrounds.Add(queue);
+            lock(this.lockObject){
+                this.queueGrounds.Add(queue);
+            }
         }
 
         /// <summary>
@@ -79,29 +96,37 @@ namespace PhysicsEngineCore.Utils{
         public void Sync(){
             if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
 
-            this.queueObjects.ToList().ForEach(obj =>{
+            List<QueueObject> currentQueueObjects;
+            List<QueueGround> currentQueueGrounds;
+            lock(this.lockObject){
+                if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
+
+                currentQueueObjects = [..this.queueObjects];
+                this.queueObjects.Clear();
+
+                currentQueueGrounds = [.. this.queueGrounds];
+                this.queueGrounds.Clear();
+            }
+
+            foreach(QueueObject obj in currentQueueObjects){
                 if(obj.target == null) return;
 
-                this.queueObjects.RemoveAll(queue => queue.id == obj.id);
-
-                if(obj.command == CommandType.Add){
+                if(obj.command == CommandType.Add) {
                     this.objects.Add(obj.target);
-                }else if(obj.command == CommandType.Remove){
+                } else if(obj.command == CommandType.Remove) {
                     this.objects.RemoveAll(target => target.id == obj.id);
                 }
-            });
+            }
 
-            this.queueGrounds.ToList().ForEach(obj=>{
-                if(obj.target == null) return;
+            foreach(QueueGround ground in currentQueueGrounds){
+                if(ground.target == null) return;
 
-                this.queueGrounds.RemoveAll(queue => queue.id == obj.id);
-
-                if(obj.command == CommandType.Add){
-                    this.grounds.Add(obj.target);
-                }else if(obj.command == CommandType.Remove){
-                    this.grounds.RemoveAll(target => target.id == obj.id);
+                if(ground.command == CommandType.Add) {
+                    this.grounds.Add(ground.target);
+                } else if(ground.command == CommandType.Remove) {
+                    this.grounds.RemoveAll(target => target.id == ground.id);
                 }
-            });
+            }
         }
 
         /// <summary>
