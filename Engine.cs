@@ -182,23 +182,21 @@ namespace PhysicsEngineCore {
 
             this.trackingCount++;
 
-            if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)) {
-                this.content.objects
-                  .Where(obj => !obj.isStop)
-                  .ToList()
-                  .ForEach(obj => {
-                      this.tracks.Add(obj.Clone());
-                  });
+            lock(this.tracks){
+                if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)) {
+                    foreach(IObject obj in this.content.getObjectsCopy().Where(obj => !obj.isStop)) {
+                        this.tracks.Add(obj.Clone());
+                    }
 
-                while(this.tracks.Count > this.trackingLimit) {
-                    this.tracks.RemoveAt(0);
+                    while(this.tracks.Count > this.trackingLimit) {
+                        this.tracks.RemoveAt(0);
+                    }
+
+                    this.trackingCount = 0;
                 }
-
-                this.trackingCount = 0;
             }
 
             this.Update();
-            
         }
 
         /// <summary>
@@ -208,53 +206,54 @@ namespace PhysicsEngineCore {
         /// <param name="sender">データ</param>
         /// <param name="e">イベント</param>
         public void OnRendering(object? sender, EventArgs e){
-            this.render.DrawObject(this.content.objects);
-            this.render.DrawGround(this.content.grounds);
+            this.render.DrawObject(this.content.getObjectsCopy());
+            this.render.DrawGround(this.content.getGroundsCopy());
         }
 
         /// <summary>
         /// オブジェクトを更新します
         /// </summary>
         private void Update(){
-            this.content.entities.ForEach(entity =>{
+            List<Entity> entities = this.content.entities;
+
+            foreach(Entity entity in entities) {
                 this.UpdatePosition(entity);
                 this.UpdateRotate(entity);
-            });
+            }
 
-            this.content.entities.ForEach(entity =>{
-                int index = this.content.entities.IndexOf(entity);
-
-                this.content.grounds.ForEach(ground =>{
+            foreach(Entity entity in entities) {
+                int index = entities.IndexOf(entity);
+                foreach(IGround ground in this.content.grounds) {
                     this.SolveGroundPosition(entity, ground);
-                });
+                }
 
-                this.content.entities.Skip(index + 1).ToList().ForEach(target=>{
+                foreach(Entity target in entities.Skip(index + 1)) {
                     this.SolvePosition(entity, target);
-                });
+                }
 
-                entity.connection.targets.ForEach(target =>{
+                foreach(Target target in entity.connection.targets) {
                     Entity? targetEntity = GetEntity(target.entityId);
-                    if(targetEntity == null){
+                    if(targetEntity == null) {
                         entity.connection.Remove(target.entityId);
-                    }else{
+                    } else {
                         this.SolveConnection(entity, targetEntity, target.distance, target.stiffness);
                     }
-                });
-            });
+                }
+            }
 
-            this.content.entities.ForEach(entity => {
+            foreach(Entity entity in entities) {
                 this.UpdateSpeed(entity);
                 this.SolveSpeed(entity);
-            });
+            }
 
-            this.content.objects.ForEach(obj => {
+            foreach(IObject obj in this.content.getObjectsCopy()) {
                 if(
                     Math.Abs(obj.position.X) > this.movementLimit ||
                     Math.Abs(obj.position.Y) > this.movementLimit
-                ) {
+                ){
                     this.DeSpawnObject(obj.id);
                 }
-            });
+            }
         }
 
         /// <summary>

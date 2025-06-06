@@ -9,6 +9,7 @@ namespace PhysicsEngineCore.Utils{
     class ContentManager(){
         internal readonly List<IObject> objects = [];
         internal readonly List<IGround> grounds = [];
+        internal readonly List<IObject> tracks = [];
         private readonly List<QueueObject> queueObjects = [];
         private readonly List<QueueGround> queueGrounds = [];
         private readonly object lockObject = new object();
@@ -18,7 +19,27 @@ namespace PhysicsEngineCore.Utils{
         /// </summary>
         public List<Entity> entities{
             get{
-                return [.. this.objects.SelectMany(obj => obj.entities)];
+                lock(this.lockObject) {
+                    return [.. this.objects.SelectMany(obj => obj.entities)];
+                }
+            }
+        }
+
+        /// <summary>
+        /// 現在のオブジェクトリストのコピーを返します
+        /// </summary>
+        public List<IObject> getObjectsCopy() {
+            lock(this.lockObject){
+                return [.. this.objects];
+            }
+        }
+
+        /// <summary>
+        /// 現在のグラウンドリストのコピーを返します。
+        /// </summary>
+        public List<IGround> getGroundsCopy() {
+            lock(this.lockObject){
+                return [.. this.grounds];
             }
         }
 
@@ -94,37 +115,33 @@ namespace PhysicsEngineCore.Utils{
         /// 待機列にあるオブジェクトを処理します
         /// </summary>
         public void Sync(){
-            if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
-
-            List<QueueObject> currentQueueObjects;
-            List<QueueGround> currentQueueGrounds;
             lock(this.lockObject){
                 if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
 
-                currentQueueObjects = [..this.queueObjects];
+                List<QueueObject> currentQueueObjects = [..this.queueObjects];
                 this.queueObjects.Clear();
 
-                currentQueueGrounds = [.. this.queueGrounds];
+                List<QueueGround> currentQueueGrounds = [.. this.queueGrounds];
                 this.queueGrounds.Clear();
-            }
 
-            foreach(QueueObject obj in currentQueueObjects){
-                if(obj.target == null) return;
+                foreach(QueueObject obj in currentQueueObjects) {
+                    if(obj.target == null) return;
 
-                if(obj.command == CommandType.Add) {
-                    this.objects.Add(obj.target);
-                } else if(obj.command == CommandType.Remove) {
-                    this.objects.RemoveAll(target => target.id == obj.id);
+                    if(obj.command == CommandType.Add) {
+                        this.objects.Add(obj.target);
+                    } else if(obj.command == CommandType.Remove) {
+                        this.objects.RemoveAll(target => target.id == obj.id);
+                    }
                 }
-            }
 
-            foreach(QueueGround ground in currentQueueGrounds){
-                if(ground.target == null) return;
+                foreach(QueueGround ground in currentQueueGrounds) {
+                    if(ground.target == null) return;
 
-                if(ground.command == CommandType.Add) {
-                    this.grounds.Add(ground.target);
-                } else if(ground.command == CommandType.Remove) {
-                    this.grounds.RemoveAll(target => target.id == ground.id);
+                    if(ground.command == CommandType.Add) {
+                        this.grounds.Add(ground.target);
+                    } else if(ground.command == CommandType.Remove) {
+                        this.grounds.RemoveAll(target => target.id == ground.id);
+                    }
                 }
             }
         }
