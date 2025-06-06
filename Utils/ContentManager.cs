@@ -82,25 +82,25 @@ namespace PhysicsEngineCore.Utils{
             this.queueObjects.ToList().ForEach(obj =>{
                 if(obj.target == null) return;
 
+                this.queueObjects.RemoveAll(queue => queue.id == obj.id);
+
                 if(obj.command == CommandType.Add){
                     this.objects.Add(obj.target);
                 }else if(obj.command == CommandType.Remove){
                     this.objects.RemoveAll(target => target.id == obj.id);
                 }
-
-                this.queueObjects.RemoveAll(queue => queue.id == obj.id);
             });
 
             this.queueGrounds.ToList().ForEach(obj=>{
                 if(obj.target == null) return;
+
+                this.queueGrounds.RemoveAll(queue => queue.id == obj.id);
 
                 if(obj.command == CommandType.Add){
                     this.grounds.Add(obj.target);
                 }else if(obj.command == CommandType.Remove){
                     this.grounds.RemoveAll(target => target.id == obj.id);
                 }
-
-                this.queueGrounds.RemoveAll(queue => queue.id == obj.id);
             });
         }
 
