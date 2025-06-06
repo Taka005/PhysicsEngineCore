@@ -27,8 +27,8 @@ namespace PhysicsEngineCore.Objects{
                 for(int i = -1;i <= 1;i += 2){
                     for(int j = -1;j <= 1;j += 2){
                         EntityOption entityOption = new EntityOption {
-                            posX = option.posX + i * (this.size / 2),
-                            posY = option.posY + j * (this.size / 2),
+                            posX = option.posX + i * (this.size / 4),
+                            posY = option.posY + j * (this.size / 4),
                             diameter = this.size/2,
                             mass = option.mass/4,
                             stiffness = option.stiffness,
