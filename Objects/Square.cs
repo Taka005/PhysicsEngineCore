@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -49,8 +50,6 @@ namespace PhysicsEngineCore.Objects{
                         double distance = difference.Length();
 
                         source.connection.Add(target, distance, source.stiffness);
-
-                        target.connection.Add(source, distance, target.stiffness);
                     });
                 });
             }
