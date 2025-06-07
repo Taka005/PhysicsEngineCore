@@ -273,6 +273,8 @@ namespace PhysicsEngineCore {
                 obj = new Rope(ropeOption);
             } else if(option is SquareOption squareOption){
                 obj = new Square(squareOption);
+            }else if(option is TriangleOption triangleOption) {
+                obj = new Triangle(triangleOption);
             }
 
             if(obj == null) throw new Exception("無効な物体が指定されています");
@@ -387,6 +389,18 @@ namespace PhysicsEngineCore {
             if(saveData.version != SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
             saveData.objects.circles.ForEach(obj=>{
+                this.SpawnObject(obj);
+            });
+
+            saveData.objects.squares.ForEach(obj => {
+                this.SpawnObject(obj);
+            });
+
+            saveData.objects.triangles.ForEach(obj => {
+                this.SpawnObject(obj);
+            });
+
+            saveData.objects.ropes.ForEach(obj => {
                 this.SpawnObject(obj);
             });
 

@@ -1,6 +1,4 @@
-﻿using PhysicsEngineCore.Utils;
-
-namespace PhysicsEngineCore.Options{
+﻿namespace PhysicsEngineCore.Options{
     public class CurveOption : IOption {
         public string? id { get; set; }
         public string color { get; set; } = "#F00000";

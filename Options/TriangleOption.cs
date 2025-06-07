@@ -1,9 +1,9 @@
 ﻿namespace PhysicsEngineCore.Options{
-    public class CircleOption(): IOption{
+    public class TriangleOption : IOption{
         public string? id { get; set; }
         public double posX { get; set; }
         public double posY { get; set; }
-        public double diameter { get; set; }
+        public double size { get; set; }
         public double mass { get; set; }
         public double stiffness { get; set; }
         public double velocityX { get; set; } = 0;

@@ -153,6 +153,7 @@ namespace PhysicsEngineCore.Utils{
         public ObjectSaveData ToData(){
             List<CircleOption> circleOptions = [.. this.objects.OfType<Circle>().Select(obj => obj.ToOption())];
             List<SquareOption> squareOptions = [.. this.objects.OfType<Square>().Select(obj => obj.ToOption())];
+            List<TriangleOption> triangleOptions = [.. this.objects.OfType<Triangle>().Select(obj => obj.ToOption())];
             List<RopeOption> ropeOptions = [.. this.objects.OfType<Rope>().Select(obj => obj.ToOption())];
             List<LineOption> lineOptions = [.. this.grounds.OfType<Line>().Select(obj => obj.ToOption())];
             List<CurveOption> curveOptions = [.. this.grounds.OfType<Curve>().Select(obj => obj.ToOption())];
@@ -160,6 +161,7 @@ namespace PhysicsEngineCore.Utils{
             return new ObjectSaveData {
                 circles = circleOptions,
                 squares = squareOptions,
+                triangles = triangleOptions,
                 ropes = ropeOptions,
                 lines = lineOptions,
                 curves = curveOptions

@@ -2,11 +2,11 @@
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
-namespace PhysicsEngineCore.Objects{
+namespace PhysicsEngineCore.Objects {
     /// <summary>
-    /// 四角を表すクラス
+    /// 三角を表すクラス
     /// </summary>
-    public class Square : BaseObject, IObject{
+    public class Triangle : BaseObject, IObject {
         private readonly string _id;
         public double size;
         private string _color;
@@ -14,30 +14,41 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// 初期化
         /// </summary>
-        /// <param name="option">四角の初期化クラス</param>
-        public Square(SquareOption option) : base(option.entities) {
+        /// <param name="option">三角の初期化クラス</param>
+        public Triangle(TriangleOption option) : base(option.entities) {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.size = option.size;
             this._color = option.color;
 
-            if(option.entities.Count != 0){
+            if(option.entities.Count != 0) {
                 this.AddAllEntities(option.entities);
-            }else{
-                for(int i = -1;i <= 1;i += 2){
-                    for(int j = -1;j <= 1;j += 2){
-                        EntityOption entityOption = new EntityOption {
-                            posX = option.posX + i * (this.size / 4),
-                            posY = option.posY + j * (this.size / 4),
-                            diameter = this.size/2,
-                            mass = option.mass/4,
-                            stiffness = option.stiffness,
-                            velocityX = option.velocityX,
-                            velocityY = option.velocityY,
-                            parentId = this.id
-                        };
+            } else {
+                EntityOption entityOption1 = new EntityOption {
+                    posX = option.posX,
+                    posY = option.posY - (2 / Math.Sqrt(3)) * this.size,
+                    diameter = option.size,
+                    mass = option.mass/3,
+                    stiffness = option.stiffness,
+                    velocityX = option.velocityX,
+                    velocityY = option.velocityY,
+                    parentId = this.id
+                };
 
-                        this.AddEntity(entityOption);
-                    }
+                this.AddEntity(entityOption1);
+
+                for(int i = -1;i <= 1;i += 2) {
+                    EntityOption entityOption2 = new EntityOption {
+                        posX = option.posX,
+                        posY = option.posY + (1 / Math.Sqrt(3))*this.size,
+                        diameter = option.size,
+                        mass = option.mass / 3,
+                        stiffness = option.stiffness,
+                        velocityX = option.velocityX,
+                        velocityY = option.velocityY,
+                        parentId = this.id
+                    };
+
+                    this.AddEntity(entityOption1);
                 }
 
                 this.entities.ForEach(source => {
@@ -89,15 +100,15 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <returns>複製されたクラス</returns>
         public IObject Clone() {
-            return new Square(this.ToOption());
+            return new Triangle(this.ToOption());
         }
 
         /// <summary>
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>
-        public SquareOption ToOption() {
-            return new SquareOption {
+        public TriangleOption ToOption() {
+            return new TriangleOption {
                 id = this.id,
                 posX = this.position.X,
                 posY = this.position.Y,

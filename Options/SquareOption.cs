@@ -1,6 +1,4 @@
-﻿using PhysicsEngineCore.Utils;
-
-namespace PhysicsEngineCore.Options{
+﻿namespace PhysicsEngineCore.Options{
     public class SquareOption() : IOption {
         public string? id { get; set; }
         public double posX { get; set; }
