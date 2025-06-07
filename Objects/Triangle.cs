@@ -25,8 +25,8 @@ namespace PhysicsEngineCore.Objects {
             } else {
                 EntityOption entityOption1 = new EntityOption {
                     posX = option.posX,
-                    posY = option.posY - (2 / Math.Sqrt(3)) * this.size,
-                    diameter = option.size,
+                    posY = option.posY - (2 / Math.Sqrt(3)) * (this.size/3),
+                    diameter = option.size/2,
                     mass = option.mass/3,
                     stiffness = option.stiffness,
                     velocityX = option.velocityX,
@@ -38,9 +38,9 @@ namespace PhysicsEngineCore.Objects {
 
                 for(int i = -1;i <= 1;i += 2) {
                     EntityOption entityOption2 = new EntityOption {
-                        posX = option.posX,
-                        posY = option.posY + (1 / Math.Sqrt(3))*this.size,
-                        diameter = option.size,
+                        posX = option.posX + i * (this.size/3),
+                        posY = option.posY + (1 / Math.Sqrt(3))*(this.size / 3),
+                        diameter = option.size/2,
                         mass = option.mass / 3,
                         stiffness = option.stiffness,
                         velocityX = option.velocityX,
@@ -48,7 +48,7 @@ namespace PhysicsEngineCore.Objects {
                         parentId = this.id
                     };
 
-                    this.AddEntity(entityOption1);
+                    this.AddEntity(entityOption2);
                 }
 
                 this.entities.ForEach(source => {
