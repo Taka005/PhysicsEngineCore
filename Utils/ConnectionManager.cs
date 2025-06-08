@@ -7,7 +7,7 @@ namespace PhysicsEngineCore.Utils{
     /// </summary>
     /// <param name="targets">初期のターゲットのリスト</param>
     public class ConnectionManager(List<Target>? targets){
-        public List<Target> targets = targets ?? [];
+        public readonly List<Target> targets = targets ?? [];
 
         /// <summary>
         /// ターゲットを取得します
