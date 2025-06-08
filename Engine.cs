@@ -2,7 +2,6 @@
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
-using PhysicsEngineRender;
 
 namespace PhysicsEngineCore {
     /// <summary>
