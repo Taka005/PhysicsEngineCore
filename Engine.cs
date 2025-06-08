@@ -449,7 +449,12 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <returns>変換されたJSON形式のセーブデータ</returns>
         public string Export(){
-            return JsonSerializer.Serialize(this.toSaveData());
+            JsonSerializerOptions options = new JsonSerializerOptions{
+                NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals,
+                WriteIndented = true
+            };
+
+            return JsonSerializer.Serialize(this.toSaveData(),options);
         }
 
         /// <summary>
