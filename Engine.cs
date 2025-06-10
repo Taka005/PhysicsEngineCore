@@ -72,10 +72,19 @@ namespace PhysicsEngineCore {
         /// </summary>
         private readonly ContentManager content = new ContentManager();
 
+        /// <summary>
+        /// カスタムスクリプト
+        /// </summary>
         private string script = string.Empty;
 
+        /// <summary>
+        /// カスタムスクリプトの実行ランナー
+        /// </summary>
         private ScriptRunner<object>? scriptRunner;
 
+        /// <summary>
+        /// スクリプトのオプション
+        /// </summary>
         private readonly ScriptOptions scriptOptions = ScriptOptions.Default
             .AddReferences(typeof(Engine).Assembly)
             .AddReferences(typeof(JsonSerializer).Assembly)
@@ -109,6 +118,10 @@ namespace PhysicsEngineCore {
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+        /// <summary>
+        /// カスタムスクリプトを設定します
+        /// </summary>
+        /// <param name="script">実行するスクリプト</param>
         public void SetScript(string script) {
             this.script = script;
 
