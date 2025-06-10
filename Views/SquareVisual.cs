@@ -18,7 +18,7 @@ namespace PhysicsEngineCore.Views {
             DrawingContext context = this.RenderOpen();
 
             this.brush = Utility.ParseColor(this.objectData.color);
-            this.pen = new Pen(this.brush, this.objectData.size/2);
+            this.pen = new Pen(this.brush, this.objectData.size / 2);
 
             this.objectData.entities.ForEach(source => {
                 context.DrawEllipse(

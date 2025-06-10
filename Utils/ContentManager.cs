@@ -1,12 +1,12 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 
-namespace PhysicsEngineCore.Utils{
+namespace PhysicsEngineCore.Utils {
 
     /// <summary>
     /// オブジェクトを管理します
     /// </summary>
-    class ContentManager(){
+    class ContentManager() {
         internal readonly List<IObject> objects = [];
         internal readonly List<IGround> grounds = [];
         internal readonly List<IObject> tracks = [];
@@ -17,8 +17,8 @@ namespace PhysicsEngineCore.Utils{
         /// <summary>
         /// 全てのエンティティー
         /// </summary>
-        public List<Entity> entities{
-            get{
+        public List<Entity> entities {
+            get {
                 lock(this.lockObject) {
                     return [.. this.objects.SelectMany(obj => obj.entities)];
                 }
@@ -29,7 +29,7 @@ namespace PhysicsEngineCore.Utils{
         /// 現在のオブジェクトリストのコピーを返します
         /// </summary>
         public List<IObject> getObjectsCopy() {
-            lock(this.lockObject){
+            lock(this.lockObject) {
                 return [.. this.objects];
             }
         }
@@ -38,7 +38,7 @@ namespace PhysicsEngineCore.Utils{
         /// 現在のグラウンドリストのコピーを返します。
         /// </summary>
         public List<IGround> getGroundsCopy() {
-            lock(this.lockObject){
+            lock(this.lockObject) {
                 return [.. this.grounds];
             }
         }
@@ -47,10 +47,10 @@ namespace PhysicsEngineCore.Utils{
         /// オブジェクトの追加を待機列に追加します
         /// </summary>
         /// <param name="target">追加するオブジェクト</param>
-        public void AddObject(IObject target){
-            if(target == null) throw new ArgumentNullException(nameof(target),"オブジェクトがNULLです");
+        public void AddObject(IObject target) {
+            if(target == null) throw new ArgumentNullException(nameof(target), "オブジェクトがNULLです");
 
-            QueueObject queue = new QueueObject{
+            QueueObject queue = new QueueObject {
                 command = CommandType.Add,
                 target = target
             };
@@ -64,10 +64,10 @@ namespace PhysicsEngineCore.Utils{
         /// オブジェクトの削除を待機列に追加します
         /// </summary>
         /// <param name="target">削除するオブジェクト</param>
-        public void RemoveObject(IObject target){
+        public void RemoveObject(IObject target) {
             if(target == null) throw new ArgumentNullException(nameof(target), "オブジェクトがNULLです");
 
-            QueueObject queue = new QueueObject{
+            QueueObject queue = new QueueObject {
                 command = CommandType.Remove,
                 target = target
             };
@@ -76,15 +76,15 @@ namespace PhysicsEngineCore.Utils{
                 this.queueObjects.Add(queue);
             }
         }
-        
+
         /// <summary>
         /// グラウンドの追加を待機列に追加します
         /// </summary>
         /// <param name="target">追加するグラウンド</param>
-        public void AddGround(IGround target){
+        public void AddGround(IGround target) {
             if(target == null) throw new ArgumentNullException(nameof(target), "グラウンドがNULLです");
 
-            QueueGround queue = new QueueGround{
+            QueueGround queue = new QueueGround {
                 command = CommandType.Add,
                 target = target
             };
@@ -98,15 +98,15 @@ namespace PhysicsEngineCore.Utils{
         /// グラウンドの削除を待機列に追加します
         /// </summary>
         /// <param name="target">削除するグラウンド</param>
-        public void RemoveGround(IGround target){
+        public void RemoveGround(IGround target) {
             if(target == null) throw new ArgumentNullException(nameof(target), "グラウンドがNULLです");
 
-            QueueGround queue = new QueueGround{
+            QueueGround queue = new QueueGround {
                 command = CommandType.Remove,
                 target = target
             };
 
-            lock(this.lockObject){
+            lock(this.lockObject) {
                 this.queueGrounds.Add(queue);
             }
         }
@@ -114,11 +114,11 @@ namespace PhysicsEngineCore.Utils{
         /// <summary>
         /// 待機列にあるオブジェクトを処理します
         /// </summary>
-        public void Sync(){
-            lock(this.lockObject){
+        public void Sync() {
+            lock(this.lockObject) {
                 if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
 
-                List<QueueObject> currentQueueObjects = [..this.queueObjects];
+                List<QueueObject> currentQueueObjects = [.. this.queueObjects];
                 this.queueObjects.Clear();
 
                 List<QueueGround> currentQueueGrounds = [.. this.queueGrounds];
@@ -150,7 +150,7 @@ namespace PhysicsEngineCore.Utils{
         /// セーブデータに変換します
         /// </summary>
         /// <returns>変換されたセーブデータ</returns>
-        public ObjectSaveData ToData(){
+        public ObjectSaveData ToData() {
             List<CircleOption> circleOptions = [.. this.objects.OfType<Circle>().Select(obj => obj.ToOption())];
             List<SquareOption> squareOptions = [.. this.objects.OfType<Square>().Select(obj => obj.ToOption())];
             List<TriangleOption> triangleOptions = [.. this.objects.OfType<Triangle>().Select(obj => obj.ToOption())];

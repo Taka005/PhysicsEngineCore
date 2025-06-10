@@ -2,16 +2,16 @@
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
 
-namespace PhysicsEngineCore.Views{
+namespace PhysicsEngineCore.Views {
     class CircleVisual : DrawingVisual {
         private readonly Circle objectData;
         private Brush brush;
         private Pen pen;
 
-        public CircleVisual(Circle objectData){
+        public CircleVisual(Circle objectData) {
             this.objectData = objectData;
             this.brush = Utility.ParseColor(objectData.color);
-            this.pen = new Pen(this.brush,1);
+            this.pen = new Pen(this.brush, 1);
         }
 
         public void Draw() {

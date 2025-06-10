@@ -7,7 +7,7 @@ namespace PhysicsEngineCore.Views {
         private readonly Line groundData;
         private Brush brush;
         private Pen pen;
- 
+
         public LineVisual(Line groundData) {
             this.groundData = groundData;
             this.brush = Utility.ParseColor(groundData.color);

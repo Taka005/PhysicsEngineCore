@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Utils;
 
-namespace PhysicsEngineCore.Objects{
-    public interface IGround{
+namespace PhysicsEngineCore.Objects {
+    public interface IGround {
         string id { get; }
         string color { get; set; }
         double width { get; set; }

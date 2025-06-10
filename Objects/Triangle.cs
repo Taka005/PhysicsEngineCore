@@ -23,9 +23,9 @@ namespace PhysicsEngineCore.Objects {
             if(option.entities.Count == 0) {
                 EntityOption entityOption1 = new EntityOption {
                     posX = option.posX,
-                    posY = option.posY - (2 / Math.Sqrt(3)) * (this.size/3),
-                    diameter = option.size/2,
-                    mass = option.mass/3,
+                    posY = option.posY - (2 / Math.Sqrt(3)) * (this.size / 3),
+                    diameter = option.size / 2,
+                    mass = option.mass / 3,
                     stiffness = option.stiffness,
                     velocityX = option.velocityX,
                     velocityY = option.velocityY,
@@ -36,9 +36,9 @@ namespace PhysicsEngineCore.Objects {
 
                 for(int i = -1;i <= 1;i += 2) {
                     EntityOption entityOption2 = new EntityOption {
-                        posX = option.posX + i * (this.size/3),
-                        posY = option.posY + (1 / Math.Sqrt(3))*(this.size / 3),
-                        diameter = option.size/2,
+                        posX = option.posX + i * (this.size / 3),
+                        posY = option.posY + (1 / Math.Sqrt(3)) * (this.size / 3),
+                        diameter = option.size / 2,
                         mass = option.mass / 3,
                         stiffness = option.stiffness,
                         velocityX = option.velocityX,

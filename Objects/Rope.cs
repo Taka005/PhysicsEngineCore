@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
 using PhysicsEngineCore.Options;
 
-namespace PhysicsEngineCore.Objects{
+namespace PhysicsEngineCore.Objects {
     /// <summary>
     /// ロープを表すクラス
     /// </summary>
-    public class Rope: BaseObject, IObject{
+    public class Rope : BaseObject, IObject {
         private readonly string _id;
         public double width;
         private string _color;
@@ -14,7 +14,7 @@ namespace PhysicsEngineCore.Objects{
         /// 初期化
         /// </summary>
         /// <param name="option">ロープの初期化クラス</param>
-        public Rope(RopeOption option): base(option.entities){
+        public Rope(RopeOption option) : base(option.entities) {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.width = option.width;
             this._color = option.color;
@@ -43,7 +43,7 @@ namespace PhysicsEngineCore.Objects{
 
                     Entity target = this.AddEntity(entityOption);
 
-                    if(entity != null){
+                    if(entity != null) {
                         entity.connection.Add(target, this.width, option.stiffness);
                         target.connection.Add(entity, this.width, option.stiffness);
                     }
@@ -56,8 +56,8 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// オブジェクトの固有ID
         /// </summary>
-        public string id{
-            get{
+        public string id {
+            get {
                 return _id;
             }
         }
@@ -66,11 +66,11 @@ namespace PhysicsEngineCore.Objects{
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
-        public string color{
-            get{
+        public string color {
+            get {
                 return this._color;
             }
-            set{
+            set {
                 this._color = value;
             }
         }
@@ -79,7 +79,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスのデータをJSON形式の文字列に変換します
         /// </summary>
         /// <returns>JSON形式の文字列</returns>
-        public string ToJson(){
+        public string ToJson() {
             return JsonSerializer.Serialize(this.ToOption());
         }
 
@@ -87,7 +87,7 @@ namespace PhysicsEngineCore.Objects{
         /// 同じ状態のクラスを複製します
         /// </summary>
         /// <returns>複製されたクラス</returns>
-        public IObject Clone(){
+        public IObject Clone() {
             return new Rope(this.ToOption());
         }
 
@@ -95,7 +95,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>
-        public RopeOption ToOption(){
+        public RopeOption ToOption() {
             return new RopeOption {
                 id = this.id,
                 startX = this.entities.First().position.X,
@@ -108,7 +108,7 @@ namespace PhysicsEngineCore.Objects{
                 mass = this.mass,
                 stiffness = this.stiffness,
                 color = this.color,
-                entities = [..this.entities.Select(entity =>entity.ToOption())]
+                entities = [.. this.entities.Select(entity => entity.ToOption())]
             };
         }
     }

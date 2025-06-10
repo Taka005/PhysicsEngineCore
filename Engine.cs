@@ -137,7 +137,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングを全て削除します
         /// </summary>
-        public void ClearTrack(){
+        public void ClearTrack() {
             this.tracks.Clear();
         }
 
@@ -176,12 +176,12 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// シュミレーションを1フレーム進めます
         /// </summary>
-        public void Step(){
+        public void Step() {
             this.content.Sync();
 
             this.trackingCount++;
 
-            lock(this.tracks){
+            lock(this.tracks) {
                 if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)) {
                     foreach(IObject obj in this.content.getObjectsCopy().Where(obj => !obj.isStop)) {
                         this.tracks.Add(obj.Clone());
@@ -203,7 +203,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="sender">データ</param>
         /// <param name="e">イベント</param>
-        public void OnRendering(object? sender, EventArgs e){
+        public void OnRendering(object? sender, EventArgs e) {
             this.render.DrawObject(this.content.getObjectsCopy());
             this.render.DrawGround(this.content.getGroundsCopy());
         }
@@ -211,7 +211,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// オブジェクトを更新します
         /// </summary>
-        private void Update(){
+        private void Update() {
             List<Entity> entities = this.content.entities;
 
             foreach(Entity entity in entities) {
@@ -248,7 +248,7 @@ namespace PhysicsEngineCore {
                 if(
                     Math.Abs(obj.position.X) > this.movementLimit ||
                     Math.Abs(obj.position.Y) > this.movementLimit
-                ){
+                ) {
                     this.DeSpawnObject(obj.id);
                 }
             }
@@ -260,18 +260,18 @@ namespace PhysicsEngineCore {
         /// <param name="option">オブジェクトの初期化オプション</param>
         /// <returns>生成したオブジェクト</returns>
         /// <exception cref="Exception">存在しないオブジェクトのとき例外</exception>
-        public IObject? SpawnObject(IOption option){
+        public IObject? SpawnObject(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(10);
 
             IObject? obj = null;
 
-            if(option is CircleOption circleOption){
+            if(option is CircleOption circleOption) {
                 obj = new Circle(circleOption);
-            }else if(option is RopeOption ropeOption){
+            } else if(option is RopeOption ropeOption) {
                 obj = new Rope(ropeOption);
-            } else if(option is SquareOption squareOption){
+            } else if(option is SquareOption squareOption) {
                 obj = new Square(squareOption);
-            }else if(option is TriangleOption triangleOption) {
+            } else if(option is TriangleOption triangleOption) {
                 obj = new Triangle(triangleOption);
             }
 
@@ -293,7 +293,7 @@ namespace PhysicsEngineCore {
         /// <param name="option">グラウンドの初期化オプション</param>
         /// <returns>生成したグラウンド</returns>
         /// <exception cref="Exception">存在しないグランドのとき例外</exception>
-        public IGround? SpawnGround(IOption option){
+        public IGround? SpawnGround(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(10);
 
             IGround? ground = null;
@@ -320,7 +320,7 @@ namespace PhysicsEngineCore {
         /// オブジェクトを削除します
         /// </summary>
         /// <param name="id">削除するオブジェクトのID</param>
-        public void DeSpawnObject(string id){
+        public void DeSpawnObject(string id) {
             IObject? obj = this.GetObject(id);
             if(obj == null) return;
 
@@ -336,7 +336,7 @@ namespace PhysicsEngineCore {
         /// グランドを削除します
         /// </summary>
         /// <param name="id">削除するグランドのID</param>
-        public void DeSpawnGround(string id){
+        public void DeSpawnGround(string id) {
             IGround? ground = this.GetGround(id);
             if(ground == null) return;
 
@@ -353,7 +353,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="id">取得するオブジェクトのID</param>
         /// <returns>取得したオブジェクト</returns>
-        public IObject? GetObject(string id){
+        public IObject? GetObject(string id) {
             return this.content.objects.Find(obj => obj.id == id);
         }
 
@@ -362,7 +362,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="id">取得するグラウンドのID</param>
         /// <returns>取得したグランド</returns>
-        public IGround? GetGround(string id){
+        public IGround? GetGround(string id) {
             return this.content.grounds.Find(obj => obj.id == id);
         }
 
@@ -371,7 +371,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="id">取得するエンティティーのID</param>
         /// <returns>取得したエンティティー</returns>
-        public Entity? GetEntity(string id){
+        public Entity? GetEntity(string id) {
             return this.content.entities.Find(obj => obj.id == id);
         }
 
@@ -384,7 +384,7 @@ namespace PhysicsEngineCore {
             SaveData? saveData;
             try {
                 saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
-            } catch (JsonException ex) {
+            } catch(JsonException ex) {
                 throw new Exception("セーブデータの形式が不正です", ex);
             }
 
@@ -394,11 +394,11 @@ namespace PhysicsEngineCore {
 
             this.Clear(force: true);
 
-            saveData.GetAllObjects().ForEach(obj=>{
+            saveData.GetAllObjects().ForEach(obj => {
                 this.SpawnObject(obj);
             });
 
-            saveData.GetAllGrounds().ForEach(obj=>{
+            saveData.GetAllGrounds().ForEach(obj => {
                 this.SpawnGround(obj);
             });
 
@@ -423,7 +423,7 @@ namespace PhysicsEngineCore {
         /// セーブデータクラスに変換します
         /// </summary>
         /// <returns>変換されたセーブデータクラス</returns>
-        public SaveData toSaveData(){
+        public SaveData toSaveData() {
             EngineOption engineOption = new EngineOption {
                 pps = this.pps,
                 gravity = this.gravity,
@@ -447,13 +447,13 @@ namespace PhysicsEngineCore {
         /// JSON形式のセーブデータに変換します
         /// </summary>
         /// <returns>変換されたJSON形式のセーブデータ</returns>
-        public string Export(){
-            JsonSerializerOptions options = new JsonSerializerOptions{
+        public string Export() {
+            JsonSerializerOptions options = new JsonSerializerOptions {
                 NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals,
                 WriteIndented = true
             };
 
-            return JsonSerializer.Serialize(this.toSaveData(),options);
+            return JsonSerializer.Serialize(this.toSaveData(), options);
         }
 
         /// <summary>

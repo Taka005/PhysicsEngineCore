@@ -27,8 +27,8 @@ namespace PhysicsEngineCore.Views {
                 (midAngle > startAngle || midAngle < endAngle) :
                 (midAngle > startAngle && midAngle < endAngle);
 
-            bool isLargeArc = clockwise ? 
-                (endAngle <= startAngle) || (Math.Abs(endAngle - startAngle) > Math.PI) : 
+            bool isLargeArc = clockwise ?
+                (endAngle <= startAngle) || (Math.Abs(endAngle - startAngle) > Math.PI) :
                 (endAngle >= startAngle) || (Math.Abs(endAngle - startAngle) > Math.PI);
 
             StreamGeometry arcGeometry = new StreamGeometry();

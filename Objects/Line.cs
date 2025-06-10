@@ -2,11 +2,11 @@
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
-namespace PhysicsEngineCore.Objects{
+namespace PhysicsEngineCore.Objects {
     /// <summary>
     /// 線を表すクラス
     /// </summary>
-    public class Line: IGround{
+    public class Line : IGround {
         private readonly string _id;
         private string _color;
         public Vector2 start;
@@ -17,22 +17,22 @@ namespace PhysicsEngineCore.Objects{
         /// 初期化
         /// </summary>
         /// <param name="option">線の初期化クラス</param>
-        public Line(LineOption option){
+        public Line(LineOption option) {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this._color = option.color;
             this.start = new Vector2(option.startX, option.startY);
             this.end = new Vector2(option.endX, option.endY);
-            this._width = CheckWidthValue(option.width); 
+            this._width = CheckWidthValue(option.width);
         }
 
         /// <summary>
         /// 線の幅
         /// </summary>
-        public double width{
-            get{
+        public double width {
+            get {
                 return this._width;
             }
-            set{
+            set {
                 this._width = CheckWidthValue(value);
             }
         }
@@ -40,8 +40,8 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// オブジェクトの固有ID
         /// </summary>
-        public string id{
-            get{
+        public string id {
+            get {
                 return this._id;
             }
         }
@@ -50,11 +50,11 @@ namespace PhysicsEngineCore.Objects{
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
-        public string color{
-            get{
+        public string color {
+            get {
                 return this._color;
             }
-            set{
+            set {
                 this._color = value;
             }
         }
@@ -62,9 +62,9 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// 線の長さ
         /// </summary>
-        public double lenght{
-            get{
-                return Vector2.Distance(this.start,this.end);
+        public double lenght {
+            get {
+                return Vector2.Distance(this.start, this.end);
             }
         }
 
@@ -72,7 +72,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスのデータをJSON形式の文字列に変換します
         /// </summary>
         /// <returns>JSON形式の文字列</returns>
-        public IGround Clone(){
+        public IGround Clone() {
             return new Line(this.ToOption());
         }
 
@@ -80,7 +80,7 @@ namespace PhysicsEngineCore.Objects{
         /// 同じ状態のクラスを複製します
         /// </summary>
         /// <returns>複製されたクラス</returns>
-        public string ToJson(){
+        public string ToJson() {
             return JsonSerializer.Serialize(this.ToOption());
         }
 
@@ -88,7 +88,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>
-        public LineOption ToOption(){
+        public LineOption ToOption() {
             return new LineOption {
                 id = this.id,
                 color = this.color,
@@ -106,14 +106,14 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="position">任意の座標</param>
         /// <returns>交差した座標</returns>
-        public Vector2 SolvePosition(Vector2 position){
+        public Vector2 SolvePosition(Vector2 position) {
             double flag = ((position.X - this.start.X) * (this.end.X - this.start.X) + (position.Y - this.start.Y) * (this.end.Y - this.start.Y)) / Vector2.DistanceSquared(this.start, this.end);
 
-            if(flag <= 0){
+            if(flag <= 0) {
                 return this.start;
-            }else if(flag >= 1){
+            } else if(flag >= 1) {
                 return this.end;
-            }else{
+            } else {
                 double crossX = this.start.X + flag * (this.end.X - this.start.X);
                 double crossY = this.start.Y + flag * (this.end.Y - this.start.Y);
 
@@ -127,7 +127,7 @@ namespace PhysicsEngineCore.Objects{
         /// <param name="width">幅</param>
         /// <returns>正しい幅</returns>
         /// <exception cref="Exception">0未満であった時に例外</exception>
-        private static double CheckWidthValue(double width){
+        private static double CheckWidthValue(double width) {
             if(width < 0) throw new Exception("厚さ(width)は0以上に設定する必要があります");
 
             return width;

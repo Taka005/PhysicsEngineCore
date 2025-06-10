@@ -7,8 +7,8 @@ namespace PhysicsEngineCore.Views {
         private readonly Rope objectData;
         private Brush brush;
         private Pen pen;
-   
-        public RopeVisual(Rope objectData){
+
+        public RopeVisual(Rope objectData) {
             this.objectData = objectData;
             this.brush = Utility.ParseColor(objectData.color);
             this.pen = new Pen(this.brush, 1);

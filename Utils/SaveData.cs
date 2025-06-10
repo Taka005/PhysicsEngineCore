@@ -2,8 +2,8 @@
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 
-namespace PhysicsEngineCore.Utils{
-    public class SaveData{
+namespace PhysicsEngineCore.Utils {
+    public class SaveData {
         public DateTime saveAt { get; set; }
         public string version { get; set; } = Engine.SAVE_DATA_VERSION;
 
@@ -21,7 +21,7 @@ namespace PhysicsEngineCore.Utils{
             return allObjects;
         }
 
-         public List<IOption> GetAllGrounds() {
+        public List<IOption> GetAllGrounds() {
             List<IOption> allObjects = [];
 
             allObjects.AddRange(objects.lines);
@@ -31,7 +31,7 @@ namespace PhysicsEngineCore.Utils{
         }
     }
 
-     public class ObjectSaveData {
+    public class ObjectSaveData {
         public List<CircleOption> circles { get; set; } = [];
         public List<SquareOption> squares { get; set; } = [];
         public List<TriangleOption> triangles { get; set; } = [];

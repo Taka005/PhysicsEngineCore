@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
 using PhysicsEngineCore.Options;
 
-namespace PhysicsEngineCore.Objects{
+namespace PhysicsEngineCore.Objects {
     /// <summary>
     /// 円を表すクラス
     /// </summary>
-    public class Circle: BaseObject, IObject{
+    public class Circle : BaseObject, IObject {
         private readonly string _id;
         public double diameter;
         private string _color;
@@ -14,13 +14,13 @@ namespace PhysicsEngineCore.Objects{
         /// 初期化
         /// </summary>
         /// <param name="option">円の初期化クラス</param>
-        public Circle(CircleOption option): base(option.entities){
+        public Circle(CircleOption option) : base(option.entities) {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.diameter = option.diameter;
             this._color = option.color;
 
-            if(option.entities.Count == 0){
-                EntityOption entityOption = new EntityOption{
+            if(option.entities.Count == 0) {
+                EntityOption entityOption = new EntityOption {
                     posX = option.posX,
                     posY = option.posY,
                     diameter = option.diameter,
@@ -38,8 +38,8 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// オブジェクトの固有ID
         /// </summary>
-        public string id{
-            get{
+        public string id {
+            get {
                 return _id;
             }
         }
@@ -48,11 +48,11 @@ namespace PhysicsEngineCore.Objects{
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
-        public string color{
-            get{
+        public string color {
+            get {
                 return this._color;
             }
-            set{
+            set {
                 this._color = value;
             }
         }
@@ -60,9 +60,9 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// オブジェクトの半径
         /// </summary>
-        public double radius{
-            get{
-                return this.diameter/2;
+        public double radius {
+            get {
+                return this.diameter / 2;
             }
         }
 
@@ -70,7 +70,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスのデータをJSON形式の文字列に変換します
         /// </summary>
         /// <returns>JSON形式の文字列</returns>
-        public string ToJson(){
+        public string ToJson() {
             return JsonSerializer.Serialize(this.ToOption());
         }
 
@@ -78,7 +78,7 @@ namespace PhysicsEngineCore.Objects{
         /// 同じ状態のクラスを複製します
         /// </summary>
         /// <returns>複製されたクラス</returns>
-        public IObject Clone(){
+        public IObject Clone() {
             return new Circle(this.ToOption());
         }
 
@@ -86,7 +86,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>
-        public CircleOption ToOption(){
+        public CircleOption ToOption() {
             return new CircleOption {
                 id = this.id,
                 posX = this.position.X,
@@ -97,7 +97,7 @@ namespace PhysicsEngineCore.Objects{
                 mass = this.mass,
                 stiffness = this.stiffness,
                 color = this.color,
-                entities = [..this.entities.Select(entity =>entity.ToOption())]
+                entities = [.. this.entities.Select(entity => entity.ToOption())]
             };
         }
     }

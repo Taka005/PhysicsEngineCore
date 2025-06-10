@@ -3,7 +3,7 @@ using PhysicsEngineCore.Views;
 using System.Windows;
 using System.Windows.Media;
 
-namespace PhysicsEngineCore{
+namespace PhysicsEngineCore {
     /// <summary>
     /// 物理エンジンのレンダークラス
     /// </summary>
@@ -41,7 +41,7 @@ namespace PhysicsEngineCore{
 
                     if(newVisual != null) {
                         this.objectVisuals.Add(obj.id, newVisual);
-                        this.visuals.Insert(0,newVisual);
+                        this.visuals.Insert(0, newVisual);
                     }
                 }
 
@@ -54,7 +54,7 @@ namespace PhysicsEngineCore{
                         squareVisual.Draw();
                     } else if(visual is RopeVisual ropeVisual) {
                         ropeVisual.Draw();
-                    }else if(visual is TriangleVisual triangleVisual) {
+                    } else if(visual is TriangleVisual triangleVisual) {
                         triangleVisual.Draw();
                     }
 
@@ -67,9 +67,9 @@ namespace PhysicsEngineCore{
                 }
             }
 
-            if(this.isDebugMode){
+            if(this.isDebugMode) {
                 this.overlayVisual.UpdateVectors(vectors);
-            }else{
+            } else {
                 this.overlayVisual.Clear();
             }
         }
@@ -94,7 +94,7 @@ namespace PhysicsEngineCore{
 
                     if(newVisual != null) {
                         this.groundVisuals.Add(ground.id, newVisual);
-                        this.visuals.Insert(0,newVisual);
+                        this.visuals.Insert(0, newVisual);
                     }
                 }
 
@@ -122,7 +122,7 @@ namespace PhysicsEngineCore{
                 return new TriangleVisual(triangle);
             }
 
-                return null;
+            return null;
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace PhysicsEngineCore{
         private DrawingVisual? CreateVisualForGround(IGround obj) {
             if(obj is Line line) {
                 return new LineVisual(line);
-            }else if(obj is Curve curve) {
+            } else if(obj is Curve curve) {
                 return new CurveVisual(curve);
             }
 

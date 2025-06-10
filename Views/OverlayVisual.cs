@@ -13,7 +13,7 @@ namespace PhysicsEngineCore.Views {
             this.Draw();
         }
 
-        public void Clear(){
+        public void Clear() {
             this.vectors.Clear();
             this.Draw();
         }
@@ -32,7 +32,7 @@ namespace PhysicsEngineCore.Views {
         }
     }
 
-    public class VectorData(Vector2 position,Vector2 velocity) {
+    public class VectorData(Vector2 position, Vector2 velocity) {
         public Vector2 position = position;
         public Vector2 velocity = velocity;
     }

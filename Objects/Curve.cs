@@ -2,11 +2,11 @@
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
-namespace PhysicsEngineCore.Objects{
+namespace PhysicsEngineCore.Objects {
     /// <summary>
     /// 曲線を表すクラス
     /// </summary>
-    public class Curve: IGround{
+    public class Curve : IGround {
         private readonly string _id;
         private string _color;
         public Vector2 start;
@@ -22,7 +22,7 @@ namespace PhysicsEngineCore.Objects{
         /// 初期化
         /// </summary>
         /// <param name="option">曲線の初期化クラス</param>
-        public Curve(CurveOption option){
+        public Curve(CurveOption option) {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this._color = option.color;
             this.start = new Vector2(option.startX, option.startY);
@@ -39,14 +39,14 @@ namespace PhysicsEngineCore.Objects{
             double centerY = slope1 * centerX + equat1;
 
             this.center = new Vector2(centerX, centerY);
-            this.radius = Vector2.Distance(this.start,this.center);
+            this.radius = Vector2.Distance(this.start, this.center);
         }
 
         /// <summary>
         /// オブジェクトの固有ID
         /// </summary>
-        public string id{
-            get{
+        public string id {
+            get {
                 return this._id;
             }
         }
@@ -55,11 +55,11 @@ namespace PhysicsEngineCore.Objects{
         /// オブジェクトの色
         /// Hexの値です
         /// </summary>
-        public string color{
-            get{
+        public string color {
+            get {
                 return this._color;
             }
-            set{
+            set {
                 this._color = value;
             }
         }
@@ -67,11 +67,11 @@ namespace PhysicsEngineCore.Objects{
         /// <summary>
         /// 線の幅
         /// </summary>
-        public double width{
-            get{
+        public double width {
+            get {
                 return this._width;
             }
-            set{
+            set {
                 this._width = CheckWidthValue(value);
             }
         }
@@ -80,7 +80,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスのデータをJSON形式の文字列に変換します
         /// </summary>
         /// <returns>JSON形式の文字列</returns>
-        public string ToJson(){
+        public string ToJson() {
             return JsonSerializer.Serialize(this.ToOption());
         }
 
@@ -88,7 +88,7 @@ namespace PhysicsEngineCore.Objects{
         /// 同じ状態のクラスを複製します
         /// </summary>
         /// <returns>複製されたクラス</returns>
-        public IGround Clone(){
+        public IGround Clone() {
             return new Curve(this.ToOption());
         }
 
@@ -96,7 +96,7 @@ namespace PhysicsEngineCore.Objects{
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>
-        public CurveOption ToOption(){
+        public CurveOption ToOption() {
             return new CurveOption {
                 id = this.id,
                 color = this.color,
@@ -117,7 +117,7 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="position">任意の座標</param>
         /// <returns>交差した座標</returns>
-        public Vector2 SolvePosition(Vector2 position){
+        public Vector2 SolvePosition(Vector2 position) {
             Vector2 difference = position - this.center;
 
             double distance = difference.Length();
@@ -134,13 +134,13 @@ namespace PhysicsEngineCore.Objects{
 
             bool isClockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
 
-            if(!IsAngleBetween(crossAngle, startAngle, endAngle, isClockwise)){
+            if(!IsAngleBetween(crossAngle, startAngle, endAngle, isClockwise)) {
                 double startDistance = Vector2.DistanceSquared(this.start, position);
                 double endDistance = Vector2.DistanceSquared(this.end, position);
 
-                if(startDistance < endDistance){
+                if(startDistance < endDistance) {
                     return this.start;
-                }else{
+                } else {
                     return this.end;
                 }
             }
@@ -156,11 +156,11 @@ namespace PhysicsEngineCore.Objects{
         /// <param name="end">終了角度</param>
         /// <param name="isClockwise">時計周りかどうか</param>
         /// <returns>時計回りなら真を返す</returns>
-        public static bool IsAngleBetween(double angle, double start, double end, bool isClockwise){
-            if(isClockwise){
-                return (angle >= start&&angle <= end)||(start > end&&(angle >= start||angle <= end));
-            }else{
-                return (angle <= start&&angle >= end)||(start < end&&(angle <= start||angle >= end));
+        public static bool IsAngleBetween(double angle, double start, double end, bool isClockwise) {
+            if(isClockwise) {
+                return (angle >= start && angle <= end) || (start > end && (angle >= start || angle <= end));
+            } else {
+                return (angle <= start && angle >= end) || (start < end && (angle <= start || angle >= end));
             }
         }
 
@@ -169,7 +169,7 @@ namespace PhysicsEngineCore.Objects{
         /// </summary>
         /// <param name="angle">正規化する角度</param>
         /// <returns>正規化された角度</returns>
-        public static double NormalizeAngle(double angle){
+        public static double NormalizeAngle(double angle) {
             return (angle + 2 * Math.PI) % (2 * Math.PI);
         }
 
