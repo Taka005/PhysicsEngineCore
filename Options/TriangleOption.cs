@@ -9,6 +9,7 @@
         public double velocityX { get; set; } = 0;
         public double velocityY { get; set; } = 0;
         public string color { get; set; } = "#F00000";
+        public string? script { get; set; } = null;
         public List<EntityOption> entities { get; set; } = [];
     }
 }

@@ -13,6 +13,8 @@ namespace PhysicsEngineCore.Objects{
         public Vector2 end;
         private double _width;
 
+        public string? script { get; set; } = null;
+
         /// <summary>
         /// 初期化
         /// </summary>

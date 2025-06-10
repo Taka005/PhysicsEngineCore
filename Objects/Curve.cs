@@ -16,6 +16,8 @@ namespace PhysicsEngineCore.Objects{
         public double radius;
         private double _width;
 
+        public string? script { get; set; } = null;
+
         /// <summary>
         /// 初期化
         /// </summary>

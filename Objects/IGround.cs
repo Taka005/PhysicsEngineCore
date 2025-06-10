@@ -5,6 +5,7 @@ namespace PhysicsEngineCore.Objects{
         string id { get; }
         string color { get; set; }
         double width { get; set; }
+        string? script { get; set; }
 
         Vector2 SolvePosition(Vector2 position);
 
