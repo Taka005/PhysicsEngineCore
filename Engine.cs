@@ -1,7 +1,12 @@
 ﻿using System.Text.Json;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Scripting;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
+using System.Reflection;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace PhysicsEngineCore {
     /// <summary>
@@ -67,6 +72,25 @@ namespace PhysicsEngineCore {
         /// コンテンツマネージャー
         /// </summary>
         private readonly ContentManager content = new ContentManager();
+
+        public string script { get; set; } = string.Empty;
+
+        private readonly ScriptOptions scriptOptions = ScriptOptions.Default
+            .AddReferences(typeof(Engine).Assembly)
+            .AddReferences(typeof(JsonSerializer).Assembly)
+            .AddReferences(typeof(Enumerable).Assembly)
+            .AddImports(
+                "System",
+                "System.Collections.Generic",
+                "System.Linq",
+                "System.Text.Json",
+                "PhysicsEngineCore",
+                "PhysicsEngineCore.Objects",
+                "PhysicsEngineCore.Options",
+                "PhysicsEngineCore.Utils"
+            )
+            .WithOptimizationLevel(OptimizationLevel.Debug)
+            .WithLanguageVersion(LanguageVersion.Latest);
 
         /// <summary>
         /// 初期化
@@ -190,10 +214,11 @@ namespace PhysicsEngineCore {
                     while(this.tracks.Count > this.trackingLimit) {
                         this.tracks.RemoveAt(0);
                     }
-
                     this.trackingCount = 0;
                 }
             }
+
+            CSharpScript.EvaluateAsync(this.script, this.scriptOptions, globals: this);
 
             this.Update();
         }

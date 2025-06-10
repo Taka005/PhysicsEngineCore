@@ -8,8 +8,6 @@ namespace PhysicsEngineCore.Objects{
     public class BaseObject: IBaseObject{
         private readonly List<Entity> _entities = [];
 
-        public string? script { get; set; } = null;
-
         /// <summary>
         /// 初期化
         /// </summary>

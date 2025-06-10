@@ -9,6 +9,5 @@ namespace PhysicsEngineCore.Objects{
         Vector2 velocity { get; set; }
         double mass {  get; set; }
         double stiffness { get; set; }
-        string? script { get; set; }
     }
 }

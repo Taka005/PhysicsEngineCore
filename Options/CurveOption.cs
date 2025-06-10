@@ -9,6 +9,5 @@
         public double endX { get; set; }
         public double endY { get; set; }
         public double width { get; set; }
-        public string? script { get; set; } = null;
     }
 }
