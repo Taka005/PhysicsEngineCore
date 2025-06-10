@@ -16,7 +16,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// スタートしているかどうか
         /// </summary>
-        private bool isStarted = false;
+        public bool isStarted = false;
 
         /// <summary>
         /// トラッキングモードが有効かどうか
