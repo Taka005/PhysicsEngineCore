@@ -15,6 +15,7 @@ namespace PhysicsEngineCore.Views {
 
         public void Clear(){
             this.vectors.Clear();
+            this.Draw();
         }
 
         public void Draw() {

@@ -410,7 +410,13 @@ namespace PhysicsEngineCore {
             this.trackingLimit = saveData.engine.trackingLimit;
             this.movementLimit = saveData.engine.movementLimit;
 
-            this.content.Sync();
+            if(this.isStarted) {
+                this.Stop();
+                this.Start();
+            } else {
+                this.Start();
+                this.Stop();
+            }
         }
 
         /// <summary>
