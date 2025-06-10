@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.Scripting;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
-using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace PhysicsEngineCore {
@@ -73,12 +72,15 @@ namespace PhysicsEngineCore {
         /// </summary>
         private readonly ContentManager content = new ContentManager();
 
-        public string script { get; set; } = string.Empty;
+        private string script = string.Empty;
+
+        private ScriptRunner<object>? scriptRunner;
 
         private readonly ScriptOptions scriptOptions = ScriptOptions.Default
             .AddReferences(typeof(Engine).Assembly)
             .AddReferences(typeof(JsonSerializer).Assembly)
             .AddReferences(typeof(Enumerable).Assembly)
+            .AddReferences(typeof(Math).Assembly)
             .AddImports(
                 "System",
                 "System.Collections.Generic",
@@ -105,6 +107,17 @@ namespace PhysicsEngineCore {
             }
 
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
+        }
+
+        public void SetScript(string script) {
+            this.script = script;
+
+            if(!string.IsNullOrEmpty(this.script)) {
+                Script<object> scriptObject = CSharpScript.Create(this.script, this.scriptOptions);
+                this.scriptRunner = scriptObject.CreateDelegate(); 
+            } else {
+                this.scriptRunner = null;
+            }
         }
 
         /// <summary>
@@ -200,7 +213,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// シュミレーションを1フレーム進めます
         /// </summary>
-        public void Step(){
+        public async void Step(){
             this.content.Sync();
 
             this.trackingCount++;
@@ -218,7 +231,17 @@ namespace PhysicsEngineCore {
                 }
             }
 
-            CSharpScript.EvaluateAsync(this.script, this.scriptOptions, globals: this);
+            if(this.scriptRunner != null){
+                try{
+                    await this.scriptRunner.Invoke(this);
+                }catch(CompilationErrorException e){
+                    Console.Error.WriteLine($"スクリプトコンパイルエラー: {e.Message}");
+
+                    this.scriptRunner = null;
+                }catch (Exception e){
+                    Console.Error.WriteLine($"スクリプトランタイムエラー: {e.Message}");
+                }
+            }
 
             this.Update();
         }
