@@ -1,11 +1,7 @@
 ﻿using System.Text.Json;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Scripting;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace PhysicsEngineCore {
     /// <summary>
@@ -73,37 +69,6 @@ namespace PhysicsEngineCore {
         private readonly ContentManager content = new ContentManager();
 
         /// <summary>
-        /// カスタムスクリプト
-        /// </summary>
-        private string script = string.Empty;
-
-        /// <summary>
-        /// カスタムスクリプトの実行ランナー
-        /// </summary>
-        private ScriptRunner<object>? scriptRunner;
-
-        /// <summary>
-        /// スクリプトのオプション
-        /// </summary>
-        private readonly ScriptOptions scriptOptions = ScriptOptions.Default
-            .AddReferences(typeof(Engine).Assembly)
-            .AddReferences(typeof(JsonSerializer).Assembly)
-            .AddReferences(typeof(Enumerable).Assembly)
-            .AddReferences(typeof(Math).Assembly)
-            .AddImports(
-                "System",
-                "System.Collections.Generic",
-                "System.Linq",
-                "System.Text.Json",
-                "PhysicsEngineCore",
-                "PhysicsEngineCore.Objects",
-                "PhysicsEngineCore.Options",
-                "PhysicsEngineCore.Utils"
-            )
-            .WithOptimizationLevel(OptimizationLevel.Debug)
-            .WithLanguageVersion(LanguageVersion.Latest);
-
-        /// <summary>
         /// 初期化
         /// </summary>
         /// <param name="option">エンジンの初期化クラス</param>
@@ -116,21 +81,6 @@ namespace PhysicsEngineCore {
             }
 
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
-        }
-
-        /// <summary>
-        /// カスタムスクリプトを設定します
-        /// </summary>
-        /// <param name="script">実行するスクリプト</param>
-        public void SetScript(string script) {
-            this.script = script;
-
-            if(!string.IsNullOrEmpty(this.script)) {
-                Script<object> scriptObject = CSharpScript.Create(this.script, this.scriptOptions);
-                this.scriptRunner = scriptObject.CreateDelegate(); 
-            } else {
-                this.scriptRunner = null;
-            }
         }
 
         /// <summary>
@@ -226,7 +176,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// シュミレーションを1フレーム進めます
         /// </summary>
-        public async void Step(){
+        public void Step(){
             this.content.Sync();
 
             this.trackingCount++;
@@ -241,18 +191,6 @@ namespace PhysicsEngineCore {
                         this.tracks.RemoveAt(0);
                     }
                     this.trackingCount = 0;
-                }
-            }
-
-            if(this.scriptRunner != null){
-                try{
-                    await this.scriptRunner.Invoke(this);
-                }catch(CompilationErrorException e){
-                    Console.Error.WriteLine($"スクリプトコンパイルエラー: {e.Message}");
-
-                    this.scriptRunner = null;
-                }catch (Exception e){
-                    Console.Error.WriteLine($"スクリプトランタイムエラー: {e.Message}");
                 }
             }
 
@@ -443,32 +381,24 @@ namespace PhysicsEngineCore {
         /// <param name="rawSaveData">JSON形式のセーブデータ</param>
         /// <exception cref="Exception">破損またはバージョンが異なる場合に例外</exception>
         public void Import(string rawSaveData) {
-            SaveData? saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
+            SaveData? saveData;
+            try {
+                saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
+            } catch (JsonException ex) {
+                throw new Exception("セーブデータの形式が不正です", ex);
+            }
+
             if(saveData == null) throw new Exception("破損したセーブデータです");
 
             if(saveData.version != SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
-            saveData.objects.circles.ForEach(obj=>{
+            this.Clear(force: true);
+
+            saveData.GetAllObjects().ForEach(obj=>{
                 this.SpawnObject(obj);
             });
 
-            saveData.objects.squares.ForEach(obj => {
-                this.SpawnObject(obj);
-            });
-
-            saveData.objects.triangles.ForEach(obj => {
-                this.SpawnObject(obj);
-            });
-
-            saveData.objects.ropes.ForEach(obj => {
-                this.SpawnObject(obj);
-            });
-
-            saveData.objects.lines.ForEach(obj=>{
-                this.SpawnGround(obj);
-            });
-
-            saveData.objects.curves.ForEach(obj=>{
+            saveData.GetAllGrounds().ForEach(obj=>{
                 this.SpawnGround(obj);
             });
 
@@ -479,6 +409,8 @@ namespace PhysicsEngineCore {
             this.trackingInterval = saveData.engine.trackingInterval;
             this.trackingLimit = saveData.engine.trackingLimit;
             this.movementLimit = saveData.engine.movementLimit;
+
+            this.content.Sync();
         }
 
         /// <summary>

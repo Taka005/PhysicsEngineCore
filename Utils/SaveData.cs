@@ -1,4 +1,6 @@
-﻿using PhysicsEngineCore.Options;
+﻿using System.Collections.Generic;
+using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Utils{
     public class SaveData{
@@ -7,6 +9,26 @@ namespace PhysicsEngineCore.Utils{
 
         public EngineOption engine { get; set; } = new EngineOption();
         public ObjectSaveData objects { get; set; } = new ObjectSaveData();
+
+        public List<IOption> GetAllObjects() {
+            List<IOption> allObjects = [];
+
+            allObjects.AddRange(objects.circles);
+            allObjects.AddRange(objects.squares);
+            allObjects.AddRange(objects.triangles);
+            allObjects.AddRange(objects.ropes);
+
+            return allObjects;
+        }
+
+         public List<IOption> GetAllGrounds() {
+            List<IOption> allObjects = [];
+
+            allObjects.AddRange(objects.lines);
+            allObjects.AddRange(objects.curves);
+
+            return allObjects;
+        }
     }
 
      public class ObjectSaveData {

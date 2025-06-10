@@ -7,7 +7,5 @@
         public float trackingInterval { get; set; } = 100;
         public int trackingLimit { get; set; } = 10000;
         public int movementLimit { get; set; } = 10000;
-
-        public string script { get; set; } = string.Empty;
     }
 }
