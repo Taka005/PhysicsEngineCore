@@ -20,9 +20,7 @@ namespace PhysicsEngineCore.Objects{
             this.size = option.size;
             this._color = option.color;
 
-            if(option.entities.Count != 0){
-                this.AddAllEntities(option.entities);
-            }else{
+            if(option.entities.Count == 0){
                 for(int i = -1;i <= 1;i += 2){
                     for(int j = -1;j <= 1;j += 2){
                         EntityOption entityOption = new EntityOption {

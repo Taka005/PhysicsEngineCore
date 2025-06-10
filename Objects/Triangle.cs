@@ -20,9 +20,7 @@ namespace PhysicsEngineCore.Objects {
             this.size = option.size;
             this._color = option.color;
 
-            if(option.entities.Count != 0) {
-                this.AddAllEntities(option.entities);
-            } else {
+            if(option.entities.Count == 0) {
                 EntityOption entityOption1 = new EntityOption {
                     posX = option.posX,
                     posY = option.posY - (2 / Math.Sqrt(3)) * (this.size/3),

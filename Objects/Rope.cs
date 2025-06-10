@@ -19,9 +19,7 @@ namespace PhysicsEngineCore.Objects{
             this.width = option.width;
             this._color = option.color;
 
-            if(option.entities.Count != 0) {
-                this.AddAllEntities(option.entities);
-            } else {
+            if(option.entities.Count == 0) {
                 double width = option.endX - option.startX;
                 double height = option.endY - option.startY;
 

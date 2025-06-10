@@ -77,13 +77,13 @@ namespace PhysicsEngineCore.Objects{
         }
 
         /// <summary>
-        /// 全てのエンティティーの平均質量
+        /// 全てのエンティティーの合計質量
         /// </summary>
         public double mass{
             get{
                 if(this.count == 0) return 0;
 
-                return this._entities.Select(entity => entity.mass).Average();
+                return this._entities.Select(entity => entity.mass).Sum();
             }
             set{
                 if(value < 0) throw new Exception("質量(mass)は0以上に設定する必要があります");
@@ -95,7 +95,7 @@ namespace PhysicsEngineCore.Objects{
         }
 
         /// <summary>
-        /// 全てのエンティティーの平均剛性
+        /// 全てのエンティティーの合計剛性
         /// </summary>
         public double stiffness{
             get{
@@ -107,7 +107,7 @@ namespace PhysicsEngineCore.Objects{
                 if(value <= 0 || value > 1) throw new Exception("剛性(stiffness)は0超過かつ1以下に設定する必要があります");
 
                 this._entities.ForEach(entity=>{
-                    entity.stiffness = value / this.count;
+                    entity.stiffness = value;
                 });
             }
         }

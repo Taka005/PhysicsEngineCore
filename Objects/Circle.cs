@@ -19,9 +19,7 @@ namespace PhysicsEngineCore.Objects{
             this.diameter = option.diameter;
             this._color = option.color;
 
-            if(option.entities.Count != 0){
-                this.AddAllEntities(option.entities);
-            }else{
+            if(option.entities.Count == 0){
                 EntityOption entityOption = new EntityOption{
                     posX = option.posX,
                     posY = option.posY,
