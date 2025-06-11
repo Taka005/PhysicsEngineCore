@@ -142,22 +142,22 @@ namespace PhysicsEngineCore.Utils {
                 this.queueGrounds.Clear();
 
                 foreach(QueueObject obj in currentQueueObjects) {
-                    if(obj.target == null) return;
+                    if(obj.target == null) continue;
 
                     if(obj.command == CommandType.Add) {
                         this.objects.Add(obj.target);
                     } else if(obj.command == CommandType.Remove) {
-                        this.objects.RemoveAll(target => target.id == obj.id);
+                        this.objects.RemoveAll(target => target.id == obj.target.id);
                     }
                 }
 
                 foreach(QueueGround ground in currentQueueGrounds) {
-                    if(ground.target == null) return;
+                    if(ground.target == null) continue;
 
                     if(ground.command == CommandType.Add) {
                         this.grounds.Add(ground.target);
                     } else if(ground.command == CommandType.Remove) {
-                        this.grounds.RemoveAll(target => target.id == ground.id);
+                        this.grounds.RemoveAll(target => target.id == ground.target.id);
                     }
                 }
             }

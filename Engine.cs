@@ -134,13 +134,13 @@ namespace PhysicsEngineCore {
         /// <param name="force">真の場合に地面と履歴も削除</param>
         public void Clear(bool force = false) {
             this.content.RemoveAllObjects();
-            this.render.DrawObject(this.content.objects);
 
             if(force) {
                 this.content.RemoveAllGrounds();
                 this.ClearTrack();
-                this.render.DrawGround(this.content.grounds);
             }
+
+            if(!this.isStarted) this.content.Sync();
         }
 
         /// <summary>
