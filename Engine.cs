@@ -31,7 +31,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// 再生速度
         /// </summary>
-        private float playBackSpeed = 1;
+        private float _playBackSpeed = 1;
 
         /// <summary>
         /// トラッキング間隔
@@ -74,7 +74,7 @@ namespace PhysicsEngineCore {
         /// <param name="option">エンジンの初期化クラス</param>
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
             if(option != null) {
-                this.playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
+                this._playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
                 this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
                 this.trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
                 this.movementLimit = CheckMovementLimitValue(option.movementLimit);
@@ -83,15 +83,21 @@ namespace PhysicsEngineCore {
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+        public float playBackSpeed {
+            get {
+                return this._playBackSpeed;
+            }
+        }
+
         /// <summary>
         /// 再生速度を設定します
         /// </summary>
         /// <param name="value">設定する再生速度</param>
         public void SetPlayBackSpeed(float value) {
-            this.playBackSpeed = CheckPlayBackSpeedValue(value);
+            this._playBackSpeed = CheckPlayBackSpeedValue(value);
 
             if(this.isStarted) {
-                this.loopTimer.Change(0, (int)((1000 / this.pps) / this.playBackSpeed));
+                this.loopTimer.Change(0, (int)((1000 / this.pps) / this._playBackSpeed));
             }
         }
 
@@ -405,7 +411,7 @@ namespace PhysicsEngineCore {
             this.pps = saveData.engine.pps;
             this.gravity = saveData.engine.gravity;
             this.friction = saveData.engine.friction;
-            this.playBackSpeed = saveData.engine.playBackSpeed;
+            this._playBackSpeed = saveData.engine.playBackSpeed;
             this.trackingInterval = saveData.engine.trackingInterval;
             this.trackingLimit = saveData.engine.trackingLimit;
             this.movementLimit = saveData.engine.movementLimit;
@@ -428,7 +434,7 @@ namespace PhysicsEngineCore {
                 pps = this.pps,
                 gravity = this.gravity,
                 friction = this.friction,
-                playBackSpeed = this.playBackSpeed,
+                playBackSpeed = this._playBackSpeed,
                 trackingInterval = this.trackingInterval,
                 trackingLimit = this.trackingLimit,
                 movementLimit = this.movementLimit
