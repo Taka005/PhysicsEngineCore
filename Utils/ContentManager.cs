@@ -111,6 +111,23 @@ namespace PhysicsEngineCore.Utils {
             }
         }
 
+        public void RemoveAllObjects() {
+            lock(this.lockObject) {
+                foreach(IObject obj in this.objects) {
+                    this.RemoveObject(obj);
+                }
+            }
+        }
+
+        public void RemoveAllGrounds() {
+            lock(this.lockObject){
+                foreach(IGround ground in this.grounds) {
+                    this.RemoveGround(ground);
+                }
+            }
+        }
+
+
         /// <summary>
         /// 待機列にあるオブジェクトを処理します
         /// </summary>

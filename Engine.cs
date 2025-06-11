@@ -83,6 +83,9 @@ namespace PhysicsEngineCore {
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+        /// <summary>
+        /// 再生速度
+        /// </summary>
         public float playBackSpeed {
             get {
                 return this._playBackSpeed;
@@ -130,11 +133,11 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="force">真の場合に地面と履歴も削除</param>
         public void Clear(bool force = false) {
-            this.content.objects.Clear();
+            this.content.RemoveAllObjects();
             this.render.DrawObject(this.content.objects);
 
             if(force) {
-                this.content.grounds.Clear();
+                this.content.RemoveAllGrounds();
                 this.ClearTrack();
                 this.render.DrawGround(this.content.grounds);
             }
