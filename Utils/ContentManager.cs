@@ -141,9 +141,9 @@ namespace PhysicsEngineCore.Utils {
                 if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
 
                 List<QueueObject> currentQueueObjects = [.. this.queueObjects];
-                this.queueObjects.Clear();
-
                 List<QueueGround> currentQueueGrounds = [.. this.queueGrounds];
+
+                this.queueObjects.Clear();
                 this.queueGrounds.Clear();
 
                 foreach(QueueObject obj in currentQueueObjects) {

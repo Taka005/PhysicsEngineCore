@@ -140,7 +140,7 @@ namespace PhysicsEngineCore {
                 this.ClearTrack();
             }
 
-            if(!this.isStarted) this.content.Sync();
+            this.content.Sync();
         }
 
         /// <summary>
@@ -172,6 +172,8 @@ namespace PhysicsEngineCore {
 
             this.isStarted = false;
             this.loopTimer.Change(Timeout.Infinite, Timeout.Infinite);
+
+             this.content.Sync();
         }
 
         /// <summary>
@@ -290,10 +292,7 @@ namespace PhysicsEngineCore {
 
             this.content.AddObject(obj);
 
-            if(!this.isStarted) {
-                this.content.Sync();
-                this.render.DrawObject(this.content.objects);
-            }
+            this.content.Sync();
 
             return obj;
         }
@@ -319,10 +318,7 @@ namespace PhysicsEngineCore {
 
             this.content.AddGround(ground);
 
-            if(!this.isStarted) {
-                this.content.Sync();
-                this.render.DrawGround(this.content.grounds);
-            }
+            this.content.Sync();
 
             return ground;
         }
@@ -337,10 +333,7 @@ namespace PhysicsEngineCore {
 
             this.content.RemoveObject(obj);
 
-            if(!this.isStarted) {
-                this.content.Sync();
-                this.render.DrawObject(this.content.objects);
-            }
+            this.content.Sync();
         }
 
         /// <summary>
@@ -353,10 +346,7 @@ namespace PhysicsEngineCore {
 
             this.content.RemoveGround(ground);
 
-            if(!this.isStarted) {
-                this.content.Sync();
-                this.render.DrawGround(this.content.grounds);
-            }
+            this.content.Sync();
         }
 
         /// <summary>
@@ -421,13 +411,7 @@ namespace PhysicsEngineCore {
             this.trackingLimit = saveData.engine.trackingLimit;
             this.movementLimit = saveData.engine.movementLimit;
 
-            if(this.isStarted) {
-                this.Stop();
-                this.Start();
-            } else {
-                this.Start();
-                this.Stop();
-            }
+            this.content.Sync();
         }
 
         /// <summary>
