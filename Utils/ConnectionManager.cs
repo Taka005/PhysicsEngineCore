@@ -7,7 +7,15 @@ namespace PhysicsEngineCore.Utils {
     /// </summary>
     /// <param name="targets">初期のターゲットのリスト</param>
     public class ConnectionManager(List<Target>? targets) {
-        public readonly List<Target> targets = targets ?? [];
+        public readonly List<Target> _targets = targets ?? [];
+
+        public List<Target> targets{
+            get{
+                lock (this._targets){
+                    return [.. this._targets];
+                }
+            }
+        }
 
         /// <summary>
         /// ターゲットを取得します
@@ -30,7 +38,10 @@ namespace PhysicsEngineCore.Utils {
 
             Target target = new Target(entity.id, distance, stiffness);
 
-            this.targets.Add(target);
+            lock(this._targets){
+                this._targets.Add(target);
+            }
+            
         }
 
         /// <summary>
@@ -42,7 +53,9 @@ namespace PhysicsEngineCore.Utils {
             Target? target = this.Get(entityId);
             if(target == null) throw new Exception("ターゲットが見つかりません");
 
-            this.targets.RemoveAll(target => target.entityId == entityId);
+            lock (this._targets){
+                this._targets.RemoveAll(target => target.entityId == entityId);
+            }
         }
     }
 }

@@ -192,7 +192,7 @@ namespace PhysicsEngineCore {
 
             lock(this.tracks) {
                 if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)) {
-                    foreach(IObject obj in this.content.getObjectsCopy().Where(obj => !obj.isStop)) {
+                    foreach(IObject obj in this.content.objects.Where(obj => !obj.isStop)) {
                         this.tracks.Add(obj.Clone());
                     }
 
@@ -213,8 +213,8 @@ namespace PhysicsEngineCore {
         /// <param name="sender">データ</param>
         /// <param name="e">イベント</param>
         public void OnRendering(object? sender, EventArgs e) {
-            this.render.DrawObject(this.content.getObjectsCopy());
-            this.render.DrawGround(this.content.getGroundsCopy());
+            this.render.DrawObject(this.content.objects);
+            this.render.DrawGround(this.content.grounds);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace PhysicsEngineCore {
                 this.SolveSpeed(entity);
             }
 
-            foreach(IObject obj in this.content.getObjectsCopy()) {
+            foreach(IObject obj in this.content.objects) {
                 if(
                     Math.Abs(obj.position.X) > this.movementLimit ||
                     Math.Abs(obj.position.Y) > this.movementLimit
