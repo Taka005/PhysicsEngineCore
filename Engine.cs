@@ -230,6 +230,7 @@ namespace PhysicsEngineCore {
 
             foreach(Entity entity in entities) {
                 int index = entities.IndexOf(entity);
+
                 foreach(IGround ground in this.content.grounds) {
                     this.SolveGroundPosition(entity, ground);
                 }
@@ -239,7 +240,8 @@ namespace PhysicsEngineCore {
                 }
 
                 foreach(Target target in entity.connection.targets) {
-                    Entity? targetEntity = GetEntity(target.entityId);
+                    Entity? targetEntity = this.GetEntity(target.entityId);
+
                     if(targetEntity == null) {
                         entity.connection.Remove(target.entityId);
                     } else {
