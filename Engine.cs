@@ -393,6 +393,10 @@ namespace PhysicsEngineCore {
 
             if(saveData.version != SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
+            bool previousStarted = this.isStarted;
+
+            if(this.isStarted) this.Stop();
+
             this.Clear(force: true);
 
             saveData.GetAllObjects().ForEach(obj => {
@@ -412,6 +416,8 @@ namespace PhysicsEngineCore {
             this.movementLimit = saveData.engine.movementLimit;
 
             this.content.Sync();
+
+            if(previousStarted) this.Start();
         }
 
         /// <summary>
