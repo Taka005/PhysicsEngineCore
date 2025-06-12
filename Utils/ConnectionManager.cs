@@ -24,7 +24,7 @@ namespace PhysicsEngineCore.Utils {
         /// <param name="entityId">取得するエンティティーID</param>
         /// <returns>取得したターゲットを返す</returns>
         public Target? Get(string entityId) {
-            return this._targets.FirstOrDefault(target => target.entityId == entityId);
+            return this.targets.FirstOrDefault(target => target.entityId == entityId);
         }
 
         /// <summary>
@@ -51,9 +51,6 @@ namespace PhysicsEngineCore.Utils {
         /// <param name="entityId">削除する</param>
         /// <exception cref="Exception"></exception>
         public void Remove(string entityId) {
-            Target? target = this.Get(entityId);
-            if(target == null) throw new Exception("ターゲットが見つかりません");
-
             lock (this._targets){
                 this._targets.RemoveAll(target => target.entityId == entityId);
             }
