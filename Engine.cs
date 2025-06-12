@@ -274,7 +274,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したオブジェクト</returns>
         /// <exception cref="Exception">存在しないオブジェクトのとき例外</exception>
         public IObject? SpawnObject(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(10);
+            if(option.id == null) option.id = IdGenerator.CreateId(15);
 
             IObject? obj = null;
 
@@ -304,7 +304,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したグラウンド</returns>
         /// <exception cref="Exception">存在しないグランドのとき例外</exception>
         public IGround? SpawnGround(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(10);
+            if(option.id == null) option.id = IdGenerator.CreateId(15);
 
             IGround? ground = null;
 

@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Objects;
+﻿using System.Diagnostics;
+using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore.Utils {
 
@@ -23,7 +24,7 @@ namespace PhysicsEngineCore.Utils {
         /// <param name="entityId">取得するエンティティーID</param>
         /// <returns>取得したターゲットを返す</returns>
         public Target? Get(string entityId) {
-            return this.targets.FirstOrDefault(target => target.entityId == entityId);
+            return this._targets.FirstOrDefault(target => target.entityId == entityId);
         }
 
         /// <summary>
