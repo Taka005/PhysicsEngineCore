@@ -201,6 +201,7 @@ namespace PhysicsEngineCore {
                     while(this.tracks.Count > this.trackingLimit) {
                         this.tracks.RemoveAt(0);
                     }
+
                     this.trackingCount = 0;
                 }
             }
@@ -449,12 +450,12 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <returns>変換されたJSON形式のセーブデータ</returns>
         public string Export() {
-            JsonSerializerOptions options = new JsonSerializerOptions {
-                NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals,
-                WriteIndented = true
-            };
+            //JsonSerializerOptions options = new JsonSerializerOptions {
+            //    NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals,
+            //    WriteIndented = true
+            //};
 
-            return JsonSerializer.Serialize(this.toSaveData(), options);
+            return JsonSerializer.Serialize(this.toSaveData());
         }
 
         /// <summary>

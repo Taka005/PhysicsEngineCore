@@ -45,7 +45,6 @@ namespace PhysicsEngineCore.Utils {
                     return [.. this._grounds];
                 }
             }
-
         }
 
         /// <summary>
