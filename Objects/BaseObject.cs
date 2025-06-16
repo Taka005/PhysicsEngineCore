@@ -55,6 +55,13 @@ namespace PhysicsEngineCore.Objects {
 
                 return new Vector2(averagePosX, averagePosY);
             }
+            set {
+                Vector2 difference = value - this.position;
+
+                this._entities.ForEach(entity => {
+                    entity.position += difference;
+                });
+            }
         }
 
         /// <summary>
