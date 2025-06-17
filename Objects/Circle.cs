@@ -7,7 +7,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Circle : BaseObject, IObject {
         private readonly string _id;
-        public double diameter;
+        private double _diameter;
         private string _color;
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace PhysicsEngineCore.Objects {
         /// <param name="option">円の初期化クラス</param>
         public Circle(CircleOption option) : base(option.entities) {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
-            this.diameter = option.diameter;
+            this._diameter = option.diameter;
             this._color = option.color;
 
             if(option.entities.Count == 0) {
@@ -64,7 +64,24 @@ namespace PhysicsEngineCore.Objects {
             get {
                 return this.diameter / 2;
             }
+            set {
+                this.diameter = value * 2;
+            }
         }
+
+        /// <summary>
+        /// オブジェクトの直径
+        /// </summary>
+        public double diameter {
+            get {
+                return this._diameter;
+            }
+            set {
+                if(value <= 0) throw new ArgumentException("直径を0以下に設定することはできません");
+
+                this._diameter = value;
+            }
+        }   
 
         /// <summary>
         /// クラスのデータをJSON形式の文字列に変換します
