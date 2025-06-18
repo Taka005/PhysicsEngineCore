@@ -6,7 +6,7 @@ namespace PhysicsEngineCore.Objects {
     /// ロープを表すクラス
     /// </summary>
     public class Rope : BaseObject, IObject {
-        private readonly string _id;
+        private string _id;
         private double _width;
         private string _color;
 
@@ -59,6 +59,13 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+            set {
+                foreach(Entity entity in this.entities) {
+                    entity.parentId = value;
+                }
+
+                this._id = value;
             }
         }
 

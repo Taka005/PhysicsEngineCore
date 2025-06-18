@@ -6,7 +6,7 @@ namespace PhysicsEngineCore.Objects {
     /// 円を表すクラス
     /// </summary>
     public class Circle : BaseObject, IObject {
-        private readonly string _id;
+        private string _id;
         private double _diameter;
         private string _color;
 
@@ -41,6 +41,13 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+            set {
+                foreach(Entity entity in this.entities) {
+                    entity.parentId = value;
+                }
+
+                this._id = value;
             }
         }
 

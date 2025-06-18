@@ -7,7 +7,7 @@ namespace PhysicsEngineCore.Objects {
     /// 四角を表すクラス
     /// </summary>
     public class Square : BaseObject, IObject {
-        private readonly string _id;
+        private string _id;
         private double _size;
         private string _color;
 
@@ -58,6 +58,13 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+            set {
+                foreach(Entity entity in this.entities) {
+                    entity.parentId = value;
+                }
+
+                this._id = value;
             }
         }
 

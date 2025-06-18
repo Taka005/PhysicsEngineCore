@@ -7,7 +7,7 @@ namespace PhysicsEngineCore.Objects {
     /// 線を表すクラス
     /// </summary>
     public class Line : IGround {
-        private readonly string _id;
+        private string _id;
         private string _color;
         public Vector2 start;
         public Vector2 end;
@@ -43,6 +43,9 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return this._id;
+            }
+            set {
+                this._id = value;
             }
         }
 

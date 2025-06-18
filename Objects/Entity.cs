@@ -19,7 +19,7 @@ namespace PhysicsEngineCore.Objects {
         private double _mass = CheckMassValue(option.mass);
         private double _stiffness = CheckStiffnessValue(option.stiffness);
         public readonly ConnectionManager connection = new ConnectionManager(option.targets);
-        public readonly string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
+        public string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
 
         /// <summary>
         /// エンティティーの直径

@@ -7,7 +7,7 @@ namespace PhysicsEngineCore.Objects {
     /// 三角を表すクラス
     /// </summary>
     public class Triangle : BaseObject, IObject {
-        private readonly string _id;
+        private string _id;
         private double _size;
         private string _color;
 
@@ -69,6 +69,13 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+            set {
+                foreach(Entity entity in this.entities) {
+                    entity.parentId = value;
+                }
+
+                this._id = value;
             }
         }
 
