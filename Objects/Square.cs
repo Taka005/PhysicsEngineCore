@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Square : BaseObject, IObject {
         private readonly string _id;
-        public double size;
+        private double _size;
         private string _color;
 
         /// <summary>
@@ -60,6 +60,20 @@ namespace PhysicsEngineCore.Objects {
                 return _id;
             }
         }
+
+        /// <summary>
+        /// オブジェクトの幅
+        /// </summary>
+        public double size {
+            get {
+                return this._size;
+            }
+            set {
+                if(value <= 0) throw new ArgumentException("幅を0以下に設定することはできません");
+
+                this._size = value;
+            }
+        }   
 
         /// <summary>
         /// オブジェクトの色

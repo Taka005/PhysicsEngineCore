@@ -79,6 +79,10 @@ namespace PhysicsEngineCore.Objects {
             set {
                 if(value <= 0) throw new ArgumentException("直径を0以下に設定することはできません");
 
+                foreach(Entity entity in this.entities) {
+                    entity.diameter = value;
+                }
+
                 this._diameter = value;
             }
         }   

@@ -179,8 +179,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// ループさせます
         /// </summary>
-        /// <param name="state">ステート</param>
-        private void Loop(Object state) {
+        private void Loop(Object _) {
             this.Step();
         }
 
@@ -394,8 +393,6 @@ namespace PhysicsEngineCore {
 
             if(saveData.version != SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
-            bool previousStarted = this.isStarted;
-
             if(this.isStarted) this.Stop();
 
             this.Clear(force: true);
@@ -417,8 +414,6 @@ namespace PhysicsEngineCore {
             this.movementLimit = saveData.engine.movementLimit;
 
             this.content.Sync();
-
-            if(previousStarted) this.Start();
         }
 
         /// <summary>

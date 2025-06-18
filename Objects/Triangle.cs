@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Triangle : BaseObject, IObject {
         private readonly string _id;
-        public double size;
+        private double _size;
         private string _color;
 
         /// <summary>
@@ -69,6 +69,20 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+        }
+
+        /// <summary>
+        /// オブジェクトの大きさ
+        /// </summary>
+        public double size {
+            get {
+                return this._size;
+            }
+            set {
+                if(value <= 0) throw new ArgumentException("幅を0以下に設定することはできません");
+
+                this._size = value;
             }
         }
 

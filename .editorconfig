@@ -14,3 +14,6 @@ dotnet_diagnostic.IDE1006.severity = none
 
 # IDE0090: 'new(...)' を使用する
 csharp_style_implicit_object_creation_when_type_is_apparent = false
+
+# CA1822: メンバーを static に設定します
+dotnet_diagnostic.CA1822.severity = suggestion

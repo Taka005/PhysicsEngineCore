@@ -7,7 +7,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Rope : BaseObject, IObject {
         private readonly string _id;
-        public double width;
+        private double _width;
         private string _color;
 
         /// <summary>
@@ -61,6 +61,20 @@ namespace PhysicsEngineCore.Objects {
                 return _id;
             }
         }
+
+        /// <summary>
+        /// ロープの幅
+        /// </summary>
+        public double width {
+            get {
+                return this._width;
+            }
+            set {
+                if(value <= 0) throw new ArgumentException("幅を0以下に設定することはできません");
+
+                this._width = value;
+            }
+        }   
 
         /// <summary>
         /// オブジェクトの色
