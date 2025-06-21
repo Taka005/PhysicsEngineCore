@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
@@ -408,10 +409,11 @@ namespace PhysicsEngineCore {
             this.pps = saveData.engine.pps;
             this.gravity = saveData.engine.gravity;
             this.friction = saveData.engine.friction;
-            this._playBackSpeed = saveData.engine.playBackSpeed;
-            this.trackingInterval = saveData.engine.trackingInterval;
-            this.trackingLimit = saveData.engine.trackingLimit;
-            this.movementLimit = saveData.engine.movementLimit;
+
+            this.SetPlayBackSpeed(saveData.engine.playBackSpeed);
+            this.SetMovementLimit(saveData.engine.movementLimit);
+            this.SetTrackingInterval(saveData.engine.trackingInterval);
+            this.SetTrackingLimit(saveData.engine.trackingLimit);
 
             this.content.Sync();
         }
