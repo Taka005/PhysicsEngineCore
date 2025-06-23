@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
     class SquareVisual : DrawingVisual {
@@ -10,14 +11,14 @@ namespace PhysicsEngineCore.Views {
 
         public SquareVisual(Square objectData) {
             this.objectData = objectData;
-            this.brush = Utility.ParseColor(objectData.color);
+            this.brush = ParseColor.StringToBrush(objectData.color);
             this.pen = new Pen(this.brush, 1);
         }
 
         public void Draw() {
             DrawingContext context = this.RenderOpen();
 
-            this.brush = Utility.ParseColor(this.objectData.color);
+            this.brush = ParseColor.StringToBrush(this.objectData.color);
             this.pen = new Pen(this.brush, this.objectData.size / 2);
 
             this.objectData.entities.ForEach(source => {

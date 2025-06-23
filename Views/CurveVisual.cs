@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
     class CurveVisual : DrawingVisual {
@@ -10,14 +11,14 @@ namespace PhysicsEngineCore.Views {
 
         public CurveVisual(Curve groundData) {
             this.groundData = groundData;
-            this.brush = Utility.ParseColor(this.groundData.color);
+            this.brush = ParseColor.StringToBrush(this.groundData.color);
             this.pen = new Pen(this.brush, this.groundData.width);
         }
 
         public void Draw() {
             DrawingContext context = this.RenderOpen();
 
-            this.brush = Utility.ParseColor(this.groundData.color);
+            this.brush = ParseColor.StringToBrush(this.groundData.color);
             this.pen = new Pen(this.brush, this.groundData.width);
 
             double startAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.start.Y - this.groundData.center.Y, this.groundData.start.X - this.groundData.center.X));

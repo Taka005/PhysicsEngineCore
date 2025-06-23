@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
     class LineVisual : DrawingVisual {
@@ -10,14 +11,14 @@ namespace PhysicsEngineCore.Views {
 
         public LineVisual(Line groundData) {
             this.groundData = groundData;
-            this.brush = Utility.ParseColor(groundData.color);
+            this.brush = ParseColor.StringToBrush(groundData.color);
             this.pen = new Pen(this.brush, 1);
         }
 
         public void Draw() {
             DrawingContext context = this.RenderOpen();
 
-            this.brush = Utility.ParseColor(this.groundData.color);
+            this.brush = ParseColor.StringToBrush(this.groundData.color);
             this.pen = new Pen(this.brush, this.groundData.width);
 
             context.DrawLine(
