@@ -13,6 +13,7 @@ namespace PhysicsEngineCore {
         private readonly VisualCollection visuals;
         private readonly Dictionary<string, DrawingVisual> objectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
+        private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
         private readonly OverlayVisual overlayVisual = new OverlayVisual();
 
         public Render() {
@@ -107,6 +108,55 @@ namespace PhysicsEngineCore {
                     }
                 }
             }
+        }
+
+        public void DrawTracking(List<IObject> tracks) {
+            HashSet<string> currentObjectIds = [.. tracks.Select(o => o.id)];
+            List<string>? visualsToRemove = [.. this.trackingVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];
+            List<VectorData> vectors = [];
+
+            foreach(string id in visualsToRemove) {
+                this.visuals.Remove(this.trackingVisuals[id]);
+                this.trackingVisuals.Remove(id);
+            }
+
+            foreach(IObject obj in tracks) {
+                if(!this.trackingVisuals.ContainsKey(obj.id)) {
+                    DrawingVisual? newVisual = this.CreateVisualForObject(obj);
+
+                    if(newVisual != null) {
+                        this.trackingVisuals.Add(obj.id, newVisual);
+                        this.visuals.Insert(0, newVisual);
+                    }
+                }
+
+                if(this.trackingVisuals.TryGetValue(obj.id, out DrawingVisual? visual)) {
+                    //if(!this.IsObjectInView(obj)) continue;
+
+                    if(visual is CircleVisual circleVisual) {
+                        circleVisual.Draw();
+                    } else if(visual is SquareVisual squareVisual) {
+                        squareVisual.Draw();
+                    } else if(visual is RopeVisual ropeVisual) {
+                        ropeVisual.Draw();
+                    } else if(visual is TriangleVisual triangleVisual) {
+                        triangleVisual.Draw();
+                    }
+
+                    if(this.isDebugMode) {
+                        vectors.Add(new VectorData(
+                            obj.position,
+                            obj.velocity
+                        ));
+                    }
+                }
+            }
+
+            //if(this.isDebugMode) {
+            //    this.overlayVisual.UpdateVectors(vectors);
+            //} else {
+            //    this.overlayVisual.Clear();
+            //}
         }
 
         /// <summary>
