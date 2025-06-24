@@ -37,7 +37,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキング間隔
         /// </summary>
-        private float trackingInterval = 100;
+        private float trackingInterval = 1000;
 
         /// <summary>
         /// トラッキング回数
@@ -47,7 +47,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングの制限数
         /// </summary>
-        private int trackingLimit = 50000;
+        private int trackingLimit = 1000;
 
         /// <summary>
         /// 移動範囲
@@ -218,6 +218,13 @@ namespace PhysicsEngineCore {
         public void OnRendering(object? sender, EventArgs e) {
             this.render.DrawObject(this.content.objects);
             this.render.DrawGround(this.content.grounds);
+
+            if(this.isTrackingMode) {
+                lock(this.tracks) {
+                    //IDが同じため被る
+                    this.render.DrawTracking(this.tracks);
+                }
+            }
         }
 
         /// <summary>
