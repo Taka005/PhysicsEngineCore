@@ -228,7 +228,6 @@ namespace PhysicsEngineCore {
 
             foreach(Entity entity in entities) {
                 this.UpdatePosition(entity);
-                this.UpdateRotate(entity);
             }
 
             foreach(Entity entity in entities) {

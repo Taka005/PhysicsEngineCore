@@ -13,8 +13,6 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 position = new Vector2(option.posX, option.posY);
         public Vector2 previousPosition = new Vector2(option.prePosX, option.prePosY);
         public Vector2 velocity = new Vector2(option.velocityX, option.velocityY);
-        public double rotateAngle = option.rotateAngle;
-        public double rotateSpeed = option.rotateSpeed;
         private double _diameter = CheckDiameterValue(option.diameter);
         private double _mass = CheckMassValue(option.mass);
         private double _stiffness = CheckStiffnessValue(option.stiffness);
@@ -119,8 +117,6 @@ namespace PhysicsEngineCore.Objects {
                 diameter = this.diameter,
                 velocityX = this.velocity.X,
                 velocityY = this.velocity.Y,
-                rotateAngle = this.rotateAngle,
-                rotateSpeed = this.rotateSpeed,
                 parentId = this.parentId,
                 targets = this.connection.targets
             };

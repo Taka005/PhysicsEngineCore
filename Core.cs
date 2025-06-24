@@ -27,19 +27,9 @@ namespace PhysicsEngineCore {
         private static readonly double CORRECTION_NUMBER = 0.0000001d;
 
         /// <summary>
-        /// 回転の強さ
-        /// </summary>
-        private static readonly double ROTATION_STRENGTH = 50d;
-
-        /// <summary>
         /// 摩擦の強さ
         /// </summary>
         private static readonly double FRICTION_STRENGTH = 0.1d;
-
-        /// <summary>
-        /// 最大回転数
-        /// </summary>
-        private static readonly double MAX_ROTATION = 500d;
 
         /// <summary>
         /// 初期化
@@ -86,18 +76,6 @@ namespace PhysicsEngineCore {
 
             source.position += correction * source.invMass;
             target.position -= correction * target.invMass;
-
-            double angle = -difference.X * source.velocity.Y + difference.X * source.velocity.X;
-
-            double rotateAngle = (Math.Acos(Vector2.Dot(difference, source.velocity) / (distance * source.velocity.Length())) * (180 / Math.PI));
-
-            if(angle > 0) {
-                source.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
-                target.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
-            } else if(angle < 0) {
-                source.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
-                target.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
-            }
         }
 
         /// <summary>
@@ -118,16 +96,6 @@ namespace PhysicsEngineCore {
             Vector2 correction = difference * move;
 
             entity.position += correction * entity.invMass;
-
-            double angle = -difference.X * entity.velocity.Y + difference.X * entity.velocity.X;
-
-            double rotateAngle = (Math.Acos(Vector2.Dot(difference, entity.velocity) / (distance * entity.velocity.Length())) * (180 / Math.PI));
-
-            if(angle > 0) {
-                entity.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
-            } else if(angle < 0) {
-                entity.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
-            }
         }
 
         /// <summary>
@@ -150,18 +118,6 @@ namespace PhysicsEngineCore {
 
             source.position += correction * source.invMass;
             target.position -= correction * target.invMass;
-
-            double angle = -difference.X * source.velocity.Y + difference.X * source.velocity.X;
-
-            double rotateAngle = (Math.Acos(Vector2.Dot(difference, source.velocity) / (distance * source.velocity.Length())) * (180 / Math.PI));
-
-            if(angle > 0) {
-                source.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
-                target.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
-            } else if(angle < 0) {
-                source.rotateSpeed += rotateAngle / ROTATION_STRENGTH;
-                target.rotateSpeed -= rotateAngle / ROTATION_STRENGTH;
-            }
         }
 
         /// <summary>
@@ -172,11 +128,6 @@ namespace PhysicsEngineCore {
             double coefficient = entity.mass * entity.radius * this.friction * FRICTION_STRENGTH;
 
             entity.velocity -= entity.velocity * coefficient * this.deltaTime;
-            entity.rotateSpeed -= entity.rotateSpeed * coefficient * this.deltaTime;
-
-            if(Math.Abs(entity.rotateSpeed) > MAX_ROTATION) {
-                entity.rotateSpeed = Math.Sign(entity.rotateSpeed) * MAX_ROTATION;
-            }
         }
 
         /// <summary>
@@ -199,14 +150,6 @@ namespace PhysicsEngineCore {
             entity.SavePosition();
 
             entity.position += entity.velocity * this.deltaTime;
-        }
-
-        /// <summary>
-        /// エンティティーの回転の更新
-        /// </summary>
-        /// <param name="entity">対象のエンティティー</param>
-        protected void UpdateRotate(Entity entity) {
-            entity.rotateAngle += entity.rotateSpeed * this.deltaTime;
         }
     }
 }

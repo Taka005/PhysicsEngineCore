@@ -13,8 +13,6 @@ namespace PhysicsEngineCore.Options{
         public string? parentId { get; set; }
         public double velocityX { get; set; } = 0;
         public double velocityY { get; set; } = 0;
-        public double rotateAngle { get; set; } = 0;
-        public double rotateSpeed { get; set; } = 0;
         public List<Target> targets { get; set; } = [];
     }
 }
