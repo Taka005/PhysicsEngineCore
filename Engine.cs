@@ -42,7 +42,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキング回数
         /// </summary>
-        private int trackingCount = 0;
+        private double trackingCount = 0;
 
         /// <summary>
         /// トラッキングの制限数
@@ -190,10 +190,10 @@ namespace PhysicsEngineCore {
         public void Step() {
             this.content.Sync();
 
-            this.trackingCount++;
+            this.trackingCount += 1000 / (double)this.pps;
 
             lock(this.tracks) {
-                if(this.trackingCount >= this.trackingInterval / (1000 / this.pps)) {
+                if(this.trackingCount >= this.trackingInterval) {
                     foreach(IObject obj in this.content.objects.Where(obj => !obj.isStop)) {
                         this.tracks.Add(obj.Clone());
                     }
@@ -201,8 +201,9 @@ namespace PhysicsEngineCore {
                     while(this.tracks.Count > this.trackingLimit) {
                         this.tracks.RemoveAt(0);
                     }
+                    Debug.WriteLine(this.trackingCount);
 
-                    this.trackingCount = 0;
+                    this.trackingCount %= this.trackingInterval;
                 }
             }
 
@@ -221,7 +222,6 @@ namespace PhysicsEngineCore {
 
             if(this.isTrackingMode) {
                 lock(this.tracks) {
-                    //IDが同じため被る
                     this.render.DrawTracking(this.tracks);
                 }
             }
