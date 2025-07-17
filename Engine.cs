@@ -148,7 +148,10 @@ namespace PhysicsEngineCore {
         /// トラッキングを全て削除します
         /// </summary>
         public void ClearTrack() {
-            this.tracks.Clear();
+            lock(this.tracks) {
+                this.trackingCount = 0;
+                this.tracks.Clear();
+            }
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Views;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -133,6 +132,14 @@ namespace PhysicsEngineCore {
                     triangleVisual.Draw();
                 }
             }
+        }
+
+        public void ClearTracking() {
+            foreach(DrawingVisual visual in this.trackingVisuals) {
+                this.visuals.Remove(visual);
+            }
+
+            this.trackingVisuals.Clear();
         }
 
         /// <summary>
