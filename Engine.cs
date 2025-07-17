@@ -47,7 +47,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングの制限数
         /// </summary>
-        private int trackingLimit = 1000;
+        private int trackingLimit = 50;
 
         /// <summary>
         /// 移動範囲
