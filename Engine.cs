@@ -151,6 +151,7 @@ namespace PhysicsEngineCore {
             lock(this.tracks) {
                 this.trackingCount = 0;
                 this.tracks.Clear();
+                this.render.ClearTracking();
             }
         }
 
