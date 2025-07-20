@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Views {
         private Rope objectData;
         private Brush brush;
         private Pen pen;
-        private float _opacity;
+        private float _opacity = 1;
 
         public RopeVisual(Rope objectData) {
             this.objectData = objectData;
@@ -24,8 +24,6 @@ namespace PhysicsEngineCore.Views {
                 if(value < 0 || value > 1) throw new ArgumentOutOfRangeException(nameof(value), "透明度は1から0の間である必要があります");
 
                 this._opacity = value;
-                this.brush.Opacity = value;
-                this.pen.Brush.Opacity = value;
             }
         }
 
@@ -46,10 +44,9 @@ namespace PhysicsEngineCore.Views {
 
             this.brush = ParseColor.StringToBrush(this.objectData.color);
            
-            this.pen = new Pen(this.brush, this.objectData.width);
-
             this.brush.Opacity = this.opacity;
-            this.pen.Brush.Opacity = this.opacity;
+
+            this.pen = new Pen(this.brush, this.objectData.width);
 
             Entity? target = null;
 

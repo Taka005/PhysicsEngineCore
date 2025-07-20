@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Views {
         private Circle objectData;
         private Brush brush;
         private Pen pen;
-        private float _opacity;
+        private float _opacity = 1;
 
         public CircleVisual(Circle objectData) {
             this.objectData = objectData;
@@ -24,8 +24,6 @@ namespace PhysicsEngineCore.Views {
                 if(value < 0 || value > 1) throw new ArgumentOutOfRangeException(nameof(value), "透明度は1から0の間である必要があります");
 
                 this._opacity = value;
-                this.brush.Opacity = value;
-                this.pen.Brush.Opacity = value;
             }
         }
 
@@ -45,10 +43,10 @@ namespace PhysicsEngineCore.Views {
             DrawingContext context = this.RenderOpen();
 
             this.brush = ParseColor.StringToBrush(this.objectData.color);
-            this.pen = new Pen(this.brush, 1);
 
             this.brush.Opacity = this.opacity;
-            this.pen.Brush.Opacity = this.opacity;
+
+            this.pen = new Pen(this.brush, 1);
 
             context.DrawEllipse(
                 this.brush,
