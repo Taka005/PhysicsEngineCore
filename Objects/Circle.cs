@@ -111,6 +111,23 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 他のオブジェクトと同じ状態かどうかを比較します
+        /// </summary>
+        /// <param name="target">対象のオブジェクト</param>
+        /// <returns>同じかどうか</returns>
+        public bool Equals(IObject target) {
+            if(target is not Circle circle) return false;
+
+            return this.id == circle.id &&
+                   this.diameter == circle.diameter &&
+                   this.color == circle.color &&
+                   this.position.Equals(circle.position) &&
+                   this.velocity.Equals(circle.velocity) &&
+                   this.mass == circle.mass &&
+                   this.stiffness == circle.stiffness;
+        }
+
+        /// <summary>
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>

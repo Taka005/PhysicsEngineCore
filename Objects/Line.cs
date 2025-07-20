@@ -80,6 +80,21 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 他のオブジェクトと同じ状態かどうかを比較します
+        /// </summary>
+        /// <param name="target">対象のオブジェクト</param>
+        /// <returns>同じかどうか</returns>
+        public bool Equals(IGround target) {
+            if(target is not Line line) return false;
+
+            return this.id == line.id &&
+                   this.width == line.width &&
+                   this.color == line.color &&
+                   this.start.Equals(line.start) &&
+                   this.end.Equals(line.end);
+        }
+
+        /// <summary>
         /// 同じ状態のクラスを複製します
         /// </summary>
         /// <returns>複製されたクラス</returns>

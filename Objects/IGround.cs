@@ -10,6 +10,8 @@ namespace PhysicsEngineCore.Objects {
 
         IGround Clone();
 
+        bool Equals(IGround target);
+
         string ToJson();
     }
 }

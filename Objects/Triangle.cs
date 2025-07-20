@@ -123,6 +123,23 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 他のオブジェクトと同じ状態かどうかを比較します
+        /// </summary>
+        /// <param name="target">対象のオブジェクト</param>
+        /// <returns>同じかどうか</returns>
+        public bool Equals(IObject target) {
+            if(target is not Triangle triangle) return false;
+
+            return this.id == triangle.id &&
+                   this.size == triangle.size &&
+                   this.color == triangle.color &&
+                   this.position.Equals(triangle.position) &&
+                   this.velocity.Equals(triangle.velocity) &&
+                   this.mass == triangle.mass &&
+                   this.stiffness == triangle.stiffness;
+        }
+
+        /// <summary>
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>

@@ -113,6 +113,24 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 他のオブジェクトと同じ状態かどうかを比較します
+        /// </summary>
+        /// <param name="target">対象のオブジェクト</param>
+        /// <returns>同じかどうか</returns>
+        public bool Equals(IObject target) {
+            if(target is not Rope rope) return false;
+
+            return this.id == rope.id &&
+                   this.width == rope.width &&
+                   this.color == rope.color &&
+                   this.position.Equals(rope.position) &&
+                   this.velocity.Equals(rope.velocity) &&
+                   this.mass == rope.mass &&
+                   this.stiffness == rope.stiffness;
+        }
+
+
+        /// <summary>
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>

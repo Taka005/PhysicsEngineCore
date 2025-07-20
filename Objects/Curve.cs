@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Windows.Shapes;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -94,6 +95,23 @@ namespace PhysicsEngineCore.Objects {
         /// <returns>複製されたクラス</returns>
         public IGround Clone() {
             return new Curve(this.ToOption());
+        }
+
+        
+        /// <summary>
+        /// 他のオブジェクトと同じ状態かどうかを比較します
+        /// </summary>
+        /// <param name="target">対象のオブジェクト</param>
+        /// <returns>同じかどうか</returns>
+        public bool Equals(IGround target) {
+            if(target is not Curve curve) return false;
+
+            return this.id == curve.id &&
+                   this.color == curve.color &&
+                   this.width == curve.width &&
+                   this.start.Equals(curve.start) && 
+                   this.middle.Equals(curve.middle) &&
+                   this.end.Equals(curve.end);
         }
 
         /// <summary>

@@ -112,6 +112,23 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 他のオブジェクトと同じ状態かどうかを比較します
+        /// </summary>
+        /// <param name="target">対象のオブジェクト</param>
+        /// <returns>同じかどうか</returns>
+        public bool Equals(IObject target) {
+            if(target is not Square square) return false;
+
+            return this.id == square.id &&
+                   this.size == square.size &&
+                   this.color == square.color &&
+                   this.position.Equals(square.position) &&
+                   this.velocity.Equals(square.velocity) &&
+                   this.mass == square.mass &&
+                   this.stiffness == square.stiffness;
+        }
+
+        /// <summary>
         /// クラスの引数に変換します
         /// </summary>
         /// <returns>クラスの引数</returns>

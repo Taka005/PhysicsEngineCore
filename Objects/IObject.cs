@@ -5,6 +5,8 @@
 
         IObject Clone();
 
+        bool Equals(IObject target);
+
         string ToJson();
     }
 }
