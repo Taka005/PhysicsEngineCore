@@ -1,6 +1,7 @@
 ﻿namespace PhysicsEngineCore.Objects {
     public interface IObject : IBaseObject {
         string id { get; }
+        string trackingId { get; }
         string color { get; set; }
 
         IObject Clone();

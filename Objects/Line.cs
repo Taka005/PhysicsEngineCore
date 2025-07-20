@@ -8,6 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Line : IGround {
         private string _id;
+        private readonly string _trackingId = IdGenerator.CreateId(15);
         private string _color;
         public Vector2 start;
         public Vector2 end;
@@ -46,6 +47,12 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 this._id = value;
+            }
+        }
+
+        public string trackingId {
+            get{
+                return this._trackingId;
             }
         }
 

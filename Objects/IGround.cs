@@ -3,6 +3,7 @@
 namespace PhysicsEngineCore.Objects {
     public interface IGround {
         string id { get; }
+        string trackingId { get; }
         string color { get; set; }
         double width { get; set; }
 

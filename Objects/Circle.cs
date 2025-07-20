@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects {
     /// <summary>
@@ -7,6 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Circle : BaseObject, IObject {
         private string _id;
+        private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _diameter;
         private string _color;
 
@@ -48,6 +50,12 @@ namespace PhysicsEngineCore.Objects {
                 }
 
                 this._id = value;
+            }
+        }
+
+        public string trackingId {
+            get{
+                return this._trackingId;
             }
         }
 

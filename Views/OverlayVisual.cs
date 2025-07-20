@@ -3,7 +3,7 @@ using PhysicsEngineCore.Utils;
 using System.Windows;
 
 namespace PhysicsEngineCore.Views {
-    public class OverlayVisual : DrawingVisual, IDraw {
+    public class OverlayVisual : DrawingVisual {
         private readonly List<VectorData> vectors = [];
         private readonly Pen pen = new Pen(Brushes.Black, 1);
 
@@ -22,6 +22,8 @@ namespace PhysicsEngineCore.Views {
             DrawingContext context = this.RenderOpen();
 
             foreach(VectorData? vectorData in vectors) {
+                if(vectorData.velocity.IsZero()) continue;
+
                 Point startPoint = new Point(vectorData.position.X, vectorData.position.Y);
                 Point endPoint = new Point(vectorData.position.X + vectorData.velocity.X, vectorData.position.Y + vectorData.velocity.Y);
 

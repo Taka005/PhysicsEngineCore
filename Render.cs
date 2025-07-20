@@ -1,5 +1,6 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Views;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -12,7 +13,7 @@ namespace PhysicsEngineCore {
         private readonly VisualCollection visuals;
         private readonly Dictionary<string, DrawingVisual> objectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
-        private readonly List<DrawingVisual> trackingVisuals = [];
+        private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
         private readonly OverlayVisual overlayVisual = new OverlayVisual();
 
         public Render() {
@@ -37,33 +38,37 @@ namespace PhysicsEngineCore {
             }
 
             foreach(IObject obj in objects) {
-                if(!this.objectVisuals.ContainsKey(obj.id)) {
+                if(this.objectVisuals.TryGetValue(obj.id, out DrawingVisual? visual)) {
+                    if(visual is IObjectVisual objectVisual) {
+                        //IObject oldObj = objectVisual.GetObjectData();
+
+                        //if(!obj.Equals(oldObj)){
+                        //    if(!obj.position.Equals(oldObj.position)){
+                        //        visual.Offset = new Vector(obj.position.X,obj.position.Y);
+
+                        //        if(this.isDebugMode) {
+                        //            vectors.Add(new VectorData(
+                        //                obj.position,
+                        //                obj.velocity
+                        //            ));
+                        //        }
+                        //    }else{
+                                objectVisual.Draw();
+                        //    }
+
+                        //    objectVisual.SetObjectData(obj.Clone());
+                        //}
+                    }
+                }else{
                     DrawingVisual? newVisual = this.CreateVisualForObject(obj);
 
                     if(newVisual != null) {
                         this.objectVisuals.Add(obj.id, newVisual);
                         this.visuals.Insert(0, newVisual);
-                    }
-                }
 
-                if(this.objectVisuals.TryGetValue(obj.id, out DrawingVisual? visual)) {
-                    //if(!this.IsObjectInView(obj)) continue;
-
-                    if(visual is CircleVisual circleVisual) {
-                        circleVisual.Draw();
-                    } else if(visual is SquareVisual squareVisual) {
-                        squareVisual.Draw();
-                    } else if(visual is RopeVisual ropeVisual) {
-                        ropeVisual.Draw();
-                    } else if(visual is TriangleVisual triangleVisual) {
-                        triangleVisual.Draw();
-                    }
-
-                    if(this.isDebugMode) {
-                        vectors.Add(new VectorData(
-                            obj.position,
-                            obj.velocity
-                        ));
+                        if(newVisual is IObjectVisual objectVisual) {
+                            objectVisual.Draw();
+                        }
                     }
                 }
             }
@@ -90,56 +95,55 @@ namespace PhysicsEngineCore {
             }
 
             foreach(IGround ground in grounds) {
-                if(!this.groundVisuals.ContainsKey(ground.id)) {
+                if(this.groundVisuals.TryGetValue(ground.id, out DrawingVisual? visual)) {
+                    if(visual is IGroundVisual groundVisual) {
+                        //IGround oldGround = groundVisual.GetGroundData();
+
+                        //if(!ground.Equals(oldGround)) {
+                            groundVisual.Draw();
+
+                        //    groundVisual.SetGroundData(ground.Clone());
+                        //}
+                    }
+                } else {
                     DrawingVisual? newVisual = this.CreateVisualForGround(ground);
 
                     if(newVisual != null) {
                         this.groundVisuals.Add(ground.id, newVisual);
                         this.visuals.Insert(0, newVisual);
-                    }
-                }
 
-                if(this.groundVisuals.TryGetValue(ground.id, out DrawingVisual? visual)) {
-                    if(visual is LineVisual lineVisual) {
-                        lineVisual.Draw();
-                    } else if(visual is CurveVisual curveVisual) {
-                        curveVisual.Draw();
+                        if(newVisual is IGroundVisual groundVisual) {
+                            groundVisual.Draw();
+                        }
                     }
                 }
             }
         }
 
         public void DrawTracking(List<IObject> tracks) {
+            HashSet<string> currentObjectIds = [.. tracks.Select(o => o.trackingId)];
+            List<string>? visualsToRemove = [.. this.trackingVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];
             List<VectorData> vectors = [];
 
+            foreach(string id in visualsToRemove) {
+                this.visuals.Remove(this.trackingVisuals[id]);
+                this.trackingVisuals.Remove(id);
+            }
+
             foreach(IObject obj in tracks) {
-                DrawingVisual? newVisual = this.CreateVisualForObject(obj);
+                if(!this.trackingVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
+                    DrawingVisual? newVisual = this.CreateVisualForObject(obj);
 
-                if(newVisual != null) {
-                    this.trackingVisuals.Add(newVisual);
-                    this.visuals.Insert(0, newVisual);
+                    if(newVisual != null) {
+                        this.trackingVisuals.Add(obj.trackingId, newVisual);
+                        this.visuals.Insert(0, newVisual);
+
+                        if(newVisual is IObjectVisual trackingVisual) {
+                            trackingVisual.Draw();
+                        }
+                    }
                 }
             }
-
-            foreach(DrawingVisual visual in this.trackingVisuals) {
-                if(visual is CircleVisual circleVisual) {
-                    circleVisual.Draw();
-                } else if(visual is SquareVisual squareVisual) {
-                    squareVisual.Draw();
-                } else if(visual is RopeVisual ropeVisual) {
-                    ropeVisual.Draw();
-                } else if(visual is TriangleVisual triangleVisual) {
-                    triangleVisual.Draw();
-                }
-            }
-        }
-
-        public void ClearTracking() {
-            foreach(DrawingVisual visual in this.trackingVisuals) {
-                this.visuals.Remove(visual);
-            }
-
-            this.trackingVisuals.Clear();
         }
 
         /// <summary>
@@ -170,13 +174,6 @@ namespace PhysicsEngineCore {
             }
 
             return null;
-        }
-
-        private bool IsObjectInView(IObject obj) {
-            return obj.entities.All(entity =>
-                entity.position.X - entity.radius >= 0 && entity.position.X + entity.radius <= this.ActualWidth &&
-                entity.position.Y - entity.radius >= 0 && entity.position.Y + entity.radius <= this.ActualHeight
-            );
         }
 
         /// <summary>

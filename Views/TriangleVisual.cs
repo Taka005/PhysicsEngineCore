@@ -4,8 +4,8 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class TriangleVisual : DrawingVisual, IDraw {
-        private readonly Triangle objectData;
+    class TriangleVisual : DrawingVisual, IObjectVisual {
+        private Triangle objectData;
         private Brush brush;
         private Pen pen;
 
@@ -13,6 +13,18 @@ namespace PhysicsEngineCore.Views {
             this.objectData = objectData;
             this.brush = ParseColor.StringToBrush(objectData.color);
             this.pen = new Pen(this.brush, 1);
+        }
+
+        public IObject GetObjectData() {
+            return this.objectData;
+        }
+
+        public void SetObjectData(IObject objectData) {
+            if(objectData is Triangle triangle) {
+                this.objectData = triangle;
+            }else{
+                throw new ArgumentException("無効なオブジェクトタイプが渡されました");
+            }
         }
 
         public void Draw() {

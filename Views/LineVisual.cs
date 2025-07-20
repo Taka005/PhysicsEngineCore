@@ -4,8 +4,8 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class LineVisual : DrawingVisual, IDraw {
-        private readonly Line groundData;
+    class LineVisual : DrawingVisual, IGroundVisual {
+        private Line groundData;
         private Brush brush;
         private Pen pen;
 
@@ -13,6 +13,18 @@ namespace PhysicsEngineCore.Views {
             this.groundData = groundData;
             this.brush = ParseColor.StringToBrush(groundData.color);
             this.pen = new Pen(this.brush, 1);
+        }
+
+        public IGround GetGroundData() {
+            return this.groundData;
+        }
+
+        public void SetGroundData(IGround groundData) {
+            if(groundData is Line line) {
+                this.groundData = line;
+            } else {
+                throw new ArgumentException("無効なオブジェクトタイプが渡されました");
+            }
         }
 
         public void Draw() {

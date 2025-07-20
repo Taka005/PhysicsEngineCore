@@ -4,8 +4,8 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class RopeVisual : DrawingVisual, IDraw {
-        private readonly Rope objectData;
+    class RopeVisual : DrawingVisual, IObjectVisual {
+        private Rope objectData;
         private Brush brush;
         private Pen pen;
 
@@ -13,6 +13,18 @@ namespace PhysicsEngineCore.Views {
             this.objectData = objectData;
             this.brush = ParseColor.StringToBrush(objectData.color);
             this.pen = new Pen(this.brush, 1);
+        }
+
+        public IObject GetObjectData() {
+            return this.objectData;
+        }
+
+        public void SetObjectData(IObject objectData) {
+            if(objectData is Rope rope) {
+                this.objectData = rope;
+            } else {
+                throw new ArgumentException("無効なオブジェクトタイプが渡されました");
+            }
         }
 
         public void Draw() {
