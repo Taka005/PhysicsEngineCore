@@ -104,7 +104,7 @@ namespace PhysicsEngineCore {
                 this._isTrackingMode = value;
 
                 if(!value) {
-                    this.ClearTrack();
+                    this.render.ClearTracking();
                 }
             }
         }

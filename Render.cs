@@ -152,6 +152,18 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// 追跡中のオブジェクトの描画をクリアします
+        /// </summary>
+        public void ClearTracking() {
+            List<string>? visualsToRemove = [.. this.trackingVisuals.Keys];
+
+            foreach(string id in visualsToRemove) {
+                this.visuals.Remove(this.trackingVisuals[id]);
+                this.trackingVisuals.Remove(id);
+            }
+        }
+
+        /// <summary>
         /// オブジェクトの種類に基づいて適切なDrawingVisualを作成
         /// </summary>
         private DrawingVisual? CreateVisualForObject(IObject obj) {
