@@ -4,7 +4,7 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class SquareVisual : DrawingVisual {
+    class SquareVisual : DrawingVisual, IDraw {
         private readonly Square objectData;
         private Brush brush;
         private Pen pen;

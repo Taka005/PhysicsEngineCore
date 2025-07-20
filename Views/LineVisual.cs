@@ -4,7 +4,7 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class LineVisual : DrawingVisual {
+    class LineVisual : DrawingVisual, IDraw {
         private readonly Line groundData;
         private Brush brush;
         private Pen pen;

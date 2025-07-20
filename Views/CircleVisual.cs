@@ -4,7 +4,7 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class CircleVisual : DrawingVisual {
+    class CircleVisual : DrawingVisual, IDraw {
         private readonly Circle objectData;
         private Brush brush;
         private Pen pen;

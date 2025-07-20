@@ -4,7 +4,7 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class CurveVisual : DrawingVisual {
+    class CurveVisual : DrawingVisual, IDraw {
         private readonly Curve groundData;
         private Brush brush;
         private Pen pen;

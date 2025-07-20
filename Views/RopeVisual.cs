@@ -4,7 +4,7 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class RopeVisual : DrawingVisual {
+    class RopeVisual : DrawingVisual, IDraw {
         private readonly Rope objectData;
         private Brush brush;
         private Pen pen;

@@ -4,7 +4,7 @@ using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
-    class TriangleVisual : DrawingVisual {
+    class TriangleVisual : DrawingVisual, IDraw {
         private readonly Triangle objectData;
         private Brush brush;
         private Pen pen;

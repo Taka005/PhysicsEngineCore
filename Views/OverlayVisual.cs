@@ -3,7 +3,7 @@ using PhysicsEngineCore.Utils;
 using System.Windows;
 
 namespace PhysicsEngineCore.Views {
-    public class OverlayVisual : DrawingVisual {
+    public class OverlayVisual : DrawingVisual, IDraw {
         private readonly List<VectorData> vectors = [];
         private readonly Pen pen = new Pen(Brushes.Black, 1);
 
