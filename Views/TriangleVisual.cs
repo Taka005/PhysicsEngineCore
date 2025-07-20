@@ -8,11 +8,24 @@ namespace PhysicsEngineCore.Views {
         private Triangle objectData;
         private Brush brush;
         private Pen pen;
+        private float _opacity;
 
         public TriangleVisual(Triangle objectData) {
             this.objectData = objectData;
             this.brush = ParseColor.StringToBrush(objectData.color);
             this.pen = new Pen(this.brush, 1);
+        }
+
+        public float opacity{
+            get{
+                return this._opacity;
+            }
+            set{
+                if(value < 0 || value > 1) throw new ArgumentOutOfRangeException(nameof(value), "透明度は1から0の間である必要があります");
+
+                this._opacity = value;
+                this.brush.Opacity = value;
+            }
         }
 
         public IObject GetObjectData() {

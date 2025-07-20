@@ -139,6 +139,7 @@ namespace PhysicsEngineCore {
                         this.visuals.Insert(0, newVisual);
 
                         if(newVisual is IObjectVisual trackingVisual) {
+                            trackingVisual.opacity = 0.1f;
                             trackingVisual.Draw();
                         }
                     }
