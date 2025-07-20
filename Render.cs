@@ -1,6 +1,5 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Views;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -120,6 +119,11 @@ namespace PhysicsEngineCore {
             }
         }
 
+        /// <summary>
+        /// 物理エンジンのオブジェクトデータを受け取り、描画します
+        /// このメソッドはUIスレッドで呼び出される必要があります
+        /// </summary>
+        /// <param name="tracks">描画するオブジェクトのリスト</param>
         public void DrawTracking(List<IObject> tracks) {
             HashSet<string> currentObjectIds = [.. tracks.Select(o => o.trackingId)];
             List<string>? visualsToRemove = [.. this.trackingVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];

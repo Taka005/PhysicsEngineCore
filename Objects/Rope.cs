@@ -71,6 +71,10 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// クラスの固有ID
+        /// トラッキング用
+        /// </summary>
         public string trackingId {
             get{
                 return this._trackingId;

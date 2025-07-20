@@ -22,7 +22,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングモードが有効かどうか
         /// </summary>
-        public bool isTrackingMode = false;
+        private bool _isTrackingMode = false;
 
         /// <summary>
         /// ループ用タイマー
@@ -90,6 +90,22 @@ namespace PhysicsEngineCore {
         public float playBackSpeed {
             get {
                 return this._playBackSpeed;
+            }
+        }
+
+        /// <summary>
+        /// トラッキングモードが有効かどうか
+        /// </summary>
+        public bool isTrackingMode {
+            get {
+                return this._isTrackingMode;
+            }
+            set {
+                this._isTrackingMode = value;
+
+                if(!value) {
+                    this.ClearTrack();
+                }
             }
         }
 
