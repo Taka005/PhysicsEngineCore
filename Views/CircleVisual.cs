@@ -25,6 +25,7 @@ namespace PhysicsEngineCore.Views {
 
                 this._opacity = value;
                 this.brush.Opacity = value;
+                this.pen.Brush.Opacity = value;
             }
         }
 
@@ -44,8 +45,10 @@ namespace PhysicsEngineCore.Views {
             DrawingContext context = this.RenderOpen();
 
             this.brush = ParseColor.StringToBrush(this.objectData.color);
-            this.brush.Opacity = this.opacity;
             this.pen = new Pen(this.brush, 1);
+
+            this.brush.Opacity = this.opacity;
+            this.pen.Brush.Opacity = this.opacity;
 
             context.DrawEllipse(
                 this.brush,
