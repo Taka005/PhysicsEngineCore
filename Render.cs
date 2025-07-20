@@ -57,6 +57,11 @@ namespace PhysicsEngineCore {
 
                         //    objectVisual.SetObjectData(obj.Clone());
                         //}
+
+                        vectors.Add(new VectorData(
+                            obj.position,
+                            obj.velocity
+                        ));
                     }
                 }else{
                     DrawingVisual? newVisual = this.CreateVisualForObject(obj);
