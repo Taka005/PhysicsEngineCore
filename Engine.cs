@@ -47,7 +47,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングの制限数
         /// </summary>
-        private int trackingLimit = 1000;
+        private int trackingLimit = 50;
 
         /// <summary>
         /// 移動範囲
@@ -148,7 +148,11 @@ namespace PhysicsEngineCore {
         /// トラッキングを全て削除します
         /// </summary>
         public void ClearTrack() {
-            this.tracks.Clear();
+            lock(this.tracks) {
+                this.trackingCount = 0;
+                this.tracks.Clear();
+                this.render.ClearTracking();
+            }
         }
 
         /// <summary>
