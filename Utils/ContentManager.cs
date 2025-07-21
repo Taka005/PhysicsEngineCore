@@ -9,7 +9,6 @@ namespace PhysicsEngineCore.Utils {
     class ContentManager() {
         private readonly List<IObject> _objects = [];
         private readonly List<IGround> _grounds = [];
-        private readonly List<IObject> tracks = [];
         private readonly List<QueueObject> queueObjects = [];
         private readonly List<QueueGround> queueGrounds = [];
         private readonly object lockObject = new object();
@@ -21,6 +20,28 @@ namespace PhysicsEngineCore.Utils {
             get {
                 lock(this.lockObject) {
                     return [.. this._objects.SelectMany(obj => obj.entities)];
+                }
+            }
+        }
+
+        /// <summary>
+        /// 現在のオブジェクトの数を返します
+        /// </summary>
+        public int objectCount {
+            get {
+                lock(this.lockObject) {
+                    return this._objects.Count;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 現在のグラウンドの数を返します
+        /// </summary>
+        public int groundCount {
+            get {
+                lock(this.lockObject) {
+                    return this._grounds.Count;
                 }
             }
         }

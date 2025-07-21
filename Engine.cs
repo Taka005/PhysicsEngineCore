@@ -25,6 +25,11 @@ namespace PhysicsEngineCore {
         private bool _isTrackingMode = false;
 
         /// <summary>
+        /// 動的トラッキングモードが有効かどうか
+        /// </summary>
+        public bool isDynamicTrackingMode = false;
+
+        /// <summary>
         /// ループ用タイマー
         /// </summary>
         private readonly Timer loopTimer;
@@ -209,6 +214,8 @@ namespace PhysicsEngineCore {
         public void Step() {
             this.content.Sync();
 
+            int trackingLimit = this.isDynamicTrackingMode ? this.trackingLimit*this.content.objectCount : this.trackingLimit;
+
             this.trackingCount += 1000 / (double)this.pps;
 
             lock(this.tracks) {
@@ -217,10 +224,9 @@ namespace PhysicsEngineCore {
                         this.tracks.Add(obj.Clone());
                     }
 
-                    while(this.tracks.Count > this.trackingLimit) {
+                    while(this.tracks.Count > trackingLimit) {
                         this.tracks.RemoveAt(0);
                     }
-                    Debug.WriteLine(this.trackingCount);
 
                     this.trackingCount %= this.trackingInterval;
                 }
@@ -324,11 +330,11 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
-        /// グランドを生成します
+        /// グラウンドを生成します
         /// </summary>
         /// <param name="option">グラウンドの初期化オプション</param>
         /// <returns>生成したグラウンド</returns>
-        /// <exception cref="Exception">存在しないグランドのとき例外</exception>
+        /// <exception cref="Exception">存在しないグラウンドのとき例外</exception>
         public IGround? SpawnGround(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(15);
 
@@ -363,9 +369,9 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
-        /// グランドを削除します
+        /// グラウンドを削除します
         /// </summary>
-        /// <param name="id">削除するグランドのID</param>
+        /// <param name="id">削除するグラウンドのID</param>
         public void DeSpawnGround(string id) {
             IGround? ground = this.GetGround(id);
             if(ground == null) return;
@@ -385,10 +391,10 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
-        /// 指定したIDのグランドを取得します
+        /// 指定したIDのグラウンドを取得します
         /// </summary>
         /// <param name="id">取得するグラウンドのID</param>
-        /// <returns>取得したグランド</returns>
+        /// <returns>取得したグラウンド</returns>
         public IGround? GetGround(string id) {
             return this.content.grounds.Find(obj => obj.id == id);
         }
