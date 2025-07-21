@@ -22,6 +22,13 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// 基本的なレンダリングの処理を行います
+        /// </summary>
+        public void Update() {
+
+        }
+
+        /// <summary>
         /// 物理エンジンのオブジェクトデータを受け取り、描画を更新します
         /// このメソッドはUIスレッドで呼び出される必要があります
         /// </summary>
