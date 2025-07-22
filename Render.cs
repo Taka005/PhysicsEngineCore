@@ -11,6 +11,7 @@ namespace PhysicsEngineCore {
         public bool isDebugMode = false;
         public double offsetX = 0;
         public double offsetY = 0;
+        public double scale = 1;
         private readonly VisualCollection visuals;
         private readonly Dictionary<string, DrawingVisual> objectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
@@ -28,7 +29,7 @@ namespace PhysicsEngineCore {
         /// このメソッドはUIスレッドで呼び出される必要があります
         /// </summary>
         public void Update() {
-            TranslateTransform newTranslateTransform = new TranslateTransform(this.offsetX, this.offsetY);
+            TransformGroup newTranslateTransform = this.CreateTranslateTransform();
 
             foreach(DrawingVisual visual in this.visuals) {
                 visual.Transform = newTranslateTransform;
@@ -83,7 +84,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.objectVisuals.Add(obj.id, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = new TranslateTransform(this.offsetX, this.offsetY);
+                        newVisual.Transform = this.CreateTranslateTransform();
 
                         if(newVisual is IObjectVisual objectVisual) {
                             objectVisual.Draw();
@@ -130,7 +131,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.groundVisuals.Add(ground.id, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = new TranslateTransform(this.offsetX, this.offsetY);
+                        newVisual.Transform = this.CreateTranslateTransform();
 
                         if(newVisual is IGroundVisual groundVisual) {
                             groundVisual.Draw();
@@ -162,7 +163,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.trackingVisuals.Add(obj.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = new TranslateTransform(this.offsetX, this.offsetY);
+                        newVisual.Transform = this.CreateTranslateTransform();
 
                         if(newVisual is IObjectVisual trackingVisual) {
                             trackingVisual.opacity = 0.2f;
@@ -213,6 +214,19 @@ namespace PhysicsEngineCore {
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// オフセットとスケールを適用するTransformGroupを作成します
+        /// </summary>
+        /// <returns>作成されたTransformGroup</returns>
+        private TransformGroup CreateTranslateTransform() {
+            TransformGroup transformGroup = new TransformGroup();
+
+            transformGroup.Children.Add(new ScaleTransform(this.scale,this.scale));
+            transformGroup.Children.Add(new TranslateTransform(this.offsetX, this.offsetY));
+
+            return transformGroup;
         }
 
         /// <summary>
