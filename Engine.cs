@@ -271,6 +271,7 @@ namespace PhysicsEngineCore {
         /// <param name="sender">データ</param>
         /// <param name="e">イベント</param>
         public void OnRendering(object? sender, EventArgs e) {
+            this.render.Update();
             this.render.DrawObject(this.content.objects);
             this.render.DrawGround(this.content.grounds);
 
