@@ -53,8 +53,8 @@ namespace PhysicsEngineCore.Views {
                      this.brush,
                      null,
                      new Point(source.position.X, source.position.Y),
-                     source.radius - 0.5,
-                     source.radius - 0.5
+                     source.radius,
+                     source.radius
                  );
 
                 this.objectData.entities.ForEach(target => {
