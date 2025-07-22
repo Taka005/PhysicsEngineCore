@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
@@ -159,7 +158,7 @@ namespace PhysicsEngineCore {
 
             if(force) {
                 this.content.RemoveAllGrounds();
-                this.ClearTrack();
+                this.ClearTrack(true);
             }
 
             this.content.Sync();
@@ -168,10 +167,14 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングを全て削除します
         /// </summary>
-        public void ClearTrack() {
+        public void ClearTrack(bool isIncludeDraw = false) {
             lock(this.tracks) {
                 this.trackingCount = 0;
                 this.tracks.Clear();
+
+                if(isIncludeDraw) {
+                    this.render.ClearTracking();
+                }
             }
         }
 
@@ -433,8 +436,8 @@ namespace PhysicsEngineCore {
                 this.SpawnObject(obj);
             });
 
-            saveData.GetAllGrounds().ForEach(obj => {
-                this.SpawnGround(obj);
+            saveData.GetAllGrounds().ForEach(ground => {
+                this.SpawnGround(ground);
             });
 
             this.pps = saveData.engine.pps;
@@ -458,7 +461,7 @@ namespace PhysicsEngineCore {
                 pps = this.pps,
                 gravity = this.gravity,
                 friction = this.friction,
-                playBackSpeed = this._playBackSpeed,
+                playBackSpeed = this.playBackSpeed,
                 trackingInterval = this.trackingInterval,
                 trackingLimit = this.trackingLimit,
                 movementLimit = this.movementLimit
@@ -478,11 +481,6 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <returns>変換されたJSON形式のセーブデータ</returns>
         public string Export() {
-            //JsonSerializerOptions options = new JsonSerializerOptions {
-            //    NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals,
-            //    WriteIndented = true
-            //};
-
             return JsonSerializer.Serialize(this.toSaveData());
         }
 
