@@ -52,8 +52,8 @@ namespace PhysicsEngineCore.Views {
                 this.brush,
                 this.pen,
                 new Point(this.objectData.position.X, this.objectData.position.Y),
-                this.objectData.radius,
-                this.objectData.radius
+                this.objectData.radius - 0.5,
+                this.objectData.radius - 0.5
             );
 
             context.Close();

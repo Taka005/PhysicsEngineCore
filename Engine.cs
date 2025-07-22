@@ -371,6 +371,9 @@ namespace PhysicsEngineCore {
                 circleOption.posX -= this.render.offsetX;
                 circleOption.posY -= this.render.offsetY;
 
+                circleOption.posX /= this.render.scale;
+                circleOption.posY /= this.render.scale;
+
                 obj = new Circle(circleOption);
             } else if(option is RopeOption ropeOption) {
                 ropeOption.startX -= this.render.offsetX;
@@ -378,15 +381,26 @@ namespace PhysicsEngineCore {
                 ropeOption.endX -= this.render.offsetX;
                 ropeOption.endY -= this.render.offsetY;
 
+                ropeOption.startX /= this.render.scale;
+                ropeOption.startY /= this.render.scale;
+                ropeOption.endX /= this.render.scale;
+                ropeOption.endY /= this.render.scale;
+
                 obj = new Rope(ropeOption);
             } else if(option is SquareOption squareOption) {
                 squareOption.posX -= this.render.offsetX;
                 squareOption.posY -= this.render.offsetY;
 
+                squareOption.posX /= this.render.scale;
+                squareOption.posY /= this.render.scale;
+
                 obj = new Square(squareOption);
             } else if(option is TriangleOption triangleOption) {
                 triangleOption.posX -= this.render.offsetX;
                 triangleOption.posY -= this.render.offsetY;
+
+                triangleOption.posX /= this.render.scale;
+                triangleOption.posY /= this.render.scale;
 
                 obj = new Triangle(triangleOption);
             }
@@ -417,6 +431,11 @@ namespace PhysicsEngineCore {
                 lineOption.endX -= this.render.offsetX;
                 lineOption.endY -= this.render.offsetY;
 
+                lineOption.startX /= this.render.scale;
+                lineOption.startY /= this.render.scale;
+                lineOption.endX /= this.render.scale;
+                lineOption.endY /= this.render.scale;
+
                 ground = new Line(lineOption);
             } else if(option is CurveOption curveOption) {
                 curveOption.startX -= this.render.offsetX;
@@ -425,6 +444,13 @@ namespace PhysicsEngineCore {
                 curveOption.middleY -= this.render.offsetY;
                 curveOption.endX -= this.render.offsetX;
                 curveOption.endY -= this.render.offsetY;
+
+                curveOption.startX /= this.render.scale;
+                curveOption.startY /= this.render.scale;
+                curveOption.middleX /= this.render.scale;
+                curveOption.middleY /= this.render.scale;
+                curveOption.endX /= this.render.scale;
+                curveOption.endY /= this.render.scale;
 
                 ground = new Curve(curveOption);
             }

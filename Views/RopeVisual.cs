@@ -62,16 +62,16 @@ namespace PhysicsEngineCore.Views {
                         this.brush,
                         null,
                         new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
+                        entity.radius - 0.5,
+                        entity.radius - 0.5
                     );
                 } else {
                     context.DrawEllipse(
                         this.brush,
                         null,
                         new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
+                        entity.radius - 0.5,
+                        entity.radius - 0.5
                     );
                 }
 
@@ -80,8 +80,8 @@ namespace PhysicsEngineCore.Views {
                         this.brush,
                         null,
                         new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
+                        entity.radius - 0.5,
+                        entity.radius - 0.5
                     );
                 }
 

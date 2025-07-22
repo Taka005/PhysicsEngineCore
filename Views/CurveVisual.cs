@@ -69,14 +69,16 @@ namespace PhysicsEngineCore.Views {
                 brush,
                 null,
                 new Point(this.groundData.start.X, this.groundData.start.Y),
-                this.groundData.width / 2, this.groundData.width / 2
+                this.groundData.width / 2 - 0.5,
+                this.groundData.width / 2 - 0.5
             );
 
             context.DrawEllipse(
                 brush,
                 null,
                 new Point(this.groundData.end.X, this.groundData.end.Y),
-                this.groundData.width / 2, this.groundData.width / 2
+                this.groundData.width / 2 - 0.5,
+                this.groundData.width / 2 - 0.5
             );
 
             sgc.Close();
