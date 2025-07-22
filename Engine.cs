@@ -41,7 +41,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキング間隔
         /// </summary>
-        private float trackingInterval = 1000;
+        private float trackingInterval = 100;
 
         /// <summary>
         /// トラッキング回数
@@ -51,7 +51,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングの制限数
         /// </summary>
-        private int trackingLimit = 50;
+        private int trackingLimit = 100;
 
         /// <summary>
         /// 移動範囲
@@ -114,6 +114,32 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// ppsを設定します
+        /// </summary>
+        /// <param name="value">設定する値</param>
+        /// <exception cref="Exception">1未満の場合にエラー</exception>
+        public void SetPps(int value) {
+            if(value <= 0) throw new Exception("ppsは1以上の値に設定する必要があります");
+
+            this.pps = value;
+
+            if(this.isStarted) {
+                this.loopTimer.Change(0, (int)((1000 / this.pps) / this.playBackSpeed));
+            }
+        }
+
+        /// <summary>
+        /// 重力加速度を設定します
+        /// </summary>
+        /// <param name="value">設定する値</param>
+        /// <exception cref="Exception">0未満の場合にエラー</exception>
+        public void SetGravity(double value) {
+            if(value < 0) throw new Exception("重力加速度(gravity)は0以上に設定する必要があります");
+
+            this.gravity = value;
+        }
+
+        /// <summary>
         /// 再生速度を設定します
         /// </summary>
         /// <param name="value">設定する再生速度</param>
@@ -121,7 +147,7 @@ namespace PhysicsEngineCore {
             this._playBackSpeed = CheckPlayBackSpeedValue(value);
 
             if(this.isStarted) {
-                this.loopTimer.Change(0, (int)((1000 / this.pps) / this._playBackSpeed));
+                this.loopTimer.Change(0, (int)((1000 / this.pps) / this.playBackSpeed));
             }
         }
 

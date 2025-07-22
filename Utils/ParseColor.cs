@@ -16,12 +16,22 @@ namespace PhysicsEngineCore.Utils {
             return fillBrush;
         }
 
-        public static string ColorToString(Color? color) {
-            if(color == null) {
-                return "#00000000";
-            } else {
-                return color.Value.ToString();
+        public static Color StringToColor(string colorString) {
+            Color color;
+            try {
+                BrushConverter brushConverter = new BrushConverter();
+                Brush? convertedBrush = brushConverter.ConvertFromString(colorString) as Brush;
+
+                if(convertedBrush is SolidColorBrush solidColorBrush) {
+                    color = solidColorBrush.Color;
+                } else {
+                    color = Colors.Transparent;
+                }
+            } catch {
+                color = Colors.Transparent;
             }
+
+            return color;
         }
     }
 }
