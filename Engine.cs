@@ -41,7 +41,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキング間隔
         /// </summary>
-        private float trackingInterval = 100;
+        private float _trackingInterval = 100;
 
         /// <summary>
         /// トラッキング回数
@@ -51,12 +51,12 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングの制限数
         /// </summary>
-        private int trackingLimit = 100;
+        private int _trackingLimit = 100;
 
         /// <summary>
         /// 移動範囲
         /// </summary>
-        private int movementLimit = 10000;
+        private int _movementLimit = 10000;
 
         /// <summary>
         /// トラッキングされたオブジェクトのリスト
@@ -80,9 +80,9 @@ namespace PhysicsEngineCore {
         public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
             if(option != null) {
                 this._playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
-                this.trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
-                this.trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
-                this.movementLimit = CheckMovementLimitValue(option.movementLimit);
+                this._trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
+                this._trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
+                this._movementLimit = CheckMovementLimitValue(option.movementLimit);
             }
 
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
@@ -94,6 +94,33 @@ namespace PhysicsEngineCore {
         public float playBackSpeed {
             get {
                 return this._playBackSpeed;
+            }
+        }
+
+        /// <summary>
+        /// トラッキング間隔
+        /// </summary>
+        public float trackingInterval {
+            get {
+                return this._trackingInterval;
+            }
+        }
+
+        /// <summary>
+        /// トラッキングの制限
+        /// </summary>
+        public int trackingLimit {
+            get {
+                return this._trackingLimit;
+            }
+        }
+
+        /// <summary>
+        /// マップの移動制限
+        /// </summary>
+        public int movementLimit {
+            get {
+                return this._movementLimit;
             }
         }
 
@@ -156,7 +183,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="value">設定するトラッキング間隔</param>
         public void SetTrackingInterval(float value) {
-            this.trackingInterval = CheckTrackingIntervalValue(value);
+            this._trackingInterval = CheckTrackingIntervalValue(value);
         }
 
         /// <summary>
@@ -164,7 +191,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="value">設定する回数</param>
         public void SetTrackingLimit(int value) {
-            this.trackingLimit = CheckTrackingLimitValue(value);
+            this._trackingLimit = CheckTrackingLimitValue(value);
         }
 
         /// <summary>
@@ -172,7 +199,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="value">設定する距離</param>
         public void SetMovementLimit(int value) {
-            this.movementLimit = CheckMovementLimitValue(value);
+            this._movementLimit = CheckMovementLimitValue(value);
         }
 
         /// <summary>
