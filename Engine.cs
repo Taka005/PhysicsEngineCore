@@ -368,12 +368,26 @@ namespace PhysicsEngineCore {
             IObject? obj = null;
 
             if(option is CircleOption circleOption) {
+                circleOption.posX -= this.render.offsetX;
+                circleOption.posY -= this.render.offsetY;
+
                 obj = new Circle(circleOption);
             } else if(option is RopeOption ropeOption) {
+                ropeOption.startX -= this.render.offsetX;
+                ropeOption.startY -= this.render.offsetY;
+                ropeOption.endX -= this.render.offsetX;
+                ropeOption.endY -= this.render.offsetY;
+
                 obj = new Rope(ropeOption);
             } else if(option is SquareOption squareOption) {
+                squareOption.posX -= this.render.offsetX;
+                squareOption.posY -= this.render.offsetY;
+
                 obj = new Square(squareOption);
             } else if(option is TriangleOption triangleOption) {
+                triangleOption.posX -= this.render.offsetX;
+                triangleOption.posY -= this.render.offsetY;
+
                 obj = new Triangle(triangleOption);
             }
 
@@ -398,8 +412,20 @@ namespace PhysicsEngineCore {
             IGround? ground = null;
 
             if(option is LineOption lineOption) {
+                lineOption.startX -= this.render.offsetX;
+                lineOption.startY -= this.render.offsetY;
+                lineOption.endX -= this.render.offsetX;
+                lineOption.endY -= this.render.offsetY;
+
                 ground = new Line(lineOption);
             } else if(option is CurveOption curveOption) {
+                curveOption.startX -= this.render.offsetX;
+                curveOption.startY -= this.render.offsetY;
+                curveOption.middleX -= this.render.offsetX;
+                curveOption.middleY -= this.render.offsetY;
+                curveOption.endX -= this.render.offsetX;
+                curveOption.endY -= this.render.offsetY;
+
                 ground = new Curve(curveOption);
             }
 
