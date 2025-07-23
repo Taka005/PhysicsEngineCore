@@ -9,6 +9,7 @@ namespace PhysicsEngineCore {
     /// </summary>
     public class Render : FrameworkElement {
         public bool isDebugMode = false;
+        public bool isDevMode = false;
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
@@ -17,10 +18,12 @@ namespace PhysicsEngineCore {
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
         private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
         private readonly OverlayVisual overlayVisual = new OverlayVisual();
+        private readonly DebugVisual debugVisual = new DebugVisual();
 
         public Render() {
             this.visuals = new VisualCollection(this) {
-                this.overlayVisual
+                this.overlayVisual,
+                this.debugVisual
             };
         }
 
@@ -32,6 +35,8 @@ namespace PhysicsEngineCore {
             TransformGroup newTranslateTransform = this.CreateTranslateTransform();
 
             foreach(DrawingVisual visual in this.visuals) {
+                if(visual is DebugVisual) continue;
+
                 visual.Transform = newTranslateTransform;
             }
         }
