@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using PhysicsEngineCore.Objects;
-using PhysicsEngineCore.Options;
+﻿using PhysicsEngineCore.Options;
 
 namespace PhysicsEngineCore.Utils {
     public class SaveData {
