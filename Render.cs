@@ -42,7 +42,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="objects">描画するオブジェクトのリスト</param>
         public void DrawObject(List<IObject> objects) {
-            HashSet<string> currentObjectIds = [.. objects.Select(o => o.id)];
+            HashSet<string> currentObjectIds = [.. objects.Select(o => o.trackingId)];
             List<string>? visualsToRemove = [.. this.objectVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];
             List<VectorData> vectors = [];
 
@@ -52,7 +52,7 @@ namespace PhysicsEngineCore {
             }
 
             foreach(IObject obj in objects) {
-                if(this.objectVisuals.TryGetValue(obj.id, out DrawingVisual? visual)) {
+                if(this.objectVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
                     if(visual is IObjectVisual objectVisual) {
                         //IObject oldObj = objectVisual.GetObjectData();
 
@@ -82,7 +82,7 @@ namespace PhysicsEngineCore {
                     DrawingVisual? newVisual = this.CreateVisualForObject(obj);
 
                     if(newVisual != null) {
-                        this.objectVisuals.Add(obj.id, newVisual);
+                        this.objectVisuals.Add(obj.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
                         newVisual.Transform = this.CreateTranslateTransform();
 
@@ -106,7 +106,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="grounds">描画する地面のリスト</param>
         public void DrawGround(List<IGround> grounds) {
-            HashSet<string> currentGrounds = [.. grounds.Select(o => o.id)];
+            HashSet<string> currentGrounds = [.. grounds.Select(o => o.trackingId)];
             List<string>? visualsToRemove = [.. this.groundVisuals.Keys.Where(id => !currentGrounds.Contains(id))];
 
             foreach(string id in visualsToRemove) {
@@ -115,7 +115,7 @@ namespace PhysicsEngineCore {
             }
 
             foreach(IGround ground in grounds) {
-                if(this.groundVisuals.TryGetValue(ground.id, out DrawingVisual? visual)) {
+                if(this.groundVisuals.TryGetValue(ground.trackingId, out DrawingVisual? visual)) {
                     if(visual is IGroundVisual groundVisual) {
                         //IGround oldGround = groundVisual.GetGroundData();
 
@@ -129,7 +129,7 @@ namespace PhysicsEngineCore {
                     DrawingVisual? newVisual = this.CreateVisualForGround(ground);
 
                     if(newVisual != null) {
-                        this.groundVisuals.Add(ground.id, newVisual);
+                        this.groundVisuals.Add(ground.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
                         newVisual.Transform = this.CreateTranslateTransform();
 
