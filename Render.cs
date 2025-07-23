@@ -103,6 +103,10 @@ namespace PhysicsEngineCore {
             } else {
                 this.overlayVisual.Clear();
             }
+
+            if(this.isDevMode) {
+                
+            }
         }
 
         /// <summary>

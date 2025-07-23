@@ -77,7 +77,7 @@ namespace PhysicsEngineCore {
         /// 初期化
         /// </summary>
         /// <param name="option">エンジンの初期化クラス</param>
-        public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0.0001) {
+        public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0) {
             if(option != null) {
                 this._playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
                 this._trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
