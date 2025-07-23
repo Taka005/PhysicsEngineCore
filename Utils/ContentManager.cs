@@ -137,19 +137,19 @@ namespace PhysicsEngineCore.Utils {
         }
 
         public void RemoveAllObjects() {
-            lock(this.lockObject) {
-                foreach(IObject obj in this._objects) {
-                    this.RemoveObject(obj);
-                }
-            }
+            QueueObject queue = new QueueObject {
+                command = CommandType.ClearAll
+            };
+
+            this.queueObjects.Add(queue);
         }
 
         public void RemoveAllGrounds() {
-            lock(this.lockObject) {
-                foreach(IGround ground in this._grounds) {
-                    this.RemoveGround(ground);
-                }
-            }
+            QueueGround queue = new QueueGround {
+                command = CommandType.ClearAll
+            };
+
+            this.queueGrounds.Add(queue);
         }
 
 
@@ -167,6 +167,10 @@ namespace PhysicsEngineCore.Utils {
                 this.queueGrounds.Clear();
 
                 foreach(QueueObject obj in currentQueueObjects) {
+                    if(obj.command == CommandType.ClearAll) {
+                        this._objects.Clear();
+                    }
+
                     if(obj.target == null) continue;
 
                     if(obj.command == CommandType.Add) {
@@ -177,14 +181,17 @@ namespace PhysicsEngineCore.Utils {
                 }
 
                 foreach(QueueGround ground in currentQueueGrounds) {
+                    if(ground.command == CommandType.ClearAll) {
+                        this._grounds.Clear();
+                    }
+
                     if(ground.target == null) continue;
 
                     if(ground.command == CommandType.Add) {
                         this._grounds.Add(ground.target);
                     } else if(ground.command == CommandType.Remove) {
                         this._grounds.RemoveAll(target => target.id == ground.target.id);
-                    }
-                }
+                    }                }
             }
         }
 
@@ -224,7 +231,8 @@ namespace PhysicsEngineCore.Utils {
 
         enum CommandType {
             Add = 0,
-            Remove = 1
+            Remove = 1,
+            ClearAll = 2
         }
     }
 }
