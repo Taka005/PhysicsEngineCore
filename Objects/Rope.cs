@@ -92,6 +92,14 @@ namespace PhysicsEngineCore.Objects {
                 if(value <= 0) throw new ArgumentException("幅を0以下に設定することはできません");
 
                 this._width = value;
+
+                foreach(Entity entity in this.entities) {
+                    entity.diameter = value;
+
+                    foreach(Target target in entity.connection.targets) {
+                        target.distance = value;
+                    }
+                }
             }
         }   
 
