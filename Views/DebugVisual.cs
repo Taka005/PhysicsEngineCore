@@ -16,9 +16,7 @@ namespace PhysicsEngineCore.Views {
                 VisualTreeHelper.GetDpi(this).PixelsPerDip
             );
 
-            Point textLocation = new Point(10, 10);
-
-            context.DrawText(formattedText, textLocation);
+            context.DrawText(formattedText, new Point(10, 10));
 
             context.Close();
         }

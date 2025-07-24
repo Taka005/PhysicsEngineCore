@@ -1,5 +1,6 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Views;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -13,6 +14,10 @@ namespace PhysicsEngineCore {
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
+        private readonly Stopwatch stopwatch = new Stopwatch();
+        private TimeSpan _lastFpsUpdateTime = TimeSpan.Zero;
+        private int _frameCount = 0;
+        private double _fps = 0;
         private readonly VisualCollection visuals;
         private readonly Dictionary<string, DrawingVisual> objectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
@@ -25,6 +30,14 @@ namespace PhysicsEngineCore {
                 this.overlayVisual,
                 this.debugVisual
             };
+
+            this.stopwatch.Start();
+        }
+        
+        public int fps{
+            get{
+                return (int)this._fps;
+            }
         }
 
         /// <summary>
@@ -38,6 +51,16 @@ namespace PhysicsEngineCore {
                 if(visual is DebugVisual) continue;
 
                 visual.Transform = newTranslateTransform;
+            }
+
+            TimeSpan currentTime = this.stopwatch.Elapsed;
+
+             this._frameCount++;
+
+            if((currentTime - this._lastFpsUpdateTime).TotalSeconds >= 1){
+                this._fps = _frameCount / (currentTime - this._lastFpsUpdateTime).TotalSeconds;
+                this._lastFpsUpdateTime = currentTime;
+                this._frameCount = 0;
             }
         }
 
@@ -105,7 +128,7 @@ namespace PhysicsEngineCore {
             }
 
             if(this.isDevMode) {
-                
+                this.debugVisual.Draw(this.fps);
             }
         }
 
