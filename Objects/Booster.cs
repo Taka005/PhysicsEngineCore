@@ -70,7 +70,10 @@ namespace PhysicsEngineCore.Objects {
 
             Vector2 difference = entity.position - (this.start + this.end) / 2;
 
-            if(difference.Length() >= entity.radius + (this.start - this.end).Length()/2) return;
+            if(
+                Math.Abs(difference.X) >= Math.Abs(this.start.X - this.end.X)/2||
+                Math.Abs(difference.Y) >= Math.Abs(this.start.Y - this.end.Y)/2
+            ) return;
 
             entity.velocity += this.velocity;
         }

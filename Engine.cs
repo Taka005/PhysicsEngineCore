@@ -211,6 +211,7 @@ namespace PhysicsEngineCore {
 
             if(force) {
                 this.content.RemoveAllGrounds();
+                this.content.RemoveAllEffects();
                 this.ClearTrack(true);
             }
 
