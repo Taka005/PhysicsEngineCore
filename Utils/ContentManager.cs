@@ -233,7 +233,11 @@ namespace PhysicsEngineCore.Utils {
         /// </summary>
         public void Sync() {
             lock(this.lockObject) {
-                if(this.queueObjects.Count == 0 && this.queueGrounds.Count == 0) return;
+                if(
+                    this.queueObjects.Count == 0 &&
+                    this.queueGrounds.Count == 0 &&
+                    this.queueEffects.Count == 0
+                ) return;
 
                 List<QueueObject> currentQueueObjects = [.. this.queueObjects];
                 List<QueueGround> currentQueueGrounds = [.. this.queueGrounds];
@@ -306,7 +310,8 @@ namespace PhysicsEngineCore.Utils {
                 triangles = triangleOptions,
                 ropes = ropeOptions,
                 lines = lineOptions,
-                curves = curveOptions
+                curves = curveOptions,
+                boosters = effectOptions
             };
         }
 

@@ -33,7 +33,12 @@ namespace PhysicsEngineCore.Views {
             this.brush = ParseColor.StringToBrush(this.effectData.color);
             this.pen = new Pen(this.brush, 3);
 
-       
+            context.DrawRectangle(null,this.pen,new Rect(
+                this.effectData.start.X,
+                this.effectData.start.Y,
+                this.effectData.end.X - this.effectData.start.X,
+                this.effectData.end.Y - this.effectData.start.Y
+            ));
 
             context.Close();
         }
