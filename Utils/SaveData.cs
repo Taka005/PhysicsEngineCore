@@ -11,21 +11,29 @@ namespace PhysicsEngineCore.Utils {
         public List<IOption> GetAllObjects() {
             List<IOption> allObjects = [];
 
-            allObjects.AddRange(objects.circles);
-            allObjects.AddRange(objects.squares);
-            allObjects.AddRange(objects.triangles);
-            allObjects.AddRange(objects.ropes);
+            allObjects.AddRange(this.objects.circles);
+            allObjects.AddRange(this.objects.squares);
+            allObjects.AddRange(this.objects.triangles);
+            allObjects.AddRange(this.objects.ropes);
 
             return allObjects;
         }
 
         public List<IOption> GetAllGrounds() {
-            List<IOption> allObjects = [];
+            List<IOption> allGrounds = [];
 
-            allObjects.AddRange(objects.lines);
-            allObjects.AddRange(objects.curves);
+            allGrounds.AddRange(this.objects.lines);
+            allGrounds.AddRange(this.objects.curves);
 
-            return allObjects;
+            return allGrounds;
+        }
+
+        public List<IOption> GetAllEffects() {
+            List<IOption> allEffects = [];
+
+            allEffects.AddRange(this.objects.boosters);
+
+            return allEffects;
         }
     }
 
@@ -36,5 +44,6 @@ namespace PhysicsEngineCore.Utils {
         public List<RopeOption> ropes { get; set; } = [];
         public List<LineOption> lines { get; set; } = [];
         public List<CurveOption> curves { get; set; } = [];
+        public List<BoosterOption> boosters { get; set; } = [];
     }
 }

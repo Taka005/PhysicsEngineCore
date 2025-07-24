@@ -316,6 +316,10 @@ namespace PhysicsEngineCore {
             List<Entity> entities = this.content.entities;
 
             foreach(Entity entity in entities) {
+                foreach(IEffect effect in this.content.effects) {
+                    effect.SetEffect(entity);
+                }
+
                 this.UpdatePosition(entity);
             }
 
@@ -412,6 +416,24 @@ namespace PhysicsEngineCore {
             return ground;
         }
 
+        public IEffect? SpawnEffect(IOption option) {
+            if(option.id == null) option.id = IdGenerator.CreateId(15);
+
+            IEffect? effect = null;
+
+            if(option is BoosterOption boosterOption) {
+                effect = new Booster(boosterOption);
+            }
+
+            if(effect == null) throw new Exception("無効な物体が指定されています");
+
+            this.content.AddEffect(effect);
+
+            this.content.Sync();
+
+            return effect;
+        }
+
         /// <summary>
         /// オブジェクトを削除します
         /// </summary>
@@ -438,6 +460,15 @@ namespace PhysicsEngineCore {
             this.content.Sync();
         }
 
+        public void DeSpawnEffect(string id) {
+            IEffect? effect = this.GetEffect(id);
+            if(effect == null) return;
+
+            this.content.RemoveEffect(effect);
+
+            this.content.Sync();
+        }
+
         /// <summary>
         /// 指定したIDのオブジェクトを取得します
         /// </summary>
@@ -454,6 +485,10 @@ namespace PhysicsEngineCore {
         /// <returns>取得したグラウンド</returns>
         public IGround? GetGround(string id) {
             return this.content.grounds.Find(obj => obj.id == id);
+        }
+
+        public IEffect? GetEffect(string id) {
+            return this.content.effects.Find(obj => obj.id == id);
         }
 
         /// <summary>
@@ -490,6 +525,10 @@ namespace PhysicsEngineCore {
 
             saveData.GetAllGrounds().ForEach(ground => {
                 this.SpawnGround(ground);
+            });
+
+            saveData.GetAllEffects().ForEach(effect => {
+                this.SpawnEffect(effect);
             });
 
             this.pps = saveData.engine.pps;
@@ -583,6 +622,24 @@ namespace PhysicsEngineCore {
                 if(distance > ground.width / 2) return;
 
                 targets.Add(ground);
+            });
+
+            return targets;
+        }
+
+        public List<IEffect> GetEffectsAt(double posX, double posY) {
+            Vector2 position = new Vector2(posX, posY);
+
+            List<IEffect> targets = [];
+
+            this.content.effects.ForEach(effect => {
+                if(effect is Booster booster) {
+                    Vector2 difference = position - (booster.start + booster.end) / 2;
+
+                    if(difference.Length() >= (booster.start - booster.end).Length()/2) return;
+
+                    targets.Add(booster);
+                }
             });
 
             return targets;

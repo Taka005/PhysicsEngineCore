@@ -9,8 +9,10 @@ namespace PhysicsEngineCore.Utils {
     class ContentManager() {
         private readonly List<IObject> _objects = [];
         private readonly List<IGround> _grounds = [];
+        private readonly List<IEffect> _effects = [];
         private readonly List<QueueObject> queueObjects = [];
         private readonly List<QueueGround> queueGrounds = [];
+        private readonly List<QueueEffect> queueEffects = [];
         private readonly object lockObject = new object();
 
         /// <summary>
@@ -47,6 +49,17 @@ namespace PhysicsEngineCore.Utils {
         }
 
         /// <summary>
+        /// 現在のエフェクトの数を返します
+        /// </summary>
+        public int effectCount {
+            get {
+                lock(this.lockObject) {
+                    return this._effects.Count;
+                }
+            }
+        }
+
+        /// <summary>
         /// 現在のオブジェクトリストのコピーを返します
         /// </summary>
         public List<IObject> objects {
@@ -58,12 +71,23 @@ namespace PhysicsEngineCore.Utils {
         }
 
         /// <summary>
-        /// 現在のグラウンドリストのコピーを返します。
+        /// 現在のグラウンドリストのコピーを返します
         /// </summary>
         public List<IGround> grounds {
             get {
                 lock(this.lockObject) {
                     return [.. this._grounds];
+                }
+            }
+        }
+
+        /// <summary>
+        /// 現在のエフェクトリストのコピーを返します
+        /// </summary>
+        public List<IEffect> effects {
+            get {
+                lock(this.lockObject) {
+                    return [.. this._effects];
                 }
             }
         }
@@ -136,6 +160,43 @@ namespace PhysicsEngineCore.Utils {
             }
         }
 
+        /// <summary>
+        /// エフェクトの追加を待機列に追加します
+        /// </summary>
+        /// <param name="target">追加するエフェクト
+        public void AddEffect(IEffect target) {
+            if(target == null) throw new ArgumentNullException(nameof(target), "エフェクトがNULLです");
+
+            QueueEffect queue = new QueueEffect {
+                command = CommandType.Add,
+                target = target
+            };
+
+            lock(this.lockObject) {
+                this.queueEffects.Add(queue);
+            }
+        }
+
+        /// <summary>
+        /// エフェクトの削除を待機列に追加します
+        /// </summary>
+        /// <param name="target">削除するエフェクト</param>
+        public void RemoveEffect(IEffect target) {
+            if(target == null) throw new ArgumentNullException(nameof(target), "エフェクトがNULLです");
+
+            QueueEffect queue = new QueueEffect {
+                command = CommandType.Remove,
+                target = target
+            };
+
+            lock(this.lockObject) {
+                this.queueEffects.Add(queue);
+            }
+        }
+
+        /// <summary>
+        /// 全てのオブジェクトの削除を待機列に追加します
+        /// </summary>
         public void RemoveAllObjects() {
             QueueObject queue = new QueueObject {
                 command = CommandType.ClearAll
@@ -144,12 +205,26 @@ namespace PhysicsEngineCore.Utils {
             this.queueObjects.Add(queue);
         }
 
+        /// <summary>
+        /// 全てのグラウンドの削除を待機列に追加します
+        /// </summary>
         public void RemoveAllGrounds() {
             QueueGround queue = new QueueGround {
                 command = CommandType.ClearAll
             };
 
             this.queueGrounds.Add(queue);
+        }
+
+        /// <summary>
+        /// 全てのエフェクトの削除を待機列に追加します
+        /// </summary>
+        public void RemoveAllEffects() {
+            QueueEffect queue = new QueueEffect {
+                command = CommandType.ClearAll
+            };
+
+            this.queueEffects.Add(queue);
         }
 
 
@@ -162,9 +237,11 @@ namespace PhysicsEngineCore.Utils {
 
                 List<QueueObject> currentQueueObjects = [.. this.queueObjects];
                 List<QueueGround> currentQueueGrounds = [.. this.queueGrounds];
+                List<QueueEffect> currentQueueEffects = [.. this.queueEffects];
 
                 this.queueObjects.Clear();
                 this.queueGrounds.Clear();
+                this.queueEffects.Clear();
 
                 foreach(QueueObject obj in currentQueueObjects) {
                     if(obj.command == CommandType.ClearAll) {
@@ -191,7 +268,22 @@ namespace PhysicsEngineCore.Utils {
                         this._grounds.Add(ground.target);
                     } else if(ground.command == CommandType.Remove) {
                         this._grounds.RemoveAll(target => target.id == ground.target.id);
-                    }                }
+                    }                
+                }
+
+                foreach(QueueEffect effect in currentQueueEffects) {
+                    if(effect.command == CommandType.ClearAll) {
+                        this._effects.Clear();
+                    }
+
+                    if(effect.target == null) continue;
+
+                    if(effect.command == CommandType.Add) {
+                        this._effects.Add(effect.target);
+                    } else if(effect.command == CommandType.Remove) {
+                        this._effects.RemoveAll(target => target.id == effect.target.id);
+                    }
+                }
             }
         }
 
@@ -206,6 +298,7 @@ namespace PhysicsEngineCore.Utils {
             List<RopeOption> ropeOptions = [.. this._objects.OfType<Rope>().Select(obj => obj.ToOption())];
             List<LineOption> lineOptions = [.. this._grounds.OfType<Line>().Select(obj => obj.ToOption())];
             List<CurveOption> curveOptions = [.. this._grounds.OfType<Curve>().Select(obj => obj.ToOption())];
+            List<BoosterOption> effectOptions = [.. this._effects.OfType<Booster>().Select(obj => obj.ToOption())];
 
             return new ObjectSaveData {
                 circles = circleOptions,
@@ -227,6 +320,12 @@ namespace PhysicsEngineCore.Utils {
             public string id = IdGenerator.CreateId(10);
             public CommandType command;
             public IGround? target;
+        }
+
+        class QueueEffect {
+            public string id = IdGenerator.CreateId(10);
+            public CommandType command;
+            public IEffect? target;
         }
 
         enum CommandType {
