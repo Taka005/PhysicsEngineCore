@@ -301,6 +301,7 @@ namespace PhysicsEngineCore {
             this.render.Update();
             this.render.DrawObject(this.content.objects);
             this.render.DrawGround(this.content.grounds);
+            this.render.DrawEffect(this.content.effects);
 
             if(this.isTrackingMode) {
                 lock(this.tracks) {

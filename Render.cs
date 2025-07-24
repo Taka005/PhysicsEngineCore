@@ -21,6 +21,7 @@ namespace PhysicsEngineCore {
         private readonly VisualCollection visuals;
         private readonly Dictionary<string, DrawingVisual> objectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
+        private readonly Dictionary<string, DrawingVisual> effectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
         private readonly VectorVisual vectorVisual = new VectorVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
@@ -199,6 +200,36 @@ namespace PhysicsEngineCore {
             }
         }
 
+        public void DrawEffect(List<IEffect> effects) {
+            HashSet<string> currentEffectIds = [.. effects.Select(o => o.trackingId)];
+            List<string>? visualsToRemove = [.. this.effectVisuals.Keys.Where(id => !currentEffectIds.Contains(id))];
+
+            foreach(string id in visualsToRemove) {
+                this.visuals.Remove(this.effectVisuals[id]);
+                this.effectVisuals.Remove(id);
+            }
+
+            foreach(IEffect effect in effects) {
+                if(this.effectVisuals.TryGetValue(effect.trackingId, out DrawingVisual? visual)) {
+                    if(visual is IEffectVisual effectVisual) {
+                        effectVisual.Draw();
+                    }
+                } else {
+                    DrawingVisual? newVisual = this.CreateVisualForEffect(effect);
+
+                    if(newVisual != null) {
+                        this.effectVisuals.Add(effect.trackingId, newVisual);
+                        this.visuals.Insert(0, newVisual);
+                        newVisual.Transform = this.CreateTranslateTransform();
+
+                        if(newVisual is IEffectVisual effectVisual) {
+                            effectVisual.Draw();
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// 物理エンジンのオブジェクトデータを受け取り、描画します
         /// このメソッドはUIスレッドで呼び出される必要があります
@@ -269,6 +300,14 @@ namespace PhysicsEngineCore {
                 return new LineVisual(line);
             } else if(obj is Curve curve) {
                 return new CurveVisual(curve);
+            }
+
+            return null;
+        }
+
+        private DrawingVisual? CreateVisualForEffect(IEffect effect) {
+            if(effect is Booster booster) {
+                return new BoosterVisual(booster);
             }
 
             return null;
