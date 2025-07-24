@@ -46,7 +46,7 @@ namespace PhysicsEngineCore.Views {
 
             this.brush.Opacity = this.opacity;
 
-            this.pen = new Pen(this.brush, this.objectData.size / 2);
+            this.pen = new Pen(this.brush, this.objectData.entities[0].diameter);
 
             this.objectData.entities.ForEach(source => {
                 context.DrawEllipse(

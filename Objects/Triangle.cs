@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -22,11 +23,14 @@ namespace PhysicsEngineCore.Objects {
             this._color = option.color;
 
             if(option.entities.Count == 0) {
+                double entitySize = 2*this.size*(2 - Math.Sqrt(3));
+                double entityMass = option.mass / 3;
+
                 EntityOption entityOption1 = new EntityOption {
                     posX = option.posX,
-                    posY = option.posY - (2 / Math.Sqrt(3)) * (this.size / 3),
-                    diameter = option.size / 2,
-                    mass = option.mass / 3,
+                    posY = option.posY - (Math.Sqrt(3)/3)*entitySize,
+                    diameter = entitySize,
+                    mass = entityMass,
                     stiffness = option.stiffness,
                     velocityX = option.velocityX,
                     velocityY = option.velocityY,
@@ -37,10 +41,10 @@ namespace PhysicsEngineCore.Objects {
 
                 for(int i = -1;i <= 1;i += 2) {
                     EntityOption entityOption2 = new EntityOption {
-                        posX = option.posX + i * (this.size / 3),
-                        posY = option.posY + (1 / Math.Sqrt(3)) * (this.size / 3),
-                        diameter = option.size / 2,
-                        mass = option.mass / 3,
+                        posX = option.posX + i * entitySize/2,
+                        posY = option.posY + (Math.Sqrt(3)/6)*entitySize,
+                        diameter = entitySize,
+                        mass = entityMass,
                         stiffness = option.stiffness,
                         velocityX = option.velocityX,
                         velocityY = option.velocityY,
@@ -54,11 +58,7 @@ namespace PhysicsEngineCore.Objects {
                     this.entities.ForEach(target => {
                         if(source.id == target.id) return;
 
-                        Vector2 difference = target.position - source.position;
-
-                        double distance = difference.Length();
-
-                        source.connection.Add(target, distance, source.stiffness);
+                        source.connection.Add(target,entitySize, source.stiffness);
                     });
                 });
             }
