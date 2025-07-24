@@ -482,8 +482,6 @@ namespace PhysicsEngineCore {
 
             if(saveData.version != SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
-            if(this.isStarted) this.Stop();
-
             this.Clear(force: true);
 
             saveData.GetAllObjects().ForEach(obj => {
