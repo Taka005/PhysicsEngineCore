@@ -44,6 +44,17 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 全てのエンティティーの平均直径
+        /// </summary>
+        public double entityDiameter {
+            get {
+                if(this.count == 0) return 0;
+
+                return this._entities.Select(entity => entity.diameter).Average();
+            }
+        }
+
+        /// <summary>
         /// 全てのエンティティーの平均位置
         /// </summary>
         public Vector2 position {
