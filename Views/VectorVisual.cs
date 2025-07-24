@@ -7,7 +7,8 @@ namespace PhysicsEngineCore.Views {
         private readonly Pen pen = new Pen(Brushes.Black, 1);
 
         public void Clear() {
-            this.Draw([]);
+            DrawingContext context = this.RenderOpen();
+            context.Close();
         }
 
         public void Draw(List<VectorData> vectors) {
