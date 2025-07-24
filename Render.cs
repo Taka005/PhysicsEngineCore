@@ -9,8 +9,8 @@ namespace PhysicsEngineCore {
     /// 物理エンジンのレンダークラス
     /// </summary>
     public class Render : FrameworkElement {
-        public bool isDebugMode = false;
-        public bool isDevMode = false;
+        public bool _isDebugMode = false;
+        public bool _isDevMode = false;
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
@@ -22,16 +22,44 @@ namespace PhysicsEngineCore {
         private readonly Dictionary<string, DrawingVisual> objectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
         private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
-        private readonly OverlayVisual overlayVisual = new OverlayVisual();
+        private readonly VectorVisual vectorVisual = new VectorVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
 
         public Render() {
             this.visuals = new VisualCollection(this) {
-                this.overlayVisual,
+                this.vectorVisual,
                 this.debugVisual
             };
 
             this.stopwatch.Start();
+        }
+
+        /// <summary>
+        /// デバッグモードの切り替え
+        /// </summary>
+        public bool isDebugMode {
+            get {
+                return this._isDebugMode;
+            }
+            set {
+                this._isDebugMode = value;
+
+                this.vectorVisual.Clear();
+            }
+        }
+
+        /// <summary>
+        /// 開発者モードの切り替え
+        /// </summary>
+        public bool isDevMode {
+            get{
+                return this._isDevMode;
+            }
+            set {
+                this._isDevMode = value;
+
+                this.debugVisual.Clear();
+            }
         }
         
         public int fps{
@@ -122,9 +150,7 @@ namespace PhysicsEngineCore {
             }
 
             if(this.isDebugMode) {
-                this.overlayVisual.UpdateVectors(vectors);
-            } else {
-                this.overlayVisual.Clear();
+                this.vectorVisual.Draw(vectors);
             }
 
             if(this.isDevMode) {

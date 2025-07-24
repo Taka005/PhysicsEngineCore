@@ -3,22 +3,14 @@ using PhysicsEngineCore.Utils;
 using System.Windows;
 
 namespace PhysicsEngineCore.Views {
-    public class OverlayVisual : DrawingVisual {
-        private readonly List<VectorData> vectors = [];
+    public class VectorVisual : DrawingVisual {
         private readonly Pen pen = new Pen(Brushes.Black, 1);
 
-        public void UpdateVectors(List<VectorData> vectors) {
-            this.vectors.Clear();
-            this.vectors.AddRange(vectors);
-            this.Draw();
-        }
-
         public void Clear() {
-            this.vectors.Clear();
-            this.Draw();
+            this.Draw([]);
         }
 
-        public void Draw() {
+        public void Draw(List<VectorData> vectors) {
             DrawingContext context = this.RenderOpen();
 
             foreach(VectorData? vectorData in vectors) {
