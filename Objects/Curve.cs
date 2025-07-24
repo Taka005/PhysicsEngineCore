@@ -18,8 +18,6 @@ namespace PhysicsEngineCore.Objects {
         public double radius;
         private double _width;
 
-        public string? script { get; set; } = null;
-
         /// <summary>
         /// 初期化
         /// </summary>
@@ -57,6 +55,10 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// クラスの固有ID
+        /// トラッキング用
+        /// </summary>
         public string trackingId {
             get{
                 return this._trackingId;
