@@ -139,7 +139,7 @@ namespace PhysicsEngineCore {
                         ));
                     }
                 }else{
-                    DrawingVisual? newVisual = this.CreateVisualForObject(obj);
+                    DrawingVisual? newVisual = this.CreateObjectVisual(obj);
 
                     if(newVisual != null) {
                         this.objectVisuals.Add(obj.trackingId, newVisual);
@@ -188,7 +188,7 @@ namespace PhysicsEngineCore {
                         //}
                     }
                 } else {
-                    DrawingVisual? newVisual = this.CreateVisualForGround(ground);
+                    DrawingVisual? newVisual = this.CreateGroundVisual(ground);
 
                     if(newVisual != null) {
                         this.groundVisuals.Add(ground.trackingId, newVisual);
@@ -223,7 +223,7 @@ namespace PhysicsEngineCore {
                         effectVisual.Draw();
                     }
                 } else {
-                    DrawingVisual? newVisual = this.CreateVisualForEffect(effect);
+                    DrawingVisual? newVisual = this.CreateEffectVisual(effect);
 
                     if(newVisual != null) {
                         this.effectVisuals.Add(effect.trackingId, newVisual);
@@ -255,7 +255,7 @@ namespace PhysicsEngineCore {
 
             foreach(IObject obj in tracks) {
                 if(!this.trackingVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
-                    DrawingVisual? newVisual = this.CreateVisualForObject(obj);
+                    DrawingVisual? newVisual = this.CreateObjectVisual(obj);
 
                     if(newVisual != null) {
                         this.trackingVisuals.Add(obj.trackingId, newVisual);
@@ -286,7 +286,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// オブジェクトの種類に基づいて適切なDrawingVisualを作成
         /// </summary>
-        private DrawingVisual? CreateVisualForObject(IObject obj) {
+        private DrawingVisual? CreateObjectVisual(IObject obj) {
             if(obj is Circle circle) {
                 return new CircleVisual(circle);
             } else if(obj is Rope rope) {
@@ -303,7 +303,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// 地面の種類に基づいて適切なDrawingVisualを作成
         /// </summary>
-        private DrawingVisual? CreateVisualForGround(IGround obj) {
+        private DrawingVisual? CreateGroundVisual(IGround obj) {
             if(obj is Line line) {
                 return new LineVisual(line);
             } else if(obj is Curve curve) {
@@ -317,7 +317,7 @@ namespace PhysicsEngineCore {
         /// エフェクトの種類に基づいて適切なDrawingVisualを作成
         /// </summary>
         /// <returns></returns>
-        private DrawingVisual? CreateVisualForEffect(IEffect effect) {
+        private DrawingVisual? CreateEffectVisual(IEffect effect) {
             if(effect is Booster booster) {
                 return new BoosterVisual(booster);
             }
