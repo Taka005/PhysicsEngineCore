@@ -27,18 +27,6 @@ namespace PhysicsEngineCore.Views {
             }
         }
 
-        public IObject GetObjectData() {
-            return this.objectData;
-        }
-
-        public void SetObjectData(IObject objectData) {
-            if(objectData is Circle circle) {
-                this.objectData = circle;
-            } else {
-                throw new ArgumentException("無効なオブジェクトタイプが渡されました");
-            }
-        }
-
         public void Draw() {
             DrawingContext context = this.RenderOpen();
 

@@ -15,18 +15,6 @@ namespace PhysicsEngineCore.Views {
             this.pen = new Pen(this.brush, this.groundData.width);
         }
 
-        public IGround GetGroundData() {
-            return this.groundData;
-        }
-
-        public void SetGroundData(IGround groundData) {
-            if(groundData is Curve curve) {
-                this.groundData = curve;
-            } else {
-                throw new ArgumentException("無効なオブジェクトタイプが渡されました");
-            }
-        }
-
         public void Draw() {
             DrawingContext context = this.RenderOpen();
 

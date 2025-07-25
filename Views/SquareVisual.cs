@@ -27,18 +27,6 @@ namespace PhysicsEngineCore.Views {
             }
         }
 
-        public IObject GetObjectData() {
-            return this.objectData;
-        }
-
-        public void SetObjectData(IObject objectData) {
-            if(objectData is Square square) {
-                this.objectData = square;
-            }else{
-                throw new ArgumentException("無効なオブジェクトタイプが渡されました");
-            }
-        }
-
         public void Draw() {
             DrawingContext context = this.RenderOpen();
 
