@@ -45,9 +45,6 @@ namespace PhysicsEngineCore.Objects {
             get {
                 return this._id;
             }
-            set {
-                this._id = value;
-            }
         }
 
         /// <summary>

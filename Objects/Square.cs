@@ -60,13 +60,6 @@ namespace PhysicsEngineCore.Objects {
             get {
                 return _id;
             }
-            set {
-                foreach(Entity entity in this.entities) {
-                    entity.parentId = value;
-                }
-
-                this._id = value;
-            }
         }
 
         /// <summary>

@@ -369,7 +369,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したオブジェクト</returns>
         /// <exception cref="Exception">存在しないオブジェクトのとき例外</exception>
         public IObject? SpawnObject(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(15);
+            if(option.id == null) option.id = IdGenerator.CreateId(12);
 
             IObject? obj = null;
 
