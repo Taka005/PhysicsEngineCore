@@ -14,6 +14,8 @@ namespace PhysicsEngineCore {
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
+        public double scaleOriginX = 0;
+        public double scaleOriginY = 0;
         private readonly Stopwatch stopwatch = new Stopwatch();
         private TimeSpan _lastFpsUpdateTime = TimeSpan.Zero;
         private int _frameCount = 0;
@@ -77,7 +79,7 @@ namespace PhysicsEngineCore {
         /// このメソッドはUIスレッドで呼び出される必要があります
         /// </summary>
         public void Update() {
-            TransformGroup newTranslateTransform = this.CreateTranslateTransform();
+            TransformGroup newTranslateTransform = this.CreateTransformGroup();
 
             foreach(DrawingVisual visual in this.visuals) {
                 if(visual is DebugVisual) continue;
@@ -144,7 +146,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.objectVisuals.Add(obj.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTranslateTransform();
+                        newVisual.Transform = this.CreateTransformGroup();
 
                         if(newVisual is IObjectVisual objectVisual) {
                             objectVisual.Draw();
@@ -193,7 +195,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.groundVisuals.Add(ground.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTranslateTransform();
+                        newVisual.Transform = this.CreateTransformGroup();
 
                         if(newVisual is IGroundVisual groundVisual) {
                             groundVisual.Draw();
@@ -228,7 +230,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.effectVisuals.Add(effect.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTranslateTransform();
+                        newVisual.Transform = this.CreateTransformGroup();
 
                         if(newVisual is IEffectVisual effectVisual) {
                             effectVisual.Draw();
@@ -260,7 +262,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.trackingVisuals.Add(obj.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTranslateTransform();
+                        newVisual.Transform = this.CreateTransformGroup();
 
                         if(newVisual is IObjectVisual trackingVisual) {
                             trackingVisual.opacity = 0.2f;
@@ -329,13 +331,26 @@ namespace PhysicsEngineCore {
         /// オフセットとスケールを適用するTransformGroupを作成します
         /// </summary>
         /// <returns>作成されたTransformGroup</returns>
-        private TransformGroup CreateTranslateTransform() {
+        private TransformGroup CreateTransformGroup() {
             TransformGroup transformGroup = new TransformGroup();
 
+            transformGroup.Children.Add(new TranslateTransform(-this.scaleOriginX, -this.scaleOriginY));
             transformGroup.Children.Add(new ScaleTransform(this.scale,this.scale));
+            transformGroup.Children.Add(new TranslateTransform(this.scaleOriginX, this.scaleOriginY));
             transformGroup.Children.Add(new TranslateTransform(this.offsetX, this.offsetY));
 
             return transformGroup;
+        }
+
+        /// <summary>
+        /// 現在のオフセットとスケールをリセットします
+        /// </summary>
+        public void ResetTransform() {
+            this.offsetX = 0;
+            this.offsetY = 0;
+            this.scale = 1;
+            this.scaleOriginX = 0;
+            this.scaleOriginY = 0;
         }
 
         /// <summary>
