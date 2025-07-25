@@ -63,6 +63,9 @@ namespace PhysicsEngineCore {
             }
         }
         
+        /// <summary>
+        /// 現在のFPS
+        /// </summary>
         public int fps{
             get{
                 return (int)this._fps;
@@ -200,6 +203,11 @@ namespace PhysicsEngineCore {
             }
         }
 
+        /// <summary>
+        /// 物理エンジンのエフェクトデータを受け取り、描画を更新します
+        /// このメソッドはUIスレッドで呼び出される必要があります
+        /// </summary>
+        /// <param name="effects">描画する地面のエフェクト</param>
         public void DrawEffect(List<IEffect> effects) {
             HashSet<string> currentEffectIds = [.. effects.Select(o => o.trackingId)];
             List<string>? visualsToRemove = [.. this.effectVisuals.Keys.Where(id => !currentEffectIds.Contains(id))];
@@ -305,6 +313,10 @@ namespace PhysicsEngineCore {
             return null;
         }
 
+        /// <summary>
+        /// エフェクトの種類に基づいて適切なDrawingVisualを作成
+        /// </summary>
+        /// <returns></returns>
         private DrawingVisual? CreateVisualForEffect(IEffect effect) {
             if(effect is Booster booster) {
                 return new BoosterVisual(booster);

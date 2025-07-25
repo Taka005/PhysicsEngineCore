@@ -418,6 +418,12 @@ namespace PhysicsEngineCore {
             return ground;
         }
 
+        /// <summary>
+        /// エフェクトを生成します
+        /// </summary>
+        /// <param name="option"エフェクトの初期化オプション></param>
+        /// <returns>生成したエフェクト</returns>
+        /// <exception cref="Exception">存在しないエフェクトのとき例外</exception>
         public IEffect? SpawnEffect(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(15);
 
@@ -462,6 +468,10 @@ namespace PhysicsEngineCore {
             this.content.Sync();
         }
 
+        /// <summary>
+        /// エフェクトを削除します
+        /// </summary>
+        /// <param name="id">削除するエフェクトのID</param>
         public void DeSpawnEffect(string id) {
             IEffect? effect = this.GetEffect(id);
             if(effect == null) return;
@@ -489,6 +499,11 @@ namespace PhysicsEngineCore {
             return this.content.grounds.Find(obj => obj.id == id);
         }
 
+        /// <summary>
+        /// 指定したIDのエフェクトを取得します
+        /// </summary>
+        /// <param name="id">取得するエフェクトのID</param>
+        /// <returns>取得したエフェクト</returns>
         public IEffect? GetEffect(string id) {
             return this.content.effects.Find(obj => obj.id == id);
         }
@@ -629,6 +644,12 @@ namespace PhysicsEngineCore {
             return targets;
         }
 
+        /// <summary>
+        /// 指定した位置にあるエフェクトを取得します
+        /// </summary>
+        /// <param name="posX">対象のX座標</param>
+        /// <param name="posY">対象のX座標</param>
+        /// <returns>存在したエフェクトのリスト</returns>
         public List<IEffect> GetEffectsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
 

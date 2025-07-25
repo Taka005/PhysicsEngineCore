@@ -92,12 +92,13 @@ namespace PhysicsEngineCore.Objects {
         /// <param name="target">対象のオブジェクト</param>
         /// <returns>同じかどうか</returns>
         public bool Equals(IEffect target) {
-            if(target is not Line line) return false;
+            if(target is not Booster booster) return false;
 
-            return this.id == line.id &&
-                   this.color == line.color &&
-                   this.start.Equals(line.start) &&
-                   this.end.Equals(line.end);
+            return this.id == booster.id &&
+                   this.color == booster.color &&
+                   this.start.Equals(booster.start) &&
+                   this.end.Equals(booster.end) &&
+                   this.velocity.Equals(booster.velocity);
         }
 
         /// <summary>
