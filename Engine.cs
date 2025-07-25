@@ -319,7 +319,7 @@ namespace PhysicsEngineCore {
 
             foreach(Entity entity in entities) {
                 foreach(IEffect effect in this.content.effects) {
-                    effect.SetEffect(entity);
+                    effect.SetEffect(entity,this.deltaTime);
                 }
 
                 this.UpdatePosition(entity);

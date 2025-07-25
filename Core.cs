@@ -46,7 +46,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// 処理する間隔
         /// </summary>
-        protected double deltaTime {
+        public double deltaTime {
             get {
                 return 1 / (double)this.pps;
             }

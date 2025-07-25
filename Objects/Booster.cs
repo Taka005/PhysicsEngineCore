@@ -65,7 +65,8 @@ namespace PhysicsEngineCore.Objects {
         /// ブースターの効果をエンティティーに適用します
         /// </summary>
         /// <param name="entity">適用するエンティティー</param>
-        public void SetEffect(Entity entity) {
+        /// <param name="deltaTime">時間の経過量</param>
+        public void SetEffect(Entity entity,double deltaTime) {
             if(entity.mass == 0) return;
 
             Vector2 difference = entity.position - (this.start + this.end) / 2;
@@ -75,7 +76,7 @@ namespace PhysicsEngineCore.Objects {
                 Math.Abs(difference.Y) >= Math.Abs(this.start.Y - this.end.Y)/2
             ) return;
 
-            entity.velocity += this.velocity;
+            entity.velocity += this.velocity*deltaTime;
         }
 
         /// <summary>
