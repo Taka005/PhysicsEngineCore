@@ -16,21 +16,23 @@ namespace PhysicsEngineCore.Views {
             double viewportWidth = 800;
             double viewportHeight = 800;
 
-            double worldStartX = -offsetX / scale;
-            double worldStartY = -offsetY / scale;
-            double worldEndX = worldStartX + viewportWidth / scale;
-            double worldEndY = worldStartY + viewportHeight / scale;
+            double mapStartX = -offsetX / scale;
+            double mapStartY = -offsetY / scale;
+            double mapEndX = mapStartX + viewportWidth / scale;
+            double mapEndY = mapStartY + viewportHeight / scale;
 
-            double startX = Math.Floor(worldStartX / gridInterval) * gridInterval;
-            double startY = Math.Floor(worldStartY / gridInterval) * gridInterval;
+            double startX = Math.Floor(mapStartX / gridInterval) * gridInterval;
+            double startY = Math.Floor(mapStartY / gridInterval) * gridInterval;
 
-            for (double posX = startX; posX <= worldEndX; posX += gridInterval) {
+            for (double posX = startX; posX <= mapEndX; posX += gridInterval) {
                 double screenX = (posX + offsetX / scale) * scale;
+
                 context.DrawLine(this.pen, new Point(screenX, 0), new Point(screenX, viewportHeight));
             }
 
-            for (double posY = startY; posY <= worldEndY; posY += gridInterval) {
+            for (double posY = startY; posY <= mapEndY; posY += gridInterval) {
                 double screenY = (posY + offsetY / scale) * scale;
+
                 context.DrawLine(this.pen, new Point(0, screenY), new Point(viewportWidth, screenY));
             }
 
