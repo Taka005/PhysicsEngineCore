@@ -14,8 +14,6 @@ namespace PhysicsEngineCore {
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
-        public double scaleOriginX = 0;
-        public double scaleOriginY = 0;
         private readonly Stopwatch stopwatch = new Stopwatch();
         private TimeSpan _lastFpsUpdateTime = TimeSpan.Zero;
         private int _frameCount = 0;
@@ -334,9 +332,7 @@ namespace PhysicsEngineCore {
         private TransformGroup CreateTransformGroup() {
             TransformGroup transformGroup = new TransformGroup();
 
-            transformGroup.Children.Add(new TranslateTransform(-this.scaleOriginX, -this.scaleOriginY));
             transformGroup.Children.Add(new ScaleTransform(this.scale,this.scale));
-            transformGroup.Children.Add(new TranslateTransform(this.scaleOriginX, this.scaleOriginY));
             transformGroup.Children.Add(new TranslateTransform(this.offsetX, this.offsetY));
 
             return transformGroup;
@@ -349,8 +345,6 @@ namespace PhysicsEngineCore {
             this.offsetX = 0;
             this.offsetY = 0;
             this.scale = 1;
-            this.scaleOriginX = 0;
-            this.scaleOriginY = 0;
         }
 
         /// <summary>
