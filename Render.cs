@@ -9,9 +9,9 @@ namespace PhysicsEngineCore {
     /// 物理エンジンのレンダークラス
     /// </summary>
     public class Render : FrameworkElement {
-        public bool _isDebugMode = false;
+        public bool _isDisplayVector = false;
         public bool _isDevMode = false;
-        public bool _isDisplayGrid = true;
+        public bool _isDisplayGrid = false;
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
@@ -42,12 +42,12 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// デバッグモードの切り替え
         /// </summary>
-        public bool isDebugMode {
+        public bool isDisplayVector {
             get {
-                return this._isDebugMode;
+                return this._isDisplayVector;
             }
             set {
-                this._isDebugMode = value;
+                this._isDisplayVector = value;
 
                 this.vectorVisual.Clear();
             }
@@ -76,6 +76,8 @@ namespace PhysicsEngineCore {
             }
             set {
                 this._isDisplayGrid = value;
+
+                this.gridVisual.Clear();
             }
         }
 
@@ -177,7 +179,7 @@ namespace PhysicsEngineCore {
                 }
             }
 
-            if(this.isDebugMode) {
+            if(this.isDisplayVector) {
                 this.vectorVisual.Draw(vectors);
             }
         }
