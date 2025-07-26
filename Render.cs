@@ -11,9 +11,11 @@ namespace PhysicsEngineCore {
     public class Render : FrameworkElement {
         public bool _isDebugMode = false;
         public bool _isDevMode = false;
+        public bool _isDisplayGrid = true;
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
+        public double gridInterval = 50;
         private readonly Stopwatch stopwatch = new Stopwatch();
         private TimeSpan _lastFpsUpdateTime = TimeSpan.Zero;
         private int _frameCount = 0;
@@ -25,9 +27,11 @@ namespace PhysicsEngineCore {
         private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
         private readonly VectorVisual vectorVisual = new VectorVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
+        private readonly GridVisual gridVisual = new GridVisual();
 
         public Render() {
             this.visuals = new VisualCollection(this) {
+                this.gridVisual,
                 this.vectorVisual,
                 this.debugVisual
             };
@@ -62,7 +66,19 @@ namespace PhysicsEngineCore {
                 this.debugVisual.Clear();
             }
         }
-        
+
+        /// <summary>
+        /// グリッドの表示切り替え
+        /// </summary>
+        public bool isDisplayGrid {
+            get {
+                return this._isDisplayGrid;
+            }
+            set {
+                this._isDisplayGrid = value;
+            }
+        }
+
         /// <summary>
         /// 現在のFPS
         /// </summary>
@@ -80,7 +96,7 @@ namespace PhysicsEngineCore {
             TransformGroup newTranslateTransform = this.CreateTransformGroup();
 
             foreach(DrawingVisual visual in this.visuals) {
-                if(visual is DebugVisual) continue;
+                if(visual is DebugVisual || visual is GridVisual) continue;
 
                 visual.Transform = newTranslateTransform;
             }
@@ -93,6 +109,14 @@ namespace PhysicsEngineCore {
                 this._fps = _frameCount / (currentTime - this._lastFpsUpdateTime).TotalSeconds;
                 this._lastFpsUpdateTime = currentTime;
                 this._frameCount = 0;
+            }
+
+            if(this.isDevMode) {
+                this.debugVisual.Draw(this.fps);
+            }
+
+            if(this.isDisplayGrid) {
+                this.gridVisual.Draw(this.gridInterval,this.scale,this.offsetX,this.offsetY);
             }
         }
 
@@ -155,10 +179,6 @@ namespace PhysicsEngineCore {
 
             if(this.isDebugMode) {
                 this.vectorVisual.Draw(vectors);
-            }
-
-            if(this.isDevMode) {
-                this.debugVisual.Draw(this.fps);
             }
         }
 
