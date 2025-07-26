@@ -10,8 +10,8 @@ namespace PhysicsEngineCore {
     /// </summary>
     public class Render : FrameworkElement {
         public bool _isDisplayVector = false;
-        public bool _isDevMode = false;
         public bool _isDisplayGrid = false;
+        public bool _isDebugMode = false;
         public double offsetX = 0;
         public double offsetY = 0;
         public double scale = 1;
@@ -54,20 +54,6 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
-        /// 開発者モードの切り替え
-        /// </summary>
-        public bool isDevMode {
-            get{
-                return this._isDevMode;
-            }
-            set {
-                this._isDevMode = value;
-
-                this.debugVisual.Clear();
-            }
-        }
-
-        /// <summary>
         /// グリッドの表示切り替え
         /// </summary>
         public bool isDisplayGrid {
@@ -78,6 +64,20 @@ namespace PhysicsEngineCore {
                 this._isDisplayGrid = value;
 
                 this.gridVisual.Clear();
+            }
+        }
+
+        /// <summary>
+        /// デバッグモードの切り替え
+        /// </summary>
+        public bool isDebugMode {
+            get{
+                return this._isDebugMode;
+            }
+            set {
+                this._isDebugMode = value;
+
+                this.debugVisual.Clear();
             }
         }
 
@@ -113,7 +113,7 @@ namespace PhysicsEngineCore {
                 this._frameCount = 0;
             }
 
-            if(this.isDevMode) {
+            if(this.isDebugMode) {
                 this.debugVisual.Draw(this.fps);
             }
 
