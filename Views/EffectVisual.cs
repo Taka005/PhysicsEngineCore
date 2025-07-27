@@ -2,12 +2,12 @@
 using PhysicsEngineCore.Views.Interfaces;
 
 namespace PhysicsEngineCore.Views {
-    public class GroundVisual : DrawingVisual {
+    public class EffectVisual : DrawingVisual {
 
-        public void Draw(List<IGroundVisual> visuals) {
+        public void Draw(List<IEffectVisual> visuals) {
             DrawingContext context = this.RenderOpen();
 
-            foreach(IGroundVisual visual in visuals) {
+            foreach(IEffectVisual visual in visuals) {
                 visual.Draw(context);
             }
 

@@ -3,6 +3,7 @@ using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Views;
 using PhysicsEngineCore.Views.Interfaces;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 
@@ -27,6 +28,10 @@ namespace PhysicsEngineCore {
         private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
         private readonly Dictionary<string, DrawingVisual> effectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
+        private readonly ObjectVisual objectVisual = new ObjectVisual();
+        private readonly ObjectVisual trackingVisual = new ObjectVisual();
+        private readonly GroundVisual groundVisual = new GroundVisual();
+        private readonly EffectVisual effectVisual = new EffectVisual();
         private readonly VectorVisual vectorVisual = new VectorVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
         private readonly GridVisual gridVisual = new GridVisual();
@@ -35,7 +40,11 @@ namespace PhysicsEngineCore {
             this.visuals = new VisualCollection(this) {
                 this.gridVisual,
                 this.vectorVisual,
-                this.debugVisual
+                this.debugVisual,
+                this.objectVisual,
+                this.trackingVisual,
+                this.effectVisual,
+                this.groundVisual
             };
 
             this.stopwatch.Start();
@@ -135,32 +144,16 @@ namespace PhysicsEngineCore {
             List<VectorData> vectors = [];
 
             foreach(string id in visualsToRemove) {
-                this.visuals.Remove(this.objectVisuals[id]);
                 this.objectVisuals.Remove(id);
             }
+
+            List<IObjectVisual> objectVisuals = [.. objects.Where(obj => this.objectVisuals.ContainsKey(obj.trackingId)).Select(obj => this.objectVisuals[obj.trackingId]).OfType<IObjectVisual>()];
+
+            this.objectVisual.Draw(objectVisuals);
 
             foreach(IObject obj in objects) {
                 if(this.objectVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
                     if(visual is IObjectVisual objectVisual) {
-                        //IObject oldObj = objectVisual.GetObjectData();
-
-                        //if(!obj.Equals(oldObj)){
-                        //    if(!obj.position.Equals(oldObj.position)){
-                        //        visual.Offset = new Vector(obj.position.X,obj.position.Y);
-
-                        //        if(this.isDebugMode) {
-                        //            vectors.Add(new VectorData(
-                        //                obj.position,
-                        //                obj.velocity
-                        //            ));
-                        //        }
-                        //    }else{
-                                objectVisual.Draw();
-                        //    }
-
-                        //    objectVisual.SetObjectData(obj.Clone());
-                        //}
-
                         vectors.Add(new VectorData(
                             obj.position,
                             obj.velocity
@@ -171,12 +164,6 @@ namespace PhysicsEngineCore {
 
                     if(newVisual != null) {
                         this.objectVisuals.Add(obj.trackingId, newVisual);
-                        this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTransformGroup();
-
-                        if(newVisual is IObjectVisual objectVisual) {
-                            objectVisual.Draw();
-                        }
                     }
                 }
             }
@@ -192,36 +179,23 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="grounds">描画する地面のリスト</param>
         public void DrawGround(List<IGround> grounds) {
-            HashSet<string> currentGrounds = [.. grounds.Select(o => o.trackingId)];
+            HashSet<string> currentGrounds = [.. grounds.Select(ground => ground.trackingId)];
             List<string>? visualsToRemove = [.. this.groundVisuals.Keys.Where(id => !currentGrounds.Contains(id))];
 
             foreach(string id in visualsToRemove) {
-                this.visuals.Remove(this.groundVisuals[id]);
                 this.groundVisuals.Remove(id);
             }
+            
+            List<IGroundVisual> groundVisuals = [.. grounds.Where(ground => this.groundVisuals.ContainsKey(ground.trackingId)).Select(ground=> this.groundVisuals[ground.trackingId]).OfType<IGroundVisual>()];
+
+            this.groundVisual.Draw(groundVisuals);
 
             foreach(IGround ground in grounds) {
-                if(this.groundVisuals.TryGetValue(ground.trackingId, out DrawingVisual? visual)) {
-                    if(visual is IGroundVisual groundVisual) {
-                        //IGround oldGround = groundVisual.GetGroundData();
-
-                        //if(!ground.Equals(oldGround)) {
-                            groundVisual.Draw();
-
-                        //    groundVisual.SetGroundData(ground.Clone());
-                        //}
-                    }
-                } else {
+                if(!this.groundVisuals.TryGetValue(ground.trackingId, out DrawingVisual? visual)) {
                     DrawingVisual? newVisual = this.CreateGroundVisual(ground);
 
                     if(newVisual != null) {
                         this.groundVisuals.Add(ground.trackingId, newVisual);
-                        this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTransformGroup();
-
-                        if(newVisual is IGroundVisual groundVisual) {
-                            groundVisual.Draw();
-                        }
                     }
                 }
             }
@@ -233,30 +207,23 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="effects">描画する地面のエフェクト</param>
         public void DrawEffect(List<IEffect> effects) {
-            HashSet<string> currentEffectIds = [.. effects.Select(o => o.trackingId)];
+            HashSet<string> currentEffectIds = [.. effects.Select(obj => obj.trackingId)];
             List<string>? visualsToRemove = [.. this.effectVisuals.Keys.Where(id => !currentEffectIds.Contains(id))];
 
             foreach(string id in visualsToRemove) {
-                this.visuals.Remove(this.effectVisuals[id]);
                 this.effectVisuals.Remove(id);
             }
 
+            List<IEffectVisual> effectVisuals = [.. effects.Where(effect => this.effectVisuals.ContainsKey(effect.trackingId)).Select(effect=> this.effectVisuals[effect.trackingId]).OfType<IEffectVisual>()];
+
+            this.effectVisual.Draw(effectVisuals);
+
             foreach(IEffect effect in effects) {
-                if(this.effectVisuals.TryGetValue(effect.trackingId, out DrawingVisual? visual)) {
-                    if(visual is IEffectVisual effectVisual) {
-                        effectVisual.Draw();
-                    }
-                } else {
+                if(!this.effectVisuals.TryGetValue(effect.trackingId, out DrawingVisual? visual)) {
                     DrawingVisual? newVisual = this.CreateEffectVisual(effect);
 
                     if(newVisual != null) {
                         this.effectVisuals.Add(effect.trackingId, newVisual);
-                        this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTransformGroup();
-
-                        if(newVisual is IEffectVisual effectVisual) {
-                            effectVisual.Draw();
-                        }
                     }
                 }
             }
@@ -288,7 +255,7 @@ namespace PhysicsEngineCore {
 
                         if(newVisual is IObjectVisual trackingVisual) {
                             trackingVisual.opacity = 0.2f;
-                            trackingVisual.Draw();
+                            trackingVisual.DrawOwn();
                         }
                     }
                 }
@@ -302,7 +269,6 @@ namespace PhysicsEngineCore {
             List<string>? visualsToRemove = [.. this.trackingVisuals.Keys];
 
             foreach(string id in visualsToRemove) {
-                this.visuals.Remove(this.trackingVisuals[id]);
                 this.trackingVisuals.Remove(id);
             }
         }

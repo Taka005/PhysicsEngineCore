@@ -1,7 +1,11 @@
-﻿namespace PhysicsEngineCore.Views.Interfaces {
+﻿using System.Windows.Media;
+
+namespace PhysicsEngineCore.Views.Interfaces {
     public interface IObjectVisual {
         float opacity { get; set; }
 
-        void Draw();
+        void DrawOwn();
+
+        void Draw(DrawingContext context);
     }
 }

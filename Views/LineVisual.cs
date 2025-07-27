@@ -16,9 +16,7 @@ namespace PhysicsEngineCore.Views {
             this.pen = new Pen(this.brush, 1);
         }
 
-        public void Draw() {
-            DrawingContext context = this.RenderOpen();
-
+        public void Draw(DrawingContext context) {
             this.brush = ParseColor.StringToBrush(this.groundData.color);
             this.pen = new Pen(this.brush, this.groundData.width);
 
@@ -43,8 +41,6 @@ namespace PhysicsEngineCore.Views {
                 this.groundData.width / 2,
                 this.groundData.width / 2
             );
-
-            context.Close();
         }
     }
 }

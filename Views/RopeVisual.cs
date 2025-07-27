@@ -28,9 +28,15 @@ namespace PhysicsEngineCore.Views {
             }
         }
 
-        public void Draw() {
+        public void DrawOwn() {
             DrawingContext context = this.RenderOpen();
 
+            this.Draw(context);
+
+            context.Close();
+        }
+
+        public void Draw(DrawingContext context) {
             this.brush = ParseColor.StringToBrush(this.objectData.color);
            
             this.brush.Opacity = this.opacity;
@@ -76,8 +82,6 @@ namespace PhysicsEngineCore.Views {
 
                 target = entity;
             });
-
-            context.Close();
         }
     }
 }
