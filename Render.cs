@@ -11,12 +11,12 @@ namespace PhysicsEngineCore {
     /// 物理エンジンのレンダークラス
     /// </summary>
     public class Render : FrameworkElement {
-        public bool _isDisplayVector = false;
-        public bool _isDisplayGrid = false;
-        public bool _isDebugMode = false;
-        public double _offsetX = 0;
-        public double _offsetY = 0;
-        public double _scale = 1;
+        private bool _isDisplayVector = false;
+        private bool _isDisplayGrid = false;
+        private bool _isDebugMode = false;
+        private double _offsetX = 0;
+        private double _offsetY = 0;
+        private double _scale = 1;
         public double gridInterval = 50;
         private readonly TransformGroup transformGroup;
         private readonly TranslateTransform translateTransform;
