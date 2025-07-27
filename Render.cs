@@ -302,7 +302,7 @@ namespace PhysicsEngineCore {
 
                     if(newVisual != null) {
                         this.trackingVisuals.Add(obj.trackingId, newVisual);
-                        this.visuals.Insert(0, newVisual);
+                        this.visuals.Add(newVisual);
                         newVisual.Transform = this.transformGroup;
                         newVisual.CacheMode = new BitmapCache();
 
