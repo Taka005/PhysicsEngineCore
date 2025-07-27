@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Windows.Shapes;
+using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 

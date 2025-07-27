@@ -1,5 +1,7 @@
 ﻿using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Views;
+using PhysicsEngineCore.Views.Interfaces;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;

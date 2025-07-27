@@ -1,6 +1,6 @@
 ﻿using PhysicsEngineCore.Utils;
 
-namespace PhysicsEngineCore.Objects {
+namespace PhysicsEngineCore.Objects.Interfaces {
     public interface IGround {
         string id { get; }
         string trackingId { get; }

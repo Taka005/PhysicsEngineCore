@@ -1,6 +1,6 @@
 ﻿using PhysicsEngineCore.Utils;
 
-namespace PhysicsEngineCore.Objects {
+namespace PhysicsEngineCore.Objects.Interfaces {
     public interface IBaseObject {
         List<Entity> entities { get; }
         bool isStop { get; }

@@ -1,4 +1,4 @@
-﻿namespace PhysicsEngineCore.Objects {
+﻿namespace PhysicsEngineCore.Objects.Interfaces {
     public interface IObject : IBaseObject {
         string id { get; }
         string trackingId { get; }

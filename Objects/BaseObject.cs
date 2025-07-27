@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Options;
+﻿using PhysicsEngineCore.Objects.Interfaces;
+using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Objects {

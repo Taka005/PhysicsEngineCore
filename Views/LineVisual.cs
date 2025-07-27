@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
+using PhysicsEngineCore.Views.Interfaces;
 
 namespace PhysicsEngineCore.Views {
     class LineVisual : DrawingVisual, IGroundVisual {

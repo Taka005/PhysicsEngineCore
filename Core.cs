@@ -1,5 +1,6 @@
 ﻿using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Objects.Interfaces;
 
 namespace PhysicsEngineCore {
     /// <summary>

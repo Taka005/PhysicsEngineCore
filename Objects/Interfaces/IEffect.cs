@@ -1,4 +1,4 @@
-﻿namespace PhysicsEngineCore.Objects {
+﻿namespace PhysicsEngineCore.Objects.Interfaces {
     public interface IEffect {
         string id { get; }
         string trackingId { get; }
