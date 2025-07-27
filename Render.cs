@@ -195,6 +195,7 @@ namespace PhysicsEngineCore {
                     DrawingVisual? newVisual = this.CreateGroundVisual(ground);
 
                     if(newVisual != null) {
+                        newVisual.CacheMode = new BitmapCache();
                         this.groundVisuals.Add(ground.trackingId, newVisual);
                     }
                 }
@@ -223,6 +224,7 @@ namespace PhysicsEngineCore {
                     DrawingVisual? newVisual = this.CreateEffectVisual(effect);
 
                     if(newVisual != null) {
+                        newVisual.CacheMode = new BitmapCache();
                         this.effectVisuals.Add(effect.trackingId, newVisual);
                     }
                 }
@@ -252,6 +254,7 @@ namespace PhysicsEngineCore {
                         this.trackingVisuals.Add(obj.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
                         newVisual.Transform = this.CreateTransformGroup();
+                        newVisual.CacheMode = new BitmapCache();
 
                         if(newVisual is IObjectVisual trackingVisual) {
                             trackingVisual.opacity = 0.2f;
