@@ -28,7 +28,6 @@ namespace PhysicsEngineCore {
         private readonly Dictionary<string, DrawingVisual> effectVisuals = [];
         private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
         private readonly ObjectVisual objectVisual = new ObjectVisual();
-        private readonly ObjectVisual trackingVisual = new ObjectVisual();
         private readonly GroundVisual groundVisual = new GroundVisual();
         private readonly EffectVisual effectVisual = new EffectVisual();
         private readonly VectorVisual vectorVisual = new VectorVisual();
@@ -38,12 +37,11 @@ namespace PhysicsEngineCore {
         public Render() {
             this.visuals = new VisualCollection(this) {
                 this.gridVisual,
-                this.vectorVisual,
-                this.debugVisual,
-                this.objectVisual,
-                this.trackingVisual,
+                this.groundVisual,
                 this.effectVisual,
-                this.groundVisual
+                this.objectVisual,
+                this.vectorVisual,
+                this.debugVisual
             };
 
             this.stopwatch.Start();
