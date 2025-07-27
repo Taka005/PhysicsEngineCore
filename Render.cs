@@ -3,7 +3,6 @@ using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Views;
 using PhysicsEngineCore.Views.Interfaces;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 
@@ -272,6 +271,7 @@ namespace PhysicsEngineCore {
             List<string>? visualsToRemove = [.. this.trackingVisuals.Keys];
 
             foreach(string id in visualsToRemove) {
+                this.visuals.Remove(this.trackingVisuals[id]);
                 this.trackingVisuals.Remove(id);
             }
         }

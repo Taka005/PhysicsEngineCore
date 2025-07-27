@@ -213,7 +213,7 @@ namespace PhysicsEngineCore {
             if(force) {
                 this.content.RemoveAllGrounds();
                 this.content.RemoveAllEffects();
-                this.ClearTrack(true);
+                this.ClearTrack();
             }
 
             this.content.Sync();
@@ -222,14 +222,10 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキングを全て削除します
         /// </summary>
-        public void ClearTrack(bool isIncludeDraw = false) {
+        public void ClearTrack() {
             lock(this.tracks) {
                 this.trackingCount = 0;
                 this.tracks.Clear();
-
-                if(isIncludeDraw) {
-                    this.render.ClearTracking();
-                }
             }
         }
 
