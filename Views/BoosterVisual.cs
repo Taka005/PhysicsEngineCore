@@ -20,13 +20,12 @@ namespace PhysicsEngineCore.Views {
             this.brush = ParseColor.StringToBrush(this.effectData.color);
             this.pen = new Pen(this.brush, 3);
 
-            //バグあり
-            context.DrawRectangle(null,this.pen,new Rect(
-                this.effectData.start.X,
-                this.effectData.start.Y,
-                this.effectData.end.X - this.effectData.start.X,
-                this.effectData.end.Y - this.effectData.start.Y
-            ));
+            double minX = Math.Min(this.effectData.start.X, this.effectData.end.X);
+            double minY = Math.Min(this.effectData.start.Y, this.effectData.end.Y);
+            double maxX = Math.Max(this.effectData.start.X, this.effectData.end.X);
+            double maxY = Math.Max(this.effectData.start.Y, this.effectData.end.Y);
+
+            context.DrawRectangle(null, this.pen, new Rect(minX, minY, maxX - minX, maxY - minY));
         }
     }
 }
