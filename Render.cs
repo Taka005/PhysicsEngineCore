@@ -14,10 +14,13 @@ namespace PhysicsEngineCore {
         public bool _isDisplayVector = false;
         public bool _isDisplayGrid = false;
         public bool _isDebugMode = false;
-        public double offsetX = 0;
-        public double offsetY = 0;
-        public double scale = 1;
+        public double _offsetX = 0;
+        public double _offsetY = 0;
+        public double _scale = 1;
         public double gridInterval = 50;
+        private readonly TransformGroup transformGroup;
+        private readonly TranslateTransform translateTransform;
+        private readonly ScaleTransform scaleTransform;
         private readonly Stopwatch stopwatch = new Stopwatch();
         private TimeSpan _lastFpsUpdateTime = TimeSpan.Zero;
         private int _frameCount = 0;
@@ -44,7 +47,59 @@ namespace PhysicsEngineCore {
                 this.debugVisual
             };
 
+            this.transformGroup = new TransformGroup();
+            this.translateTransform = new TranslateTransform(this.offsetX, this.offsetY);
+            this.scaleTransform = new ScaleTransform(this.scale, this.scale);
+
+            transformGroup.Children.Add(this.scaleTransform);
+            transformGroup.Children.Add(this.translateTransform);
+
             this.stopwatch.Start();
+        }
+
+        /// <summary>
+        /// オフセットX座標
+        /// </summary>
+        public double offsetX {
+            get {
+                return this._offsetX;
+            }
+            set {
+                this._offsetX = value;
+
+                this.translateTransform.X = value;
+            }
+        }
+
+        /// <summary>
+        /// オフセットY座標
+        /// </summary>
+        public double offsetY {
+            get {
+                return this._offsetY;
+            }
+            set {
+                this._offsetY = value;
+
+                this.translateTransform.Y = value;
+            }
+        }
+
+        /// <summary>
+        /// スケール値
+        /// </summary>
+        public double scale {
+            get {
+                return this._scale;
+            }
+            set {
+                if(value <= 0) throw new ArgumentOutOfRangeException(nameof(value), "scaleを0以下には設定できません");
+
+                this._scale = value;
+
+                this.scaleTransform.ScaleX = value;
+                this.scaleTransform.ScaleY = value;
+            }
         }
 
         /// <summary>
@@ -103,12 +158,10 @@ namespace PhysicsEngineCore {
         /// このメソッドはUIスレッドで呼び出される必要があります
         /// </summary>
         public void Update() {
-            TransformGroup newTranslateTransform = this.CreateTransformGroup();
-
             foreach(DrawingVisual visual in this.visuals) {
                 if(visual is DebugVisual || visual is GridVisual) continue;
 
-                visual.Transform = newTranslateTransform;
+                visual.Transform = this.transformGroup;
             }
 
             TimeSpan currentTime = this.stopwatch.Elapsed;
@@ -250,7 +303,7 @@ namespace PhysicsEngineCore {
                     if(newVisual != null) {
                         this.trackingVisuals.Add(obj.trackingId, newVisual);
                         this.visuals.Insert(0, newVisual);
-                        newVisual.Transform = this.CreateTransformGroup();
+                        newVisual.Transform = this.transformGroup;
                         newVisual.CacheMode = new BitmapCache();
 
                         if(newVisual is IObjectVisual trackingVisual) {
@@ -314,19 +367,6 @@ namespace PhysicsEngineCore {
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// オフセットとスケールを適用するTransformGroupを作成します
-        /// </summary>
-        /// <returns>作成されたTransformGroup</returns>
-        private TransformGroup CreateTransformGroup() {
-            TransformGroup transformGroup = new TransformGroup();
-
-            transformGroup.Children.Add(new ScaleTransform(this.scale,this.scale));
-            transformGroup.Children.Add(new TranslateTransform(this.offsetX, this.offsetY));
-
-            return transformGroup;
         }
 
         /// <summary>
