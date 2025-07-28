@@ -33,7 +33,7 @@ namespace PhysicsEngineCore.Views {
             ArcSegment arcSegment = new ArcSegment {
                 Point = new Point(this.groundData.end.X, this.groundData.end.Y),
                 Size = new Size(this.groundData.radius, this.groundData.radius),
-                IsLargeArc = Math.Abs(endAngle - startAngle) > Math.PI,
+                IsLargeArc = IsMiddleOnLargeArc(startAngle, endAngle, midAngle),
                 SweepDirection = clockwise ? SweepDirection.Clockwise : SweepDirection.Counterclockwise
             };
 
@@ -44,6 +44,24 @@ namespace PhysicsEngineCore.Views {
 
             context.DrawEllipse(this.brush, null, new Point(this.groundData.start.X, this.groundData.start.Y), this.groundData.width / 2, this.groundData.width / 2);
             context.DrawEllipse(this.brush, null, new Point(this.groundData.end.X, this.groundData.end.Y), this.groundData.width / 2, this.groundData.width / 2);
+        }
+
+        private static bool IsMiddleOnLargeArc(double startAngle, double endAngle, double midAngle){
+            double diff = Math.Abs(endAngle - startAngle);
+
+            double clockwiseAngleDiff = endAngle - startAngle;
+            if(clockwiseAngleDiff < 0) clockwiseAngleDiff += 2 * Math.PI;
+
+            double counterClockwiseAngleDiff = startAngle - endAngle;
+            if (counterClockwiseAngleDiff < 0) counterClockwiseAngleDiff += 2 * Math.PI;
+
+            bool midInClockwiseArc = Curve.IsAngleBetween(midAngle, startAngle, endAngle, true);
+            bool midInCounterClockwiseArc = Curve.IsAngleBetween(midAngle, startAngle, endAngle, false);
+
+            if (midInClockwiseArc && clockwiseAngleDiff > Math.PI) return true;
+            if (midInCounterClockwiseArc && counterClockwiseAngleDiff > Math.PI) return true;
+
+            return false;
         }
     }
 }

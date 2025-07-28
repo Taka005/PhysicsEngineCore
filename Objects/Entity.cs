@@ -79,10 +79,11 @@ namespace PhysicsEngineCore.Objects {
 
         /// <summary>
         /// エンティティーが静止しているかを判定します
+        /// これは厳密比較ではありません
         /// </summary>
         public bool isStop {
             get {
-                return position.Equals(previousPosition);
+                return position.NearlyEquals(previousPosition);
             }
         }
 
