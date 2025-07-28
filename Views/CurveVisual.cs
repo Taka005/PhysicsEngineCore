@@ -23,52 +23,27 @@ namespace PhysicsEngineCore.Views {
             double startAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.start.Y - this.groundData.center.Y, this.groundData.start.X - this.groundData.center.X));
             double endAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.end.Y - this.groundData.center.Y, this.groundData.end.X - this.groundData.center.X));
             double midAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.middle.Y - this.groundData.center.Y, this.groundData.middle.X - this.groundData.center.X));
-            bool clockwise = (startAngle > endAngle) ?
-                (midAngle > startAngle || midAngle < endAngle) :
-                (midAngle > startAngle && midAngle < endAngle);
+            bool clockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
 
-            bool isLargeArc = clockwise ?
-                (endAngle <= startAngle) || (Math.Abs(endAngle - startAngle) > Math.PI) :
-                (endAngle >= startAngle) || (Math.Abs(endAngle - startAngle) > Math.PI);
+            PathGeometry pathGeometry = new PathGeometry();
+            PathFigure pathFigure = new PathFigure {
+                StartPoint = new Point(this.groundData.start.X, this.groundData.start.Y)
+            };
 
-            StreamGeometry arcGeometry = new StreamGeometry();
-            StreamGeometryContext sgc = arcGeometry.Open();
+            ArcSegment arcSegment = new ArcSegment {
+                Point = new Point(this.groundData.end.X, this.groundData.end.Y),
+                Size = new Size(this.groundData.radius, this.groundData.radius),
+                IsLargeArc = Math.Abs(endAngle - startAngle) > Math.PI,
+                SweepDirection = clockwise ? SweepDirection.Clockwise : SweepDirection.Counterclockwise
+            };
 
-            sgc.BeginFigure(
-                new Point(this.groundData.center.X + this.groundData.radius * Math.Cos(startAngle), this.groundData.center.Y + this.groundData.radius * Math.Sin(startAngle)),
-                false,
-                false
-            );
+            pathFigure.Segments.Add(arcSegment);
+            pathGeometry.Figures.Add(pathFigure);
 
-            sgc.ArcTo(
-                new Point(this.groundData.center.X + this.groundData.radius * Math.Cos(endAngle), this.groundData.center.Y + this.groundData.radius * Math.Sin(endAngle)),
-                new Size(this.groundData.radius, this.groundData.radius),
-                0,
-                isLargeArc,
-                clockwise ? SweepDirection.Clockwise : SweepDirection.Counterclockwise,
-                true,
-                false
-            );
+            context.DrawGeometry(null, this.pen, pathGeometry);
 
-            context.DrawGeometry(null, this.pen, arcGeometry);
-
-            context.DrawEllipse(
-                brush,
-                null,
-                new Point(this.groundData.start.X, this.groundData.start.Y),
-                this.groundData.width / 2,
-                this.groundData.width / 2
-            );
-
-            context.DrawEllipse(
-                brush,
-                null,
-                new Point(this.groundData.end.X, this.groundData.end.Y),
-                this.groundData.width / 2,
-                this.groundData.width / 2
-            );
-
-            sgc.Close();
+            context.DrawEllipse(this.brush, null, new Point(this.groundData.start.X, this.groundData.start.Y), this.groundData.width / 2, this.groundData.width / 2);
+            context.DrawEllipse(this.brush, null, new Point(this.groundData.end.X, this.groundData.end.Y), this.groundData.width / 2, this.groundData.width / 2);
         }
     }
 }
