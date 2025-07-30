@@ -31,16 +31,7 @@ namespace PhysicsEngineCore.Objects {
             this.end = new Vector2(option.endX, option.endY);
             this._width = CheckWidthValue(option.width);
 
-            double slope1 = (option.middleX - option.startX) / (option.startY - option.middleY);
-            double slope2 = (option.endX - option.middleX) / (option.middleY - option.endY);
-            double equat1 = (option.startY + option.middleY) / 2 - slope1 * ((option.startX + option.middleX) / 2);
-            double equat2 = (option.middleY + option.endY) / 2 - slope2 * ((option.middleX + option.endX) / 2);
-
-            double centerX = (equat2 - equat1) / (slope1 - slope2);
-            double centerY = slope1 * centerX + equat1;
-
-            this.center = new Vector2(centerX, centerY);
-            this.radius = Vector2.Distance(this.start, this.center);
+            UpdateCenter();
         }
 
         /// <summary>
@@ -136,6 +127,22 @@ namespace PhysicsEngineCore.Objects {
                 endY = this.end.Y,
                 width = this.width
             };
+        }
+
+
+        /// <summary>
+        /// 曲線の中心を計算して更新します
+        /// </summary>
+        public void UpdateCenter() {
+            double slope1 = (this.middle.X - this.start.X) / (this.start.Y - this.middle.Y);
+            double slope2 = (this.end.X - this.middle.X) / (this.middle.Y - this.end.Y);
+            double equat1 = (this.start.Y + this.middle.Y) / 2 - slope1 * ((this.start.X + this.middle.X) / 2);
+            double equat2 = (this.middle.Y + this.end.Y) / 2 - slope2 * ((this.middle.X + this.end.X) / 2);
+            double centerX = (equat2 - equat1) / (slope1 - slope2);
+            double centerY = slope1 * centerX + equat1;
+
+            this.center = new Vector2(centerX, centerY);
+            this.radius = Vector2.Distance(this.start, this.center);
         }
 
 
