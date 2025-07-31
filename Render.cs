@@ -1,5 +1,6 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Objects.Interfaces;
+using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Views;
 using PhysicsEngineCore.Views.Interfaces;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace PhysicsEngineCore {
         private double _offsetX = 0;
         private double _offsetY = 0;
         private double _scale = 1;
-        public double gridInterval = 50;
+        private double _gridInterval = 50;
         private readonly TransformGroup transformGroup;
         private readonly TranslateTransform translateTransform;
         private readonly ScaleTransform scaleTransform;
@@ -36,6 +37,7 @@ namespace PhysicsEngineCore {
         private readonly VectorVisual vectorVisual = new VectorVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
         private readonly GridVisual gridVisual = new GridVisual();
+        public Vector2 mousePosition = new Vector2(0, 0);
 
         public Render() {
             this.visuals = new VisualCollection(this) {
@@ -99,6 +101,20 @@ namespace PhysicsEngineCore {
 
                 this.scaleTransform.ScaleX = value;
                 this.scaleTransform.ScaleY = value;
+            }
+        }
+
+        /// <summary>
+        /// グリッドの間隔
+        /// </summary>
+        public double gridInterval {
+            get {
+                return this._gridInterval;
+            }
+            set {
+                if(value <= 0) throw new ArgumentOutOfRangeException(nameof(value), "gridIntervalを0以下には設定できません");
+
+                this._gridInterval = value;
             }
         }
 
@@ -175,7 +191,7 @@ namespace PhysicsEngineCore {
             }
 
             if(this.isDebugMode) {
-                this.debugVisual.Draw(this.fps);
+                this.debugVisual.Draw(this.fps,this.mousePosition);
             }
 
             if(this.isDisplayGrid) {

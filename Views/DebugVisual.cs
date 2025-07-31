@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Views {
     public class DebugVisual : DrawingVisual{
@@ -8,10 +9,10 @@ namespace PhysicsEngineCore.Views {
             context.Close();
         }
 
-        public void Draw(double fps) {
+        public void Draw(double fps,Vector2 mousePosition) {
             DrawingContext context = this.RenderOpen();
 
-            FormattedText formattedText = new FormattedText(
+            FormattedText fpsText = new FormattedText(
                 $"FPS: {fps:F0}",
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
@@ -21,7 +22,18 @@ namespace PhysicsEngineCore.Views {
                 VisualTreeHelper.GetDpi(this).PixelsPerDip
             );
 
-            context.DrawText(formattedText, new Point(10, 10));
+            FormattedText mouseText = new FormattedText(
+                $"MOUSE: ({mousePosition.X:F1},{mousePosition.Y:F1})",
+                System.Globalization.CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface("Arial"),
+                16,
+                Brushes.Black,
+                VisualTreeHelper.GetDpi(this).PixelsPerDip
+            );
+
+            context.DrawText(fpsText, new Point(10, 10));
+            context.DrawText(mouseText, new Point(10, 30));
 
             context.Close();
         }
