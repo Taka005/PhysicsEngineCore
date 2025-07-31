@@ -12,11 +12,11 @@ namespace PhysicsEngineCore.Objects {
         private string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private string _color;
-        public Vector2 start;
-        public Vector2 middle;
-        public Vector2 center;
-        public Vector2 end;
-        public double radius;
+        private Vector2 _start;
+        private Vector2 _middle;
+        private Vector2 _center;
+        private Vector2 _end;
+        private double _radius;
         private double _width;
 
         /// <summary>
@@ -26,9 +26,9 @@ namespace PhysicsEngineCore.Objects {
         public Curve(CurveOption option) {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this._color = option.color;
-            this.start = new Vector2(option.startX, option.startY);
-            this.middle = new Vector2(option.middleX, option.middleY);
-            this.end = new Vector2(option.endX, option.endY);
+            this._start = new Vector2(option.startX, option.startY);
+            this._middle = new Vector2(option.middleX, option.middleY);
+            this._end = new Vector2(option.endX, option.endY);
             this._width = CheckWidthValue(option.width);
 
             UpdateCenter();
@@ -75,6 +75,67 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 this._width = CheckWidthValue(value);
+            }
+        }
+
+        /// <summary>
+        /// 曲線の半径
+        /// </summary>
+        public double radius {
+            get {
+                return this._radius;
+            }
+        }
+
+        /// <summary>
+        /// 曲線の始点
+        /// </summary>
+        public Vector2 start {
+            get {
+                return this._start;
+            }
+            set {
+                this._start = value;
+
+                this.UpdateCenter();
+            }
+        }
+
+        /// <summary>
+        /// 曲線の中点
+        /// </summary>
+        public Vector2 middle {
+            get {
+                return this._middle;
+            }
+            set {
+                this._middle = value;
+
+                this.UpdateCenter();
+            }
+        }
+
+
+        /// <summary>
+        /// 曲線の終点
+        /// </summary>
+        public Vector2 end {
+            get {
+                return this._end;
+            }
+            set {
+                this._end = value;
+
+                this.UpdateCenter();
+            }
+        }
+
+        /// <summary>
+        /// 曲線の中心座標
+        /// </summary>
+        public Vector2 center {
+            get {
+                return this._center;
             }
         }
 
@@ -133,7 +194,7 @@ namespace PhysicsEngineCore.Objects {
         /// <summary>
         /// 曲線の中心を計算して更新します
         /// </summary>
-        public void UpdateCenter() {
+        private void UpdateCenter() {
             double slope1 = (this.middle.X - this.start.X) / (this.start.Y - this.middle.Y);
             double slope2 = (this.end.X - this.middle.X) / (this.middle.Y - this.end.Y);
             double equat1 = (this.start.Y + this.middle.Y) / 2 - slope1 * ((this.start.X + this.middle.X) / 2);
@@ -141,8 +202,8 @@ namespace PhysicsEngineCore.Objects {
             double centerX = (equat2 - equat1) / (slope1 - slope2);
             double centerY = slope1 * centerX + equat1;
 
-            this.center = new Vector2(centerX, centerY);
-            this.radius = Vector2.Distance(this.start, this.center);
+            this._center = new Vector2(centerX, centerY);
+            this._radius = Vector2.Distance(this.start, this.center);
         }
 
 
