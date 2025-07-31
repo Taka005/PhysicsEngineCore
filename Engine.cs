@@ -656,7 +656,10 @@ namespace PhysicsEngineCore {
                 if(effect is Booster booster) {
                     Vector2 difference = position - (booster.start + booster.end) / 2;
 
-                    if(difference.Length() >= (booster.start - booster.end).Length()/2) return;
+                    if(
+                        Math.Abs(difference.X) >= Math.Abs(booster.start.X - booster.end.X)/2||
+                        Math.Abs(difference.Y) >= Math.Abs(booster.start.Y - booster.end.Y)/2
+                    ) return;
 
                     targets.Add(booster);
                 }
