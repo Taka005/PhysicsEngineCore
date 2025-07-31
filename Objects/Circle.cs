@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// 円を表すクラス
     /// </summary>
     public class Circle : BaseObject, IObject {
-        private string _id;
+        private readonly string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _diameter;
         private string _color;

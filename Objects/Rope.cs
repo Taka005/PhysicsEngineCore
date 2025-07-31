@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// ロープを表すクラス
     /// </summary>
     public class Rope : BaseObject, IObject {
-        private string _id;
+        private readonly string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _width;
         private string _color;

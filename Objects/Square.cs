@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// 四角を表すクラス
     /// </summary>
     public class Square : BaseObject, IObject {
-        private string _id;
+        private readonly string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _size;
         private string _color;

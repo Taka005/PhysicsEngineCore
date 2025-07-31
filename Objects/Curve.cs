@@ -9,7 +9,7 @@ namespace PhysicsEngineCore.Objects {
     /// 曲線を表すクラス
     /// </summary>
     public class Curve : IGround {
-        private string _id;
+        private readonly string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private string _color;
         private Vector2 _start;

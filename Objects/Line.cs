@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// 線を表すクラス
     /// </summary>
     public class Line : IGround {
-        private string _id;
+        private readonly string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private string _color;
         public Vector2 start;

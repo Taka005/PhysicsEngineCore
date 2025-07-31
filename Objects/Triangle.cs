@@ -9,7 +9,7 @@ namespace PhysicsEngineCore.Objects {
     /// 三角を表すクラス
     /// </summary>
     public class Triangle : BaseObject, IObject {
-        private string _id;
+        private readonly string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _size;
         private string _color;
