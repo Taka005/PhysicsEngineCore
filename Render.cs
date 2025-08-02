@@ -173,7 +173,7 @@ namespace PhysicsEngineCore {
         /// 基本的なレンダリングの処理を行います
         /// このメソッドはUIスレッドで呼び出される必要があります
         /// </summary>
-        public void Update() {
+        public void Update(int objectCount,int groundCount) {
             foreach(DrawingVisual visual in this.visuals) {
                 if(visual is DebugVisual || visual is GridVisual) continue;
 
@@ -191,7 +191,7 @@ namespace PhysicsEngineCore {
             }
 
             if(this.isDebugMode) {
-                this.debugVisual.Draw(this.fps,this.mousePosition);
+                this.debugVisual.Draw(this.fps,this.mousePosition,objectCount,groundCount);
             }
 
             if(this.isDisplayGrid) {
