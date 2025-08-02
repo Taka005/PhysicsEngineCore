@@ -42,9 +42,9 @@ namespace PhysicsEngineCore {
 
         public Render(RenderOption? option) {
             if(option != null) {
-                this.offsetX = option.offsetX;
-                this.offsetY = option.offsetY;
-                this.scale = option.scale;
+                this._offsetX = option.offsetX;
+                this._offsetY = option.offsetY;
+                this._scale = option.scale;
             }
 
             this.visuals = new VisualCollection(this) {
