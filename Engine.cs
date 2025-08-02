@@ -584,6 +584,10 @@ namespace PhysicsEngineCore {
             this.SetTrackingInterval(saveData.engine.trackingInterval);
             this.SetTrackingLimit(saveData.engine.trackingLimit);
 
+            this.render.scale = saveData.render.scale;
+            this.render.offsetX = saveData.render.offsetX;
+            this.render.offsetY = saveData.render.offsetY;
+
             this.content.Sync();
         }
 
@@ -602,9 +606,16 @@ namespace PhysicsEngineCore {
                 movementLimit = this.movementLimit
             };
 
+            RenderOption renderOption = new RenderOption {
+                scale = this.render.scale,
+                offsetX = this.render.offsetX,
+                offsetY = this.render.offsetY
+            };
+
             SaveData saveData = new SaveData {
                 saveAt = DateTime.Now,
                 engine = engineOption,
+                render = renderOption,
                 objects = this.content.ToData()
             };
 
