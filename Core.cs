@@ -25,7 +25,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// 0除算を防止するための値
         /// </summary>
-        private static readonly double CORRECTION_NUMBER = 0.0000001d;
+        private static readonly double CORRECTION_NUMBER = 0.00000001d;
 
         /// <summary>
         /// 摩擦の強さ

@@ -514,6 +514,11 @@ namespace PhysicsEngineCore {
             return this.content.entities.Find(obj => obj.id == id);
         }
 
+        /// <summary>
+        /// 指定したX座標に最も近いグリッドの交差点の位置を取得します
+        /// </summary>
+        /// <param name="posX">指定するX座標</param>
+        /// <returns>計算されたX座標</returns>
         public double GetNearGridCrossPositionX(double posX) {
              double mapX = posX / this.render.scale - this.render.offsetX / this.render.scale;
 
@@ -524,6 +529,11 @@ namespace PhysicsEngineCore {
             return nearestGridX;
         }
 
+        /// <summary>
+        /// 指定したY座標に最も近いグリッドの交差点の位置を取得します
+        /// </summary>
+        /// <param name="posY">指定するY座標</param>
+        /// <returns>計算されたY座標</returns>
         public double GetNearGridCrossPositionY(double posY) {
             double mapY = posY / this.render.scale - this.render.offsetY / this.render.scale;
 
