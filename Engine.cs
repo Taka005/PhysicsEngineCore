@@ -514,6 +514,26 @@ namespace PhysicsEngineCore {
             return this.content.entities.Find(obj => obj.id == id);
         }
 
+        public double GetNearGridCrossPositionX(double posX) {
+             double mapX = posX / this.render.scale - this.render.offsetX / this.render.scale;
+
+            double nearestGridMapX = Math.Round(mapX / this.render.gridInterval) * this.render.gridInterval;
+
+            double nearestGridX = (nearestGridMapX + this.render.offsetX / this.render.scale) * this.render.scale;
+
+            return nearestGridX;
+        }
+
+        public double GetNearGridCrossPositionY(double posY) {
+            double mapY = posY / this.render.scale - this.render.offsetY / this.render.scale;
+
+            double nearestGridMapY = Math.Round(mapY / this.render.gridInterval) * this.render.gridInterval;
+
+            double nearestGridY = (nearestGridMapY + this.render.offsetY / this.render.scale) * this.render.scale;
+
+            return nearestGridY;
+        }
+
         /// <summary>
         /// セーブデータを読み込みます
         /// </summary>
