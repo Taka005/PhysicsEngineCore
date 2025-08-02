@@ -67,7 +67,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// レンダー
         /// </summary>
-        public readonly Render render = new Render();
+        public readonly Render render;
 
         /// <summary>
         /// コンテンツマネージャー
@@ -78,13 +78,15 @@ namespace PhysicsEngineCore {
         /// 初期化
         /// </summary>
         /// <param name="option">エンジンの初期化クラス</param>
-        public Engine(EngineOption? option) : base(option?.pps ?? 180, option?.gravity ?? 500, option?.friction ?? 0) {
-            if(option != null) {
-                this._playBackSpeed = CheckPlayBackSpeedValue(option.playBackSpeed);
-                this._trackingInterval = CheckTrackingIntervalValue(option.trackingInterval);
-                this._trackingLimit = CheckTrackingLimitValue(option.trackingLimit);
-                this._movementLimit = CheckMovementLimitValue(option.movementLimit);
+        public Engine(EngineOption? engineOption,RenderOption? renderOption) : base(engineOption?.pps ?? 180, engineOption?.gravity ?? 500, engineOption?.friction ?? 0) {
+            if(engineOption != null) {
+                this._playBackSpeed = CheckPlayBackSpeedValue(engineOption.playBackSpeed);
+                this._trackingInterval = CheckTrackingIntervalValue(engineOption.trackingInterval);
+                this._trackingLimit = CheckTrackingLimitValue(engineOption.trackingLimit);
+                this._movementLimit = CheckMovementLimitValue(engineOption.movementLimit);
             }
+
+            this.render = new Render(renderOption);
 
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
         }

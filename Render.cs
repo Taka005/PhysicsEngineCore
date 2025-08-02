@@ -1,5 +1,6 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Objects.Interfaces;
+using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Views;
 using PhysicsEngineCore.Views.Interfaces;
@@ -39,7 +40,13 @@ namespace PhysicsEngineCore {
         private readonly GridVisual gridVisual = new GridVisual();
         public Vector2 mousePosition = new Vector2(0, 0);
 
-        public Render() {
+        public Render(RenderOption? option) {
+            if(option != null) {
+                this.offsetX = option.offsetX;
+                this.offsetY = option.offsetY;
+                this.scale = option.scale;
+            }
+
             this.visuals = new VisualCollection(this) {
                 this.gridVisual,
                 this.groundVisual,
