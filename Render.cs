@@ -38,7 +38,7 @@ namespace PhysicsEngineCore {
         private readonly VectorVisual vectorVisual = new VectorVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
         private readonly GridVisual gridVisual = new GridVisual();
-        public Vector2 mousePosition = new Vector2(0, 0);
+        public Vector2 currentPosition = new Vector2(0, 0);
 
         public Render(RenderOption? option) {
             if(option != null) {
@@ -198,7 +198,7 @@ namespace PhysicsEngineCore {
             }
 
             if(this.isDebugMode) {
-                this.debugVisual.Draw(this.fps,this.mousePosition,objectCount,groundCount);
+                this.debugVisual.Draw(this.fps,this.currentPosition,objectCount,groundCount);
             }
 
             if(this.isDisplayGrid) {

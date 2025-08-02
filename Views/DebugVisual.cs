@@ -9,7 +9,7 @@ namespace PhysicsEngineCore.Views {
             context.Close();
         }
 
-        public void Draw(double fps,Vector2 mousePosition,int objectCount,int groundCount) {
+        public void Draw(double fps,Vector2 currentPosition,int objectCount,int groundCount) {
             DrawingContext context = this.RenderOpen();
 
             FormattedText fpsText = new FormattedText(
@@ -23,7 +23,7 @@ namespace PhysicsEngineCore.Views {
             );
 
             FormattedText mouseText = new FormattedText(
-                $"MOUSE: ({mousePosition.X:F1},{mousePosition.Y:F1})",
+                $"POSITION: ({currentPosition.X:F1},{currentPosition.Y:F1})",
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
                 new Typeface("Arial"),
