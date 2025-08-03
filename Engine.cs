@@ -395,9 +395,9 @@ namespace PhysicsEngineCore {
             if(obj.imageName != null) {
                 Image? image = this.assets.Get(obj.imageName);
 
-                if(image == null) throw new Exception($"指定された画像({obj.imageName})が存在しません");
-
-                obj.image = image;
+                if(image != null) {
+                    obj.image = image;
+                }
             }
 
             this.content.AddObject(obj);
@@ -429,9 +429,9 @@ namespace PhysicsEngineCore {
             if(ground.imageName != null) {
                 Image? image = this.assets.Get(ground.imageName);
 
-                if(image == null) throw new Exception($"指定された画像({ground.imageName})が存在しません");
-
-                ground.image = image;
+                if(image != null) {
+                    ground.image = image;
+                }
             }
 
             this.content.AddGround(ground);
@@ -463,7 +463,9 @@ namespace PhysicsEngineCore {
 
                 if(image == null) throw new Exception($"指定された画像({effect.imageName})が存在しません");
 
-                effect.image = image;
+                if(image != null) {
+                    effect.image = image;
+                }
             }
 
             this.content.AddEffect(effect);
