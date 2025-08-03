@@ -12,8 +12,8 @@ namespace PhysicsEngineCore.Objects {
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _width;
         private string _color;
-        private string? _imageName;
-        private Image? _image;
+        private string? _imageName = null;
+        private Image? _image = null;
 
         /// <summary>
         /// 初期化

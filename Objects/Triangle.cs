@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
@@ -13,8 +12,8 @@ namespace PhysicsEngineCore.Objects {
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _size;
         private string _color;
-        private string? _imageName;
-        private Image? _image;
+        private string? _imageName = null;
+        private Image? _image = null;
 
         /// <summary>
         /// 初期化

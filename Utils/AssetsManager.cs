@@ -11,12 +11,14 @@ namespace PhysicsEngineCore.Utils {
         /// <param name="filename">追加するファイル名</param>
         /// <param name="imageStream">追加するファイルストリーム</param>
         /// <exception cref="Exception">同じ画像がある場合エラー</exception>
-        public void Add(string filename,Stream imageStream) {
+        public Image Add(string filename,Stream imageStream) {
             if(this.images.Any(image => image.filename == filename)) throw new Exception("同じ画像が既に存在します");
 
             Image image = new Image(filename,imageStream);
 
             this.images.Add(image);
+
+            return image;
         }
 
         /// <summary>

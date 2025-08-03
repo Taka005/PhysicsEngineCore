@@ -14,8 +14,8 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 start;
         public Vector2 end;
         public Vector2 velocity;
-        private string? _imageName;
-        private Image? _image;
+        private string? _imageName = null;
+        private Image? _image = null;
 
         /// <summary>
         /// 初期化
