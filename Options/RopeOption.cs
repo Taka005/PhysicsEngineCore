@@ -1,6 +1,5 @@
 ﻿namespace PhysicsEngineCore.Options{
-    public class RopeOption() : IOption {
-        public string? id { get; set; }
+    public class RopeOption() : BaseOption {
         public double startX { get; set; }
         public double startY { get; set; }
         public double endX { get; set; }

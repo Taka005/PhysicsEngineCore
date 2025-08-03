@@ -1,28 +1,30 @@
-﻿namespace PhysicsEngineCore.Utils {
+﻿using System.IO;
+
+namespace PhysicsEngineCore.Utils {
     public class AssetsManager {
         private readonly List<Image> images = [];
 
-        public void Add(string path) {
-            if(this.images.Any(image => image.path == path)) throw new Exception("同じパスの画像が既に存在します");
+        public void Add(string filename,Stream imageStream) {
+            if(this.images.Any(image => image.filename == filename)) throw new Exception("同じ画像が既に存在します");
 
-            Image image = new Image(path);
+            Image image = new Image(filename,imageStream);
 
             this.images.Add(image);
         }
 
-        public void Remove(string path) {
-            if(!this.images.Any(image => image.path == path)) throw new Exception("指定されたパスの画像が存在しません");
+        public void Remove(string filename) {
+            if(!this.images.Any(image => image.filename == filename)) throw new Exception("指定された画像が存在しません");
 
-            this.images.RemoveAll(image => image.path == path);
+            this.images.RemoveAll(image => image.filename == filename);
         }
 
-        public Image? Get(string path) {
-            return this.images.FirstOrDefault(image => image.path == path);
+        public Image? Get(string filename) {
+            return this.images.FirstOrDefault(image => image.filename == filename);
         }
 
         public List<string> paths {
             get {
-                return [.. this.images.Select(image => image.path)];
+                return [.. this.images.Select(image => image.filename)];
             }
         }
     }

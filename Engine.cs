@@ -77,7 +77,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// アセットマネージャー
         /// </summary>
-        private readonly AssetsManager assets = new AssetsManager();
+        public readonly AssetsManager assets = new AssetsManager();
 
         /// <summary>
         /// 初期化

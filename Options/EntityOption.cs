@@ -1,7 +1,7 @@
 ﻿using PhysicsEngineCore.Utils;
 
 namespace PhysicsEngineCore.Options{
-    public class EntityOption() : IOption {
+    public class EntityOption(){
         public string? id { get; set; }
         public double posX { get; set; }
         public double posY { get; set; }

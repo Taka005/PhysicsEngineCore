@@ -3,35 +3,29 @@ using System.Windows.Media.Imaging;
 
 namespace PhysicsEngineCore.Utils {
     public class Image {
-        public  string path;
+        public string filename;
         public BitmapImage data;
 
-        public Image(string path) {
-            this.path = path;
+        public Image(string filename,Stream imageStream) {
+            this.filename = filename;
             this.data = new BitmapImage();
 
             this.data.BeginInit();
-            this.data.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
+            this.data.StreamSource = imageStream;
             this.data.CacheOption = BitmapCacheOption.OnLoad;
             this.data.EndInit();
             this.data.Freeze();
         }
 
-        public string filename {
-            get {
-                return Path.GetFileName(this.path);
-            }
-        }
-
         public string name {
             get {
-                return Path.GetFileNameWithoutExtension(this.path);
+                return Path.GetFileNameWithoutExtension(this.filename);
             }
         }
 
         public string extension {
             get {
-                return Path.GetExtension(this.path).ToLower();
+                return Path.GetExtension(this.filename).ToLower();
             }
         }
 
