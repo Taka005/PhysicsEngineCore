@@ -115,7 +115,6 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 this._image = value;
-                this._imageName = value?.filename;
             }
         }
 
