@@ -63,6 +63,30 @@ namespace PhysicsEngineCore.Views {
                         );
                     });
                 });
+            } else {
+                double scale = this.objectData.size / Math.Min(this.objectData.image.width, this.objectData.image.height);
+
+                TransformGroup transformGroup = new TransformGroup();
+                transformGroup.Children.Add(new ScaleTransform(scale, scale));
+
+                double angleRad = Math.Atan2(this.objectData.velocity.Y, this.objectData.velocity.X);
+
+                transformGroup.Children.Add(new RotateTransform(angleRad * 180 / Math.PI, this.objectData.position.X, this.objectData.position.Y));
+
+                context.PushTransform(transformGroup);
+                context.PushOpacity(this.opacity);
+
+                context.DrawImage(
+                    this.objectData.image.source,
+                    new Rect(
+                        this.objectData.position.X - this.objectData.size/2,
+                        this.objectData.position.Y - this.objectData.size/2,
+                        this.objectData.size,
+                        this.objectData.size
+                    )
+                );
+
+                context.Pop();
             }
         }
     }
