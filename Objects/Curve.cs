@@ -185,6 +185,7 @@ namespace PhysicsEngineCore.Objects {
 
             return this.id == curve.id &&
                    this.color == curve.color &&
+                   this.imageName == curve.imageName &&
                    this.width == curve.width &&
                    this.start.Equals(curve.start) && 
                    this.middle.Equals(curve.middle) &&
@@ -199,6 +200,7 @@ namespace PhysicsEngineCore.Objects {
             return new CurveOption {
                 id = this.id,
                 color = this.color,
+                imageName = this.imageName,
                 startX = this.start.X,
                 startY = this.start.Y,
                 middleX = this.middle.X,

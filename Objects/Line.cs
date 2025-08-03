@@ -118,6 +118,7 @@ namespace PhysicsEngineCore.Objects {
             return this.id == line.id &&
                    this.width == line.width &&
                    this.color == line.color &&
+                   this.imageName == line.imageName &&
                    this.start.Equals(line.start) &&
                    this.end.Equals(line.end);
         }
@@ -138,6 +139,7 @@ namespace PhysicsEngineCore.Objects {
             return new LineOption {
                 id = this.id,
                 color = this.color,
+                imageName = this.imageName,
                 startX = this.start.X,
                 startY = this.start.Y,
                 endX = this.end.X,

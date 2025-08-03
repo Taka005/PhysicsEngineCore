@@ -142,6 +142,7 @@ namespace PhysicsEngineCore.Objects {
             return this.id == circle.id &&
                    this.diameter == circle.diameter &&
                    this.color == circle.color &&
+                   this.imageName == circle.imageName &&
                    this.position.Equals(circle.position) &&
                    this.velocity.Equals(circle.velocity) &&
                    this.mass == circle.mass &&
@@ -163,6 +164,7 @@ namespace PhysicsEngineCore.Objects {
                 mass = this.mass,
                 stiffness = this.stiffness,
                 color = this.color,
+                imageName = this.imageName,
                 entities = [.. this.entities.Select(entity => entity.ToOption())]
             };
         }

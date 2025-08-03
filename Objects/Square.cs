@@ -146,6 +146,7 @@ namespace PhysicsEngineCore.Objects {
             return this.id == square.id &&
                    this.size == square.size &&
                    this.color == square.color &&
+                   this.imageName == square.imageName &&
                    this.position.Equals(square.position) &&
                    this.velocity.Equals(square.velocity) &&
                    this.mass == square.mass &&
@@ -167,6 +168,7 @@ namespace PhysicsEngineCore.Objects {
                 mass = this.mass,
                 stiffness = this.stiffness,
                 color = this.color,
+                imageName = this.imageName,
                 entities = [.. this.entities.Select(entity => entity.ToOption())]
             };
         }

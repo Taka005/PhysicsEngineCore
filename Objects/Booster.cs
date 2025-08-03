@@ -114,6 +114,7 @@ namespace PhysicsEngineCore.Objects {
 
             return this.id == booster.id &&
                    this.color == booster.color &&
+                   this._imageName == booster._imageName &&
                    this.start.Equals(booster.start) &&
                    this.end.Equals(booster.end) &&
                    this.velocity.Equals(booster.velocity);
@@ -135,6 +136,7 @@ namespace PhysicsEngineCore.Objects {
             return new BoosterOption {
                 id = this.id,
                 color = this.color,
+                imageName = this._imageName,
                 startX = this.start.X,
                 startY = this.start.Y,
                 endX = this.end.X,

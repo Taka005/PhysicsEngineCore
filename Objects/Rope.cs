@@ -148,6 +148,7 @@ namespace PhysicsEngineCore.Objects {
             return this.id == rope.id &&
                    this.width == rope.width &&
                    this.color == rope.color &&
+                   this.imageName == rope.imageName &&
                    this.position.Equals(rope.position) &&
                    this.velocity.Equals(rope.velocity) &&
                    this.mass == rope.mass &&
@@ -172,6 +173,7 @@ namespace PhysicsEngineCore.Objects {
                 mass = this.mass,
                 stiffness = this.stiffness,
                 color = this.color,
+                imageName = this.imageName,
                 entities = [.. this.entities.Select(entity => entity.ToOption())]
             };
         }

@@ -156,6 +156,7 @@ namespace PhysicsEngineCore.Objects {
             return this.id == triangle.id &&
                    this.size == triangle.size &&
                    this.color == triangle.color &&
+                   this._imageName == triangle._imageName &&
                    this.position.Equals(triangle.position) &&
                    this.velocity.Equals(triangle.velocity) &&
                    this.mass == triangle.mass &&
@@ -177,6 +178,7 @@ namespace PhysicsEngineCore.Objects {
                 mass = this.mass,
                 stiffness = this.stiffness,
                 color = this.color,
+                imageName = this.imageName,
                 entities = [.. this.entities.Select(entity => entity.ToOption())]
             };
         }
