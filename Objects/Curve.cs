@@ -280,6 +280,29 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 中間点が大きな弧にあるかどうかをチェックします
+        /// </summary>
+        /// <param name="startAngle">開始角度</param>
+        /// <param name="endAngle">終了角度</param>
+        /// <param name="midAngle">中点角度</param>
+        /// <returns>中間点が大きな弧にあるなら真を返す</returns>
+        public static bool IsMiddleOnLargeArc(double startAngle, double endAngle, double midAngle){
+            double clockwiseAngleDiff = endAngle - startAngle;
+            if(clockwiseAngleDiff < 0) clockwiseAngleDiff += 2 * Math.PI;
+
+            double counterClockwiseAngleDiff = startAngle - endAngle;
+            if (counterClockwiseAngleDiff < 0) counterClockwiseAngleDiff += 2 * Math.PI;
+
+            bool midInClockwiseArc = Curve.IsAngleBetween(midAngle, startAngle, endAngle, true);
+            bool midInCounterClockwiseArc = Curve.IsAngleBetween(midAngle, startAngle, endAngle, false);
+
+            if (midInClockwiseArc && clockwiseAngleDiff > Math.PI) return true;
+            if (midInCounterClockwiseArc && counterClockwiseAngleDiff > Math.PI) return true;
+
+            return false;
+        }
+
+        /// <summary>
         /// 角度を正規化します
         /// </summary>
         /// <param name="angle">正規化する角度</param>

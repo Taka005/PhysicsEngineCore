@@ -37,31 +37,33 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            this.brush = ParseColor.StringToBrush(this.objectData.color);
+            if(this.objectData.image == null) {
+                this.brush = ParseColor.StringToBrush(this.objectData.color);
 
-            this.brush.Opacity = this.opacity;
+                this.brush.Opacity = this.opacity;
 
-            this.pen = new Pen(this.brush, this.objectData.entityDiameter);
+                this.pen = new Pen(this.brush, this.objectData.entityDiameter);
 
-            this.objectData.entities.ForEach(source => {
-                context.DrawEllipse(
-                     this.brush,
-                     null,
-                     new Point(source.position.X, source.position.Y),
-                     source.radius,
-                     source.radius
-                 );
+                this.objectData.entities.ForEach(source => {
+                    context.DrawEllipse(
+                         this.brush,
+                         null,
+                         new Point(source.position.X, source.position.Y),
+                         source.radius,
+                         source.radius
+                     );
 
-                this.objectData.entities.ForEach(target => {
-                    if(source.id == target.id) return;
+                    this.objectData.entities.ForEach(target => {
+                        if(source.id == target.id) return;
 
-                    context.DrawLine(
-                        this.pen,
-                        new Point(source.position.X, source.position.Y),
-                        new Point(target.position.X, target.position.Y)
-                    );
+                        context.DrawLine(
+                            this.pen,
+                            new Point(source.position.X, source.position.Y),
+                            new Point(target.position.X, target.position.Y)
+                        );
+                    });
                 });
-            });
+            }
         }
     }
 }

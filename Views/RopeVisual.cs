@@ -37,51 +37,53 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            this.brush = ParseColor.StringToBrush(this.objectData.color);
+            if(this.objectData.image == null) {
+                this.brush = ParseColor.StringToBrush(this.objectData.color);
            
-            this.brush.Opacity = this.opacity;
+                this.brush.Opacity = this.opacity;
 
-            this.pen = new Pen(this.brush, this.objectData.width);
+                this.pen = new Pen(this.brush, this.objectData.width);
 
-            Entity? target = null;
+                Entity? target = null;
 
-            this.objectData.entities.ForEach(entity => {
-                if(target != null) {
-                    context.DrawLine(
-                        this.pen,
-                        new Point(entity.position.X, entity.position.Y),
-                        new Point(target.position.X, target.position.Y)
-                    );
+                this.objectData.entities.ForEach(entity => {
+                    if(target != null) {
+                        context.DrawLine(
+                            this.pen,
+                            new Point(entity.position.X, entity.position.Y),
+                            new Point(target.position.X, target.position.Y)
+                        );
 
-                    context.DrawEllipse(
-                        this.brush,
-                        null,
-                        new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
-                    );
-                } else {
-                    context.DrawEllipse(
-                        this.brush,
-                        null,
-                        new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
-                    );
-                }
+                        context.DrawEllipse(
+                            this.brush,
+                            null,
+                            new Point(entity.position.X, entity.position.Y),
+                            entity.radius,
+                            entity.radius
+                        );
+                    } else {
+                        context.DrawEllipse(
+                            this.brush,
+                            null,
+                            new Point(entity.position.X, entity.position.Y),
+                            entity.radius,
+                            entity.radius
+                        );
+                    }
 
-                if(this.objectData.entities.IndexOf(entity) == this.objectData.entities.Count - 1) {
-                    context.DrawEllipse(
-                        this.brush,
-                        null,
-                        new Point(entity.position.X, entity.position.Y),
-                        entity.radius,
-                        entity.radius
-                    );
-                }
+                    if(this.objectData.entities.IndexOf(entity) == this.objectData.entities.Count - 1) {
+                        context.DrawEllipse(
+                            this.brush,
+                            null,
+                            new Point(entity.position.X, entity.position.Y),
+                            entity.radius,
+                            entity.radius
+                        );
+                    }
 
-                target = entity;
-            });
+                    target = entity;
+                });
+            }
         }
     }
 }

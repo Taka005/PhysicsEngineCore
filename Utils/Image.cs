@@ -4,17 +4,17 @@ using System.Windows.Media.Imaging;
 namespace PhysicsEngineCore.Utils {
     public class Image {
         public string filename;
-        public BitmapImage data;
+        public BitmapImage source;
 
         public Image(string filename,Stream imageStream) {
             this.filename = filename;
-            this.data = new BitmapImage();
+            this.source = new BitmapImage();
 
-            this.data.BeginInit();
-            this.data.StreamSource = imageStream;
-            this.data.CacheOption = BitmapCacheOption.OnLoad;
-            this.data.EndInit();
-            this.data.Freeze();
+            this.source.BeginInit();
+            this.source.StreamSource = imageStream;
+            this.source.CacheOption = BitmapCacheOption.OnLoad;
+            this.source.EndInit();
+            this.source.Freeze();
         }
 
         public string name {
@@ -31,13 +31,13 @@ namespace PhysicsEngineCore.Utils {
 
         public int height {
             get {
-                return this.data.PixelHeight;
+                return this.source.PixelHeight;
             }
         }
 
         public int width {
             get {
-                return this.data.PixelWidth;
+                return this.source.PixelWidth;
             }
         }
     }

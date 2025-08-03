@@ -37,19 +37,21 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            this.brush = ParseColor.StringToBrush(this.objectData.color);
+            if(this.objectData.image == null) {
+                this.brush = ParseColor.StringToBrush(this.objectData.color);
 
-            this.brush.Opacity = this.opacity;
+                this.brush.Opacity = this.opacity;
 
-            this.pen = new Pen(this.brush, 1);
+                this.pen = new Pen(this.brush, 1);
 
-            context.DrawEllipse(
-                this.brush,
-                this.pen,
-                new Point(this.objectData.position.X, this.objectData.position.Y),
-                this.objectData.radius - 0.5,
-                this.objectData.radius - 0.5
-            );
+                context.DrawEllipse(
+                    this.brush,
+                    this.pen,
+                    new Point(this.objectData.position.X, this.objectData.position.Y),
+                    this.objectData.radius - 0.5,
+                    this.objectData.radius - 0.5
+                );
+            }
         }
     }
 }
