@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Utils;
@@ -52,12 +53,9 @@ namespace PhysicsEngineCore.Views {
                     this.objectData.radius - 0.5
                 );
             } else {
-                double scale = this.objectData.diameter / Math.Min(this.objectData.image.width, this.objectData.image.height);
-
                 TransformGroup transformGroup = new TransformGroup();
-                transformGroup.Children.Add(new ScaleTransform(scale, scale));
 
-                double angleRad = Math.Atan2(this.objectData.velocity.Y, this.objectData.velocity.X);
+                double angleRad = Math.Atan2(this.objectData.velocity.Y, -this.objectData.velocity.X);
 
                 transformGroup.Children.Add(new RotateTransform(angleRad * 180 / Math.PI, this.objectData.position.X, this.objectData.position.Y));
 
@@ -74,6 +72,7 @@ namespace PhysicsEngineCore.Views {
                     )
                 );
 
+                context.Pop();
                 context.Pop();
             }
         }
