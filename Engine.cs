@@ -705,6 +705,32 @@ namespace PhysicsEngineCore {
             return JsonSerializer.Serialize(this.ToSaveData());
         }
 
+        public Stream ExportMap() {
+            MemoryStream memoryStream = new MemoryStream();
+
+            using(ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true)) {
+                ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
+
+                using(StreamWriter writer = new StreamWriter(mapEntry.Open())) {
+                    writer.Write(this.Export());
+                }
+
+                foreach(Image? image in this.assets.paths.Select(path => this.assets.Get(path))) {
+                    if(image == null) continue;
+
+                    ZipArchiveEntry imageEntry = archive.CreateEntry($"assets/{image.filename}");
+
+                    using(Stream imageStream = image.source.StreamSource) {
+                        imageStream.CopyTo(imageEntry.Open());
+                    }
+                }
+            }
+
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+
         /// <summary>
         /// 指定した位置にあるオブジェクトを取得します
         /// </summary>
