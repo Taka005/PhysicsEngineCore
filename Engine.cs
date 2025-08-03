@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.IO;
+using System.IO.Compression;
+using System.Text.Json;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
@@ -622,11 +624,53 @@ namespace PhysicsEngineCore {
             this.content.Sync();
         }
 
+        public void ImportMap(FileStream fileStream) {
+            ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read);
+
+            ZipArchiveEntry? mapEntry = archive.GetEntry("map.json");
+
+            if(mapEntry == null) {
+                archive.Dispose();
+                throw new Exception("マップファイルデータが破損しています");
+            }
+
+            this.assets.Clear();
+
+            foreach (ZipArchiveEntry entry in archive.Entries){
+                bool isInAssetsFolder = entry.FullName.StartsWith("assets/", StringComparison.OrdinalIgnoreCase) || entry.FullName.StartsWith("assets\\", StringComparison.OrdinalIgnoreCase);
+
+                if (entry.FullName.EndsWith("/") || entry.FullName.EndsWith("\\")) continue;
+
+                bool isImageFile = AssetsManager.imageExtensions.Any(ext => entry.FullName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+                if (isInAssetsFolder && isImageFile) {
+                    Stream entryStream = entry.Open();
+
+                    MemoryStream memoryStream = new MemoryStream();
+                    entryStream.CopyTo(memoryStream);
+                    memoryStream.Position = 0;
+
+                    this.assets.Add(Path.GetFileName(entry.FullName), memoryStream);
+
+                    entryStream.Dispose();
+                }
+            }
+
+            Stream mapStream = mapEntry.Open();
+            StreamReader reader = new StreamReader(mapStream);
+            string rawSaveData = reader.ReadToEnd();
+
+            this.Import(rawSaveData);
+
+            reader.Dispose();
+            mapStream.Dispose();
+            archive.Dispose();
+        }
+
         /// <summary>
         /// セーブデータクラスに変換します
         /// </summary>
         /// <returns>変換されたセーブデータクラス</returns>
-        public SaveData toSaveData() {
+        public SaveData ToSaveData() {
             EngineOption engineOption = new EngineOption {
                 pps = this.pps,
                 gravity = this.gravity,
@@ -658,7 +702,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <returns>変換されたJSON形式のセーブデータ</returns>
         public string Export() {
-            return JsonSerializer.Serialize(this.toSaveData());
+            return JsonSerializer.Serialize(this.ToSaveData());
         }
 
         /// <summary>

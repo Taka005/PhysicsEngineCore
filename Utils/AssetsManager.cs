@@ -3,6 +3,7 @@
 namespace PhysicsEngineCore.Utils {
     public class AssetsManager {
         private readonly List<Image> images = [];
+        public readonly static string[] imageExtensions = [".png", ".jpg", ".jpeg"];
 
         public void Add(string filename,Stream imageStream) {
             if(this.images.Any(image => image.filename == filename)) throw new Exception("同じ画像が既に存在します");
@@ -26,6 +27,10 @@ namespace PhysicsEngineCore.Utils {
             get {
                 return [.. this.images.Select(image => image.filename)];
             }
+        }
+
+        public void Clear() {
+            this.images.Clear();
         }
     }
 }
