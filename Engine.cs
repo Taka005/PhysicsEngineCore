@@ -624,6 +624,11 @@ namespace PhysicsEngineCore {
             this.content.Sync();
         }
 
+        /// <summary>
+        /// マップデータをインポートします
+        /// </summary>
+        /// <param name="fileStream">マップの圧縮ストリーム</param>
+        /// <exception cref="Exception"破損時にエラー></exception>
         public void ImportMap(FileStream fileStream) {
             ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read);
 
@@ -705,26 +710,34 @@ namespace PhysicsEngineCore {
             return JsonSerializer.Serialize(this.ToSaveData());
         }
 
+        /// <summary>
+        /// マップデータをエクスポートします
+        /// </summary>
+        /// <returns>圧縮されたマップストリーム</returns>
         public Stream ExportMap() {
             MemoryStream memoryStream = new MemoryStream();
 
-            using(ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true)) {
-                ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
+            ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true);
 
-                using(StreamWriter writer = new StreamWriter(mapEntry.Open())) {
-                    writer.Write(this.Export());
-                }
+            ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
 
-                foreach(Image? image in this.assets.paths.Select(path => this.assets.Get(path))) {
-                    if(image == null) continue;
+            StreamWriter writer = new StreamWriter(mapEntry.Open());
 
-                    ZipArchiveEntry imageEntry = archive.CreateEntry($"assets/{image.filename}");
+            writer.Write(this.Export());
 
-                    using(Stream imageStream = image.source.StreamSource) {
-                        imageStream.CopyTo(imageEntry.Open());
-                    }
-                }
+            writer.Dispose();
+
+            foreach(Image image in this.assets.images) {
+                ZipArchiveEntry imageEntry = archive.CreateEntry($"assets/{image.filename}");
+
+                Stream imageStream = image.source.StreamSource;
+
+                imageStream.CopyTo(imageEntry.Open());
+
+                imageStream.Dispose();
             }
+
+            archive.Dispose();
 
             memoryStream.Position = 0;
 
