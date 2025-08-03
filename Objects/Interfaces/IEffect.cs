@@ -1,8 +1,12 @@
-﻿namespace PhysicsEngineCore.Objects.Interfaces {
+﻿using PhysicsEngineCore.Utils;
+
+namespace PhysicsEngineCore.Objects.Interfaces {
     public interface IEffect {
         string id { get; }
         string trackingId { get; }
         string color { get; set; }
+        string? imageName { get; }
+        Image? image { get; set; }
 
         void SetEffect(Entity entity,double deltaTime);
 

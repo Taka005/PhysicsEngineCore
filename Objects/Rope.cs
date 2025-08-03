@@ -12,6 +12,8 @@ namespace PhysicsEngineCore.Objects {
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _width;
         private string _color;
+        private string? _imageName;
+        private Image? _image;
 
         /// <summary>
         /// 初期化
@@ -21,6 +23,7 @@ namespace PhysicsEngineCore.Objects {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.width = option.width;
             this._color = option.color;
+            this._imageName = option.imageName;
 
             if(option.entities.Count == 0) {
                 double width = option.endX - option.startX;
@@ -99,6 +102,22 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 this._color = value;
+            }
+        }
+
+        public string? imageName {
+            get {
+                return this._imageName;
+            }
+        }
+
+        public Image? image {
+            get {
+                return this._image;
+            }
+            set {
+                this._image = value;
+                this._imageName = value?.filename;
             }
         }
 

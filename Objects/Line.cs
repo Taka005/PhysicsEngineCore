@@ -14,6 +14,8 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 start;
         public Vector2 end;
         private double _width;
+        private string? _imageName;
+        private Image? _image;
 
         /// <summary>
         /// 初期化
@@ -25,6 +27,7 @@ namespace PhysicsEngineCore.Objects {
             this.start = new Vector2(option.startX, option.startY);
             this.end = new Vector2(option.endX, option.endY);
             this._width = CheckWidthValue(option.width);
+            this._imageName = option.imageName;
         }
 
         /// <summary>
@@ -77,6 +80,22 @@ namespace PhysicsEngineCore.Objects {
         public double lenght {
             get {
                 return Vector2.Distance(this.start, this.end);
+            }
+        }
+
+        public string? imageName {
+            get {
+                return this._imageName;
+            }
+        }
+
+        public Image? image {
+            get {
+                return this._image;
+            }
+            set {
+                this._image = value;
+                this._imageName = value?.filename;
             }
         }
 

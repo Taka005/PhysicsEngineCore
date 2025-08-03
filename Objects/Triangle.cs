@@ -13,6 +13,8 @@ namespace PhysicsEngineCore.Objects {
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _size;
         private string _color;
+        private string? _imageName;
+        private Image? _image;
 
         /// <summary>
         /// 初期化
@@ -22,6 +24,7 @@ namespace PhysicsEngineCore.Objects {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.size = option.size;
             this._color = option.color;
+            this._imageName = option.imageName;
 
             if(option.entities.Count == 0) {
                 double entitySize = 2*this.size*(2 - Math.Sqrt(3));
@@ -108,6 +111,22 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 this._color = value;
+            }
+        }
+
+        public string? imageName {
+            get {
+                return this._imageName;
+            }
+        }
+
+        public Image? image {
+            get {
+                return this._image;
+            }
+            set {
+                this._image = value;
+                this._imageName = value?.filename;
             }
         }
 

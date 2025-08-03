@@ -18,6 +18,8 @@ namespace PhysicsEngineCore.Objects {
         private Vector2 _end;
         private double _radius;
         private double _width;
+        private string? _imageName;
+        private Image? _image;
 
         /// <summary>
         /// 初期化
@@ -30,6 +32,7 @@ namespace PhysicsEngineCore.Objects {
             this._middle = new Vector2(option.middleX, option.middleY);
             this._end = new Vector2(option.endX, option.endY);
             this._width = CheckWidthValue(option.width);
+            this._imageName = option.imageName;
 
             UpdateCenter();
         }
@@ -136,6 +139,22 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 center {
             get {
                 return this._center;
+            }
+        }
+
+        public string? imageName {
+            get {
+                return this._imageName;
+            }
+        }
+
+        public Image? image {
+            get {
+                return this._image;
+            }
+            set {
+                this._image = value;
+                this._imageName = value?.filename;
             }
         }
 

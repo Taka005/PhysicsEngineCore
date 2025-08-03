@@ -14,6 +14,8 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 start;
         public Vector2 end;
         public Vector2 velocity;
+        private string? _imageName;
+        private Image? _image;
 
         /// <summary>
         /// 初期化
@@ -25,6 +27,7 @@ namespace PhysicsEngineCore.Objects {
             this.start = new Vector2(option.startX, option.startY);
             this.end = new Vector2(option.endX, option.endY);
             this.velocity = new Vector2(option.velocityX, option.velocityY);
+            this._imageName = option.imageName;
         }
 
         /// <summary>
@@ -56,6 +59,22 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 this._color = value;
+            }
+        }
+
+        public string? imageName {
+            get {
+                return this._imageName;
+            }
+        }
+
+        public Image? image {
+            get {
+                return this._image;
+            }
+            set {
+                this._image = value;
+                this._imageName = value?.filename;
             }
         }
 

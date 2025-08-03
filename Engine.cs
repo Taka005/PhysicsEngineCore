@@ -389,6 +389,14 @@ namespace PhysicsEngineCore {
 
             if(obj == null) throw new Exception("無効な物体が指定されています");
 
+            if(obj.imageName != null) {
+                Image? image = this.assets.Get(obj.imageName);
+
+                if(image == null) throw new Exception($"指定された画像({obj.imageName})が存在しません");
+
+                obj.image = image;
+            }
+
             this.content.AddObject(obj);
 
             this.content.Sync();
@@ -415,6 +423,14 @@ namespace PhysicsEngineCore {
 
             if(ground == null) throw new Exception("無効な物体が指定されています");
 
+            if(ground.imageName != null) {
+                Image? image = this.assets.Get(ground.imageName);
+
+                if(image == null) throw new Exception($"指定された画像({ground.imageName})が存在しません");
+
+                ground.image = image;
+            }
+
             this.content.AddGround(ground);
 
             this.content.Sync();
@@ -438,6 +454,14 @@ namespace PhysicsEngineCore {
             }
 
             if(effect == null) throw new Exception("無効な物体が指定されています");
+
+            if(effect.imageName != null) {
+                Image? image = this.assets.Get(effect.imageName);
+
+                if(image == null) throw new Exception($"指定された画像({effect.imageName})が存在しません");
+
+                effect.image = image;
+            }
 
             this.content.AddEffect(effect);
 
