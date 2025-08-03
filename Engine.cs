@@ -75,6 +75,11 @@ namespace PhysicsEngineCore {
         private readonly ContentManager content = new ContentManager();
 
         /// <summary>
+        /// アセットマネージャー
+        /// </summary>
+        private readonly AssetsManager assets = new AssetsManager();
+
+        /// <summary>
         /// 初期化
         /// </summary>
         /// <param name="option">エンジンの初期化クラス</param>
