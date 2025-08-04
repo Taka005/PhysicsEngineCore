@@ -17,35 +17,33 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            if(this.groundData.image == null) {
-                this.brush = ParseColor.StringToBrush(this.groundData.color);
-                this.pen = new Pen(this.brush, this.groundData.width);
+            this.brush = ParseColor.StringToBrush(this.groundData.color);
+            this.pen = new Pen(this.brush, this.groundData.width);
 
-                double startAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.start.Y - this.groundData.center.Y, this.groundData.start.X - this.groundData.center.X));
-                double endAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.end.Y - this.groundData.center.Y, this.groundData.end.X - this.groundData.center.X));
-                double midAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.middle.Y - this.groundData.center.Y, this.groundData.middle.X - this.groundData.center.X));
-                bool clockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
+            double startAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.start.Y - this.groundData.center.Y, this.groundData.start.X - this.groundData.center.X));
+            double endAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.end.Y - this.groundData.center.Y, this.groundData.end.X - this.groundData.center.X));
+            double midAngle = Curve.NormalizeAngle(Math.Atan2(this.groundData.middle.Y - this.groundData.center.Y, this.groundData.middle.X - this.groundData.center.X));
+            bool clockwise = (startAngle > endAngle) ? (midAngle > startAngle || midAngle < endAngle) : (midAngle > startAngle && midAngle < endAngle);
 
-                PathGeometry pathGeometry = new PathGeometry();
-                PathFigure pathFigure = new PathFigure {
-                    StartPoint = new Point(this.groundData.start.X, this.groundData.start.Y)
-                };
+            PathGeometry pathGeometry = new PathGeometry();
+            PathFigure pathFigure = new PathFigure {
+                StartPoint = new Point(this.groundData.start.X, this.groundData.start.Y)
+            };
 
-                ArcSegment arcSegment = new ArcSegment {
-                    Point = new Point(this.groundData.end.X, this.groundData.end.Y),
-                    Size = new Size(this.groundData.radius, this.groundData.radius),
-                    IsLargeArc = Curve.IsMiddleOnLargeArc(startAngle, endAngle, midAngle),
-                    SweepDirection = clockwise ? SweepDirection.Clockwise : SweepDirection.Counterclockwise
-                };
+            ArcSegment arcSegment = new ArcSegment {
+                Point = new Point(this.groundData.end.X, this.groundData.end.Y),
+                Size = new Size(this.groundData.radius, this.groundData.radius),
+                IsLargeArc = Curve.IsMiddleOnLargeArc(startAngle, endAngle, midAngle),
+                SweepDirection = clockwise ? SweepDirection.Clockwise : SweepDirection.Counterclockwise
+            };
 
-                pathFigure.Segments.Add(arcSegment);
-                pathGeometry.Figures.Add(pathFigure);
+            pathFigure.Segments.Add(arcSegment);
+            pathGeometry.Figures.Add(pathFigure);
 
-                context.DrawGeometry(null, this.pen, pathGeometry);
+            context.DrawGeometry(null, this.pen, pathGeometry);
 
-                context.DrawEllipse(this.brush, null, new Point(this.groundData.start.X, this.groundData.start.Y), this.groundData.width / 2, this.groundData.width / 2);
-                context.DrawEllipse(this.brush, null, new Point(this.groundData.end.X, this.groundData.end.Y), this.groundData.width / 2, this.groundData.width / 2);
-            }
+            context.DrawEllipse(this.brush, null, new Point(this.groundData.start.X, this.groundData.start.Y), this.groundData.width / 2, this.groundData.width / 2);
+            context.DrawEllipse(this.brush, null, new Point(this.groundData.end.X, this.groundData.end.Y), this.groundData.width / 2, this.groundData.width / 2);
         }
     }
 }

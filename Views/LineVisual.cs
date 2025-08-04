@@ -17,32 +17,30 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            if(this.groundData.image == null) {
-                this.brush = ParseColor.StringToBrush(this.groundData.color);
-                this.pen = new Pen(this.brush, this.groundData.width);
+            this.brush = ParseColor.StringToBrush(this.groundData.color);
+            this.pen = new Pen(this.brush, this.groundData.width);
 
-                context.DrawLine(
-                    this.pen,
-                    new Point(this.groundData.start.X, this.groundData.start.Y),
-                    new Point(this.groundData.end.X, this.groundData.end.Y)
-                );
+            context.DrawLine(
+                this.pen,
+                new Point(this.groundData.start.X, this.groundData.start.Y),
+                new Point(this.groundData.end.X, this.groundData.end.Y)
+            );
 
-                context.DrawEllipse(
-                    this.brush,
-                    null,
-                    new Point(this.groundData.start.X, this.groundData.start.Y),
-                    this.groundData.width / 2,
-                    this.groundData.width / 2
-                );
+            context.DrawEllipse(
+                this.brush,
+                null,
+                new Point(this.groundData.start.X, this.groundData.start.Y),
+                this.groundData.width / 2,
+                this.groundData.width / 2
+            );
 
-                context.DrawEllipse(
-                    this.brush,
-                    null,
-                    new Point(this.groundData.end.X, this.groundData.end.Y),
-                    this.groundData.width / 2,
-                    this.groundData.width / 2
-                );
-            }
+            context.DrawEllipse(
+                this.brush,
+                null,
+                new Point(this.groundData.end.X, this.groundData.end.Y),
+                this.groundData.width / 2,
+                this.groundData.width / 2
+            );
         }
     }
 }
