@@ -84,16 +84,18 @@ namespace PhysicsEngineCore.Views {
                     target = entity;
                 });
             } else {
-                TransformGroup transformGroup = new TransformGroup();
-
-                double angleRad = Math.Atan2(this.objectData.velocity.Y, -this.objectData.velocity.X);
-
-                transformGroup.Children.Add(new RotateTransform(angleRad * 180 / Math.PI, this.objectData.position.X, this.objectData.position.Y));
-
-                context.PushTransform(transformGroup);
                 context.PushOpacity(this.opacity);
 
                 this.objectData.entities.ForEach(entity => {
+                    TransformGroup transformGroup = new TransformGroup();
+
+                    double angleRad = Math.Atan2(this.objectData.velocity.Y, -this.objectData.velocity.X);
+
+                    transformGroup.Children.Add(new RotateTransform(angleRad * 180 / Math.PI, entity.position.X, entity.position.Y));
+
+                    context.PushTransform(transformGroup);
+                    context.PushClip(new EllipseGeometry(new Point(entity.position.X, entity.position.Y), entity.radius, entity.radius));
+
                     context.DrawImage(
                         this.objectData.image.source,
                         new Rect(
@@ -103,9 +105,11 @@ namespace PhysicsEngineCore.Views {
                             entity.diameter
                         )
                     );
+
+                    context.Pop();
+                    context.Pop();
                 });
 
-                context.Pop();
                 context.Pop();
             }
         }

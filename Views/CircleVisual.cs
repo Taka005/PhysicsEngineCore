@@ -61,6 +61,7 @@ namespace PhysicsEngineCore.Views {
 
                 context.PushTransform(transformGroup);
                 context.PushOpacity(this.opacity);
+                context.PushClip(new EllipseGeometry(new Point(this.objectData.position.X, this.objectData.position.Y), this.objectData.radius, this.objectData.radius));
 
                 context.DrawImage(
                     this.objectData.image.source,
@@ -72,6 +73,7 @@ namespace PhysicsEngineCore.Views {
                     )
                 );
 
+                context.Pop();
                 context.Pop();
                 context.Pop();
             }
