@@ -27,6 +27,13 @@ namespace PhysicsEngineCore.Views {
                 double maxY = Math.Max(this.effectData.start.Y, this.effectData.end.Y);
 
                 context.DrawRectangle(null, this.pen, new Rect(minX, minY, maxX - minX, maxY - minY));
+            } else {
+                double minX = Math.Min(this.effectData.start.X, this.effectData.end.X);
+                double minY = Math.Min(this.effectData.start.Y, this.effectData.end.Y);
+                double maxX = Math.Max(this.effectData.start.X, this.effectData.end.X);
+                double maxY = Math.Max(this.effectData.start.Y, this.effectData.end.Y);
+
+                context.DrawImage(this.effectData.image.source, new Rect(minX, minY, maxX - minX, maxY - minY));
             }
         }
     }
