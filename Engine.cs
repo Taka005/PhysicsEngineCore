@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
 using PhysicsEngineCore.Objects;
@@ -381,7 +380,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したオブジェクト</returns>
         /// <exception cref="Exception">存在しないオブジェクトのとき例外</exception>
         public IObject? SpawnObject(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(12);
+            if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             IObject? obj = null;
 
@@ -419,7 +418,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したグラウンド</returns>
         /// <exception cref="Exception">存在しないグラウンドのとき例外</exception>
         public IGround? SpawnGround(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(15);
+            if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             IGround? ground = null;
 
@@ -453,7 +452,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したエフェクト</returns>
         /// <exception cref="Exception">存在しないエフェクトのとき例外</exception>
         public IEffect? SpawnEffect(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(15);
+            if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             IEffect? effect = null;
 
@@ -566,7 +565,7 @@ namespace PhysicsEngineCore {
 
             IObject copy = obj.Clone();
 
-            copy.id = IdGenerator.CreateId(12);
+            copy.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
             copy.position = position;
 
             this.content.AddObject(copy);

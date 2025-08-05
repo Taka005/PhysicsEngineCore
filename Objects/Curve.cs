@@ -10,7 +10,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Curve : IGround {
         private string _id;
-        private readonly string _trackingId = IdGenerator.CreateId(15);
+        private readonly string _trackingId = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
         private string _color;
         private Vector2 _start;
         private Vector2 _middle;

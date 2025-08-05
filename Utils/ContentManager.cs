@@ -317,19 +317,19 @@ namespace PhysicsEngineCore.Utils {
         }
 
         class QueueObject {
-            public string id = IdGenerator.CreateId(12);
+            public string id = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
             public CommandType command;
             public IObject? target;
         }
 
         class QueueGround {
-            public string id = IdGenerator.CreateId(12);
+            public string id = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
             public CommandType command;
             public IGround? target;
         }
 
         class QueueEffect {
-            public string id = IdGenerator.CreateId(12);
+            public string id = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
             public CommandType command;
             public IEffect? target;
         }

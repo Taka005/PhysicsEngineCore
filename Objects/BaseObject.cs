@@ -137,7 +137,7 @@ namespace PhysicsEngineCore.Objects {
         /// <param name="entityOption">エンティティーの初期化引数</param>
         /// <returns></returns>
         protected Entity AddEntity(EntityOption entityOption) {
-            if(entityOption.id == null) entityOption.id = IdGenerator.CreateId(15);
+            if(entityOption.id == null) entityOption.id = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
 
             Entity entity = new Entity(entityOption);
 

@@ -9,7 +9,7 @@ namespace PhysicsEngineCore.Objects {
     /// </summary>
     public class Rope : BaseObject, IObject {
         private string _id;
-        private readonly string _trackingId = IdGenerator.CreateId(15);
+        private readonly string _trackingId = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
         private double _width;
         private string _color;
         private string? _imageName = null;
