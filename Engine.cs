@@ -773,6 +773,33 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// 指定した範囲にあるオブジェクトを取得します
+        /// </summary>
+        /// <param name="start">対象の始点ベクトル</param>
+        /// <param name="end">対象の終点ベクトル</param>
+        /// <returns>存在したオブジェクトのリスト</returns>
+        public List<IObject> GetObjectsInRect(Vector2 start, Vector2 end){
+            List<IObject> targets = [];
+
+            this.content.objects.ForEach(obj => {
+                List<Entity> entities = [..obj.entities.Where(entity =>{
+                     Vector2 difference = entity.position - (start + end) / 2;
+
+                    return (
+                        Math.Abs(difference.X) < Math.Abs(start.X - end.X) / 2 &&
+                        Math.Abs(difference.Y) < Math.Abs(start.Y - end.Y) / 2
+                    );
+                })];
+
+                if (entities.Count == 0) return;
+
+                targets.Add(obj);
+            });
+
+            return targets;
+        }
+
+        /// <summary>
         /// 指定した位置にあるグランドを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
@@ -852,7 +879,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="start">対象の始点ベクトル</param>
         /// <param name="end">対象の終点ベクトル</param>
-        /// <returns></returns>
+        /// <returns>存在したエンティティーのリスト</returns>
         public List<Entity> GetEntitiesInRect(Vector2 start, Vector2 end){
             List<Entity> targets = [];
 
