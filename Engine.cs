@@ -749,7 +749,7 @@ namespace PhysicsEngineCore {
         /// 指定した位置にあるオブジェクトを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したオブジェクトのリスト</returns>
         public List<IObject> GetObjectsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -776,7 +776,7 @@ namespace PhysicsEngineCore {
         /// 指定した位置にあるグランドを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したグランドのリスト</returns>
         public List<IGround> GetGroundsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -801,7 +801,7 @@ namespace PhysicsEngineCore {
         /// 指定した位置にあるエフェクトを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したエフェクトのリスト</returns>
         public List<IEffect> GetEffectsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -828,7 +828,7 @@ namespace PhysicsEngineCore {
         /// 指定した位置にあるエンティティーを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したエンティティーのリスト</returns>
         public List<Entity> GetEntitiesAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -843,6 +843,29 @@ namespace PhysicsEngineCore {
 
                 targets.Add(entity);
             });
+
+            return targets;
+        }
+
+        /// <summary>
+        /// 指定した範囲にあるエンティティーを取得します
+        /// </summary>
+        /// <param name="start">対象の始点ベクトル</param>
+        /// <param name="end">対象の終点ベクトル</param>
+        /// <returns></returns>
+        public List<Entity> GetEntitiesInRect(Vector2 start, Vector2 end){
+            List<Entity> targets = [];
+
+            foreach (var entity in this.content.entities){
+                Vector2 difference = entity.position - (start + end) / 2;
+
+                if(
+                    Math.Abs(difference.X) >= Math.Abs(start.X - end.X) / 2 ||
+                    Math.Abs(difference.Y) >= Math.Abs(start.Y - end.Y) / 2
+                ) continue;
+
+                targets.Add(entity);
+            }
 
             return targets;
         }
