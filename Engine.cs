@@ -18,6 +18,11 @@ namespace PhysicsEngineCore {
         public readonly static string SAVE_DATA_VERSION = "1";
 
         /// <summary>
+        /// デフォルトのIDの長さ
+        /// </summary>
+        public readonly static int DEFAULT_ID_LENGTH = 12;
+
+        /// <summary>
         /// スタートしているかどうか
         /// </summary>
         public bool isStarted = false;
@@ -546,6 +551,28 @@ namespace PhysicsEngineCore {
         /// <returns>取得したエンティティー</returns>
         public Entity? GetEntity(string id) {
             return this.content.entities.Find(obj => obj.id == id);
+        }
+
+        /// <summary>
+        /// オブジェクトを指定した座標にコピーします
+        /// </summary>
+        /// <param name="id">コピーするオブジェクトID</param>
+        /// <param name="position">コピー先の座標</param>
+        /// <returns>コピーされたオブジェクト</returns>
+        /// <exception cref="Exception">存在しないオブジェクトの時にエラー</exception>
+        public IObject CopyObject(string id,Vector2 position) {
+            IObject? obj = this.GetObject(id);
+            if(obj == null) throw new Exception($"ID {id} のオブジェクトは存在しません");
+
+            IObject copy = obj.Clone();
+
+            copy.id = IdGenerator.CreateId(12);
+            copy.position = position;
+
+            this.content.AddObject(copy);
+            this.content.Sync();
+
+            return copy;
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace PhysicsEngineCore.Options{
+﻿namespace PhysicsEngineCore.Options{
     public class LineOption : IOption{
         public string? id { get; set; }
         public string? imageName { get; set; }
@@ -10,13 +8,5 @@ namespace PhysicsEngineCore.Options{
         public double endX { get; set; }
         public double endY { get; set; }
         public double width { get; set; }
-
-        public static LineOption? ParseString(string jsonString){
-            try{
-                return JsonSerializer.Deserialize<LineOption>(jsonString);
-            } catch{
-                throw new ArgumentException("データの形式が無効です");
-            }
-        }
     }
 }

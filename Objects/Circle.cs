@@ -8,7 +8,7 @@ namespace PhysicsEngineCore.Objects {
     /// 円を表すクラス
     /// </summary>
     public class Circle : BaseObject, IObject {
-        private readonly string _id;
+        private string _id;
         private readonly string _trackingId = IdGenerator.CreateId(15);
         private double _diameter;
         private string _color;
@@ -38,14 +38,6 @@ namespace PhysicsEngineCore.Objects {
                 };
 
                 this.AddEntity(entityOption);
-            } else{
-                if(!this.position.Equals(new Vector2(option.posX, option.posY))){
-                    this.position = new Vector2(option.posX, option.posY);
-                }
-
-                if (!this.velocity.Equals(new Vector2(option.velocityX, option.velocityY))){
-                    this.velocity = new Vector2(option.velocityX, option.velocityY);
-                }
             }
         }
 
@@ -55,6 +47,15 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+            set{
+                if (string.IsNullOrEmpty(value)) throw new ArgumentException("IDは空にできません");
+
+                this._id = value;
+
+                foreach (Entity entity in this.entities) {
+                    entity.parentId = this._id;
+                }
             }
         }
 
