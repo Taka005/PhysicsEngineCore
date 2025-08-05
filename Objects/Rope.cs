@@ -56,6 +56,10 @@ namespace PhysicsEngineCore.Objects {
 
                     entity = target;
                 }
+            }else{
+                if (!this.velocity.Equals(new Vector2(option.velocityX, option.velocityY))){
+                    this.velocity = new Vector2(option.velocityX, option.velocityY);
+                }
             }
         }
 

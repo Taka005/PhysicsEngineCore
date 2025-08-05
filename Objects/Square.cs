@@ -54,6 +54,14 @@ namespace PhysicsEngineCore.Objects {
                         source.connection.Add(target, distance, source.stiffness);
                     });
                 });
+            }else{
+                if (!this.position.Equals(new Vector2(option.posX, option.posY))){
+                    this.position = new Vector2(option.posX, option.posY);
+                }
+
+                if (!this.velocity.Equals(new Vector2(option.velocityX, option.velocityY))){
+                    this.velocity = new Vector2(option.velocityX, option.velocityY);
+                }
             }
         }
 
