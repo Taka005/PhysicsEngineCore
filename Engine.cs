@@ -461,8 +461,6 @@ namespace PhysicsEngineCore {
             if(effect.imageName != null) {
                 Image? image = this.assets.Get(effect.imageName);
 
-                if(image == null) throw new Exception($"指定された画像({effect.imageName})が存在しません");
-
                 if(image != null) {
                     effect.image = image;
                 }
