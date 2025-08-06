@@ -553,28 +553,6 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
-        /// オブジェクトを指定した座標にコピーします
-        /// </summary>
-        /// <param name="id">コピーするオブジェクトID</param>
-        /// <param name="position">コピー先の座標</param>
-        /// <returns>コピーされたオブジェクト</returns>
-        /// <exception cref="Exception">存在しないオブジェクトの時にエラー</exception>
-        public IObject CopyObject(string id,Vector2 position) {
-            IObject? obj = this.GetObject(id);
-            if(obj == null) throw new Exception($"ID {id} のオブジェクトは存在しません");
-
-            IObject copy = obj.Clone();
-
-            copy.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
-            copy.position = position;
-
-            this.content.AddObject(copy);
-            this.content.Sync();
-
-            return copy;
-        }
-
-        /// <summary>
         /// 指定したX座標に最も近いグリッドの交差点の位置を取得します
         /// </summary>
         /// <param name="posX">指定するX座標</param>
@@ -655,7 +633,7 @@ namespace PhysicsEngineCore {
         /// マップデータをインポートします
         /// </summary>
         /// <param name="fileStream">マップの圧縮ストリーム</param>
-        /// <exception cref="Exception"破損時にエラー></exception>
+        /// <exception cref="Exception">破損時にエラー</exception>
         public void ImportMap(FileStream fileStream) {
             ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read);
 
