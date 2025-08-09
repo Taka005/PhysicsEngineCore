@@ -5,13 +5,11 @@ namespace PhysicsEngineCore.Views {
     public class GroundVisual : DrawingVisual {
 
         public void Draw(List<IGroundVisual> visuals) {
-            DrawingContext context = this.RenderOpen();
-
-            foreach(IGroundVisual visual in visuals) {
-                visual.Draw(context);
+            using(DrawingContext context = this.RenderOpen()) {
+                foreach(IGroundVisual visual in visuals) {
+                    visual.Draw(context);
+                }
             }
-
-            context.Close();
         }
     }
 }

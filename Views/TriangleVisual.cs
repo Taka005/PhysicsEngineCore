@@ -29,11 +29,9 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void DrawOwn() {
-            DrawingContext context = this.RenderOpen();
-
-            this.Draw(context);
-
-            context.Close();
+            using(DrawingContext context = this.RenderOpen()){
+                this.Draw(context);
+            }
         }
 
         public void Draw(DrawingContext context) {
