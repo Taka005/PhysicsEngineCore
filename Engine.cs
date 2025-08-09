@@ -639,9 +639,7 @@ namespace PhysicsEngineCore {
 
                 ZipArchiveEntry? mapEntry = archive.GetEntry("map.json");
 
-                if(mapEntry == null) {
-                    throw new Exception("マップファイルデータが破損しています");
-                }
+                if(mapEntry == null) throw new Exception("マップファイルデータが破損しています");
 
                 this.assets.Clear();
 
@@ -718,7 +716,6 @@ namespace PhysicsEngineCore {
         /// <returns>圧縮されたマップストリーム</returns>
         public Stream ExportMap() {
             using(MemoryStream memoryStream = new MemoryStream()) {
-
                 using(ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true)) {
                     ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
 
