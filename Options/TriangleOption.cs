@@ -1,5 +1,7 @@
 ﻿namespace PhysicsEngineCore.Options{
-    public class TriangleOption : BaseOption{
+    public class TriangleOption : IOption{
+        public string? id { get; set; }
+        public string? imageName { get; set; }
         public double posX { get; set; }
         public double posY { get; set; }
         public double size { get; set; }

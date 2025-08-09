@@ -9,8 +9,8 @@ namespace PhysicsEngineCore.Objects {
     /// 曲線を表すクラス
     /// </summary>
     public class Curve : IGround {
-        private readonly string _id;
-        private readonly string _trackingId = IdGenerator.CreateId(15);
+        private string _id;
+        private readonly string _trackingId = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
         private string _color;
         private Vector2 _start;
         private Vector2 _middle;
@@ -43,6 +43,11 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return this._id;
+            }
+            set{
+                if (string.IsNullOrEmpty(value)) throw new ArgumentException("IDは空にできません");
+
+                this._id = value;
             }
         }
 

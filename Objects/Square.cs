@@ -8,8 +8,8 @@ namespace PhysicsEngineCore.Objects {
     /// 四角を表すクラス
     /// </summary>
     public class Square : BaseObject, IObject {
-        private readonly string _id;
-        private readonly string _trackingId = IdGenerator.CreateId(15);
+        private string _id;
+        private readonly string _trackingId = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
         private double _size;
         private string _color;
         private string? _imageName = null;
@@ -63,6 +63,15 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+            set{
+                if (string.IsNullOrEmpty(value)) throw new ArgumentException("IDは空にできません");
+
+                this._id = value;
+
+                foreach (Entity entity in this.entities){
+                    entity.parentId = this._id;
+                }
             }
         }
 

@@ -1,5 +1,7 @@
 ﻿namespace PhysicsEngineCore.Options{
-    public class SquareOption() : BaseOption {
+    public class SquareOption() : IOption{
+        public string? id { get; set; }
+        public string? imageName { get; set; }
         public double posX { get; set; }
         public double posY { get; set; }
         public double size { get; set; }

@@ -2,7 +2,7 @@
 
 namespace PhysicsEngineCore.Objects.Interfaces {
     public interface IEffect {
-        string id { get; }
+        string id { get; set; }
         string trackingId { get; }
         string color { get; set; }
         string? imageName { get; }

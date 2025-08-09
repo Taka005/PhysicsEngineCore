@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
 using PhysicsEngineCore.Objects;
@@ -16,6 +15,11 @@ namespace PhysicsEngineCore {
         /// セーブデータのバージョン
         /// </summary>
         public readonly static string SAVE_DATA_VERSION = "1";
+
+        /// <summary>
+        /// デフォルトのIDの長さ
+        /// </summary>
+        public readonly static int DEFAULT_ID_LENGTH = 12;
 
         /// <summary>
         /// スタートしているかどうか
@@ -376,7 +380,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したオブジェクト</returns>
         /// <exception cref="Exception">存在しないオブジェクトのとき例外</exception>
         public IObject? SpawnObject(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(12);
+            if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             IObject? obj = null;
 
@@ -414,7 +418,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したグラウンド</returns>
         /// <exception cref="Exception">存在しないグラウンドのとき例外</exception>
         public IGround? SpawnGround(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(15);
+            if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             IGround? ground = null;
 
@@ -448,7 +452,7 @@ namespace PhysicsEngineCore {
         /// <returns>生成したエフェクト</returns>
         /// <exception cref="Exception">存在しないエフェクトのとき例外</exception>
         public IEffect? SpawnEffect(IOption option) {
-            if(option.id == null) option.id = IdGenerator.CreateId(15);
+            if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             IEffect? effect = null;
 
@@ -460,8 +464,6 @@ namespace PhysicsEngineCore {
 
             if(effect.imageName != null) {
                 Image? image = this.assets.Get(effect.imageName);
-
-                if(image == null) throw new Exception($"指定された画像({effect.imageName})が存在しません");
 
                 if(image != null) {
                     effect.image = image;
@@ -631,7 +633,7 @@ namespace PhysicsEngineCore {
         /// マップデータをインポートします
         /// </summary>
         /// <param name="fileStream">マップの圧縮ストリーム</param>
-        /// <exception cref="Exception"破損時にエラー></exception>
+        /// <exception cref="Exception">破損時にエラー</exception>
         public void ImportMap(FileStream fileStream) {
             ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read);
 
@@ -751,7 +753,7 @@ namespace PhysicsEngineCore {
         /// 指定した位置にあるオブジェクトを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したオブジェクトのリスト</returns>
         public List<IObject> GetObjectsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -775,10 +777,37 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// 指定した範囲にあるオブジェクトを取得します
+        /// </summary>
+        /// <param name="start">対象の始点ベクトル</param>
+        /// <param name="end">対象の終点ベクトル</param>
+        /// <returns>存在したオブジェクトのリスト</returns>
+        public List<IObject> GetObjectsInRect(Vector2 start, Vector2 end){
+            List<IObject> targets = [];
+
+            this.content.objects.ForEach(obj => {
+                List<Entity> entities = [..obj.entities.Where(entity =>{
+                     Vector2 difference = entity.position - (start + end) / 2;
+
+                    return (
+                        Math.Abs(difference.X) < Math.Abs(start.X - end.X) / 2 &&
+                        Math.Abs(difference.Y) < Math.Abs(start.Y - end.Y) / 2
+                    );
+                })];
+
+                if (entities.Count == 0) return;
+
+                targets.Add(obj);
+            });
+
+            return targets;
+        }
+
+        /// <summary>
         /// 指定した位置にあるグランドを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したグランドのリスト</returns>
         public List<IGround> GetGroundsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -803,7 +832,7 @@ namespace PhysicsEngineCore {
         /// 指定した位置にあるエフェクトを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したエフェクトのリスト</returns>
         public List<IEffect> GetEffectsAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -830,7 +859,7 @@ namespace PhysicsEngineCore {
         /// 指定した位置にあるエンティティーを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
-        /// <param name="posY">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
         /// <returns>存在したエンティティーのリスト</returns>
         public List<Entity> GetEntitiesAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
@@ -845,6 +874,29 @@ namespace PhysicsEngineCore {
 
                 targets.Add(entity);
             });
+
+            return targets;
+        }
+
+        /// <summary>
+        /// 指定した範囲にあるエンティティーを取得します
+        /// </summary>
+        /// <param name="start">対象の始点ベクトル</param>
+        /// <param name="end">対象の終点ベクトル</param>
+        /// <returns>存在したエンティティーのリスト</returns>
+        public List<Entity> GetEntitiesInRect(Vector2 start, Vector2 end){
+            List<Entity> targets = [];
+
+            foreach (var entity in this.content.entities){
+                Vector2 difference = entity.position - (start + end) / 2;
+
+                if(
+                    Math.Abs(difference.X) >= Math.Abs(start.X - end.X) / 2 ||
+                    Math.Abs(difference.Y) >= Math.Abs(start.Y - end.Y) / 2
+                ) continue;
+
+                targets.Add(entity);
+            }
 
             return targets;
         }

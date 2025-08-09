@@ -8,8 +8,8 @@ namespace PhysicsEngineCore.Objects {
     /// ロープを表すクラス
     /// </summary>
     public class Rope : BaseObject, IObject {
-        private readonly string _id;
-        private readonly string _trackingId = IdGenerator.CreateId(15);
+        private string _id;
+        private readonly string _trackingId = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
         private double _width;
         private string _color;
         private string? _imageName = null;
@@ -56,6 +56,10 @@ namespace PhysicsEngineCore.Objects {
 
                     entity = target;
                 }
+            }else{
+                if (!this.velocity.Equals(new Vector2(option.velocityX, option.velocityY))){
+                    this.velocity = new Vector2(option.velocityX, option.velocityY);
+                }
             }
         }
 
@@ -65,6 +69,15 @@ namespace PhysicsEngineCore.Objects {
         public string id {
             get {
                 return _id;
+            }
+            set{
+                if (string.IsNullOrEmpty(value)) throw new ArgumentException("IDは空にできません");
+
+                this._id = value;
+
+                foreach (Entity entity in this.entities){
+                    entity.parentId = this._id;
+                }
             }
         }
 

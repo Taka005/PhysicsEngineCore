@@ -2,7 +2,7 @@
 
 namespace PhysicsEngineCore.Objects.Interfaces {
     public interface IGround {
-        string id { get; }
+        string id { get; set; }
         string trackingId { get; }
         string color { get; set; }
         double width { get; set; }

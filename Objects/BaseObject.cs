@@ -72,6 +72,28 @@ namespace PhysicsEngineCore.Objects {
 
                 this._entities.ForEach(entity => {
                     entity.position += difference;
+                    entity.previousPosition += difference;
+                });
+            }
+        }
+
+        /// <summary>
+        /// 全てのエンティティーの平均前回位置
+        /// </summary>
+        public Vector2 prePosition {
+            get {
+                if(this.count == 0) return Vector2.Zero;
+
+                double averagePrePosX = this._entities.Select(entity => entity.previousPosition.X).Average();
+                double averagePrePosY = this._entities.Select(entity => entity.previousPosition.Y).Average();
+
+                return new Vector2(averagePrePosX, averagePrePosY);
+            }
+            set {
+                Vector2 difference = value - this.prePosition;
+
+                this._entities.ForEach(entity => {
+                    entity.previousPosition += difference;
                 });
             }
         }
@@ -137,7 +159,7 @@ namespace PhysicsEngineCore.Objects {
         /// <param name="entityOption">エンティティーの初期化引数</param>
         /// <returns></returns>
         protected Entity AddEntity(EntityOption entityOption) {
-            if(entityOption.id == null) entityOption.id = IdGenerator.CreateId(15);
+            if(entityOption.id == null) entityOption.id = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
 
             Entity entity = new Entity(entityOption);
 
