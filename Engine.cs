@@ -635,45 +635,42 @@ namespace PhysicsEngineCore {
         /// <param name="fileStream">マップの圧縮ストリーム</param>
         /// <exception cref="Exception">破損時にエラー</exception>
         public void ImportMap(FileStream fileStream) {
-            ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read);
+            using(ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read)) {
 
-            ZipArchiveEntry? mapEntry = archive.GetEntry("map.json");
+                ZipArchiveEntry? mapEntry = archive.GetEntry("map.json");
 
-            if(mapEntry == null) {
-                archive.Dispose();
-                throw new Exception("マップファイルデータが破損しています");
-            }
+                if(mapEntry == null) {
+                    throw new Exception("マップファイルデータが破損しています");
+                }
 
-            this.assets.Clear();
+                this.assets.Clear();
 
-            foreach (ZipArchiveEntry entry in archive.Entries){
-                bool isInAssetsFolder = entry.FullName.StartsWith("assets/", StringComparison.OrdinalIgnoreCase) || entry.FullName.StartsWith("assets\\", StringComparison.OrdinalIgnoreCase);
+                foreach(ZipArchiveEntry entry in archive.Entries) {
+                    bool isInAssetsFolder = entry.FullName.StartsWith("assets/", StringComparison.OrdinalIgnoreCase) || entry.FullName.StartsWith("assets\\", StringComparison.OrdinalIgnoreCase);
 
-                if (entry.FullName.EndsWith("/") || entry.FullName.EndsWith("\\")) continue;
+                    if(entry.FullName.EndsWith("/") || entry.FullName.EndsWith("\\")) continue;
 
-                bool isImageFile = AssetsManager.imageExtensions.Any(ext => entry.FullName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
-                if (isInAssetsFolder && isImageFile) {
-                    Stream entryStream = entry.Open();
+                    bool isImageFile = AssetsManager.imageExtensions.Any(ext => entry.FullName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+                    if(isInAssetsFolder && isImageFile) {
+                        using(Stream entryStream = entry.Open()) {
+                            using(MemoryStream memoryStream = new MemoryStream()) {
+                                entryStream.CopyTo(memoryStream);
+                                memoryStream.Position = 0;
 
-                    MemoryStream memoryStream = new MemoryStream();
-                    entryStream.CopyTo(memoryStream);
-                    memoryStream.Position = 0;
+                                this.assets.Add(Path.GetFileName(entry.FullName), memoryStream);
+                            }
+                        }
+                    }
+                }
 
-                    this.assets.Add(Path.GetFileName(entry.FullName), memoryStream);
+                using(Stream mapStream = mapEntry.Open()) {
+                    using(StreamReader reader = new StreamReader(mapStream)) {
+                        string rawSaveData = reader.ReadToEnd();
 
-                    entryStream.Dispose();
+                        this.Import(rawSaveData);
+                    }
                 }
             }
-
-            Stream mapStream = mapEntry.Open();
-            StreamReader reader = new StreamReader(mapStream);
-            string rawSaveData = reader.ReadToEnd();
-
-            this.Import(rawSaveData);
-
-            reader.Dispose();
-            mapStream.Dispose();
-            archive.Dispose();
         }
 
         /// <summary>
@@ -720,33 +717,28 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <returns>圧縮されたマップストリーム</returns>
         public Stream ExportMap() {
-            MemoryStream memoryStream = new MemoryStream();
+            using(MemoryStream memoryStream = new MemoryStream()) {
 
-            ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true);
+                using(ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true)) {
+                    ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
 
-            ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
+                    using(StreamWriter writer = new StreamWriter(mapEntry.Open())) {
+                        writer.Write(this.Export());
+                    }
 
-            StreamWriter writer = new StreamWriter(mapEntry.Open());
+                    foreach(Image image in this.assets.images) {
+                        ZipArchiveEntry imageEntry = archive.CreateEntry($"assets/{image.filename}");
 
-            writer.Write(this.Export());
+                        using(Stream imageStream = image.source.StreamSource) {
+                            imageStream.CopyTo(imageEntry.Open());
+                        }
+                    }
+                }
 
-            writer.Dispose();
+                memoryStream.Position = 0;
 
-            foreach(Image image in this.assets.images) {
-                ZipArchiveEntry imageEntry = archive.CreateEntry($"assets/{image.filename}");
-
-                Stream imageStream = image.source.StreamSource;
-
-                imageStream.CopyTo(imageEntry.Open());
-
-                imageStream.Dispose();
+                return memoryStream;
             }
-
-            archive.Dispose();
-
-            memoryStream.Position = 0;
-
-            return memoryStream;
         }
 
         /// <summary>
