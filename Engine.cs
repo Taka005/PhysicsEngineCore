@@ -715,27 +715,27 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <returns>圧縮されたマップストリーム</returns>
         public Stream ExportMap() {
-            using(MemoryStream memoryStream = new MemoryStream()) {
-                using(ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true)) {
-                    ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
+            MemoryStream memoryStream = new MemoryStream();
 
-                    using(StreamWriter writer = new StreamWriter(mapEntry.Open())) {
-                        writer.Write(this.Export());
-                    }
+            using(ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true)) {
+                ZipArchiveEntry mapEntry = archive.CreateEntry("map.json");
 
-                    foreach(Image image in this.assets.images) {
-                        ZipArchiveEntry imageEntry = archive.CreateEntry($"assets/{image.filename}");
-
-                        using(Stream imageStream = image.source.StreamSource) {
-                            imageStream.CopyTo(imageEntry.Open());
-                        }
-                    }
+                using(StreamWriter writer = new StreamWriter(mapEntry.Open())) {
+                    writer.Write(this.Export());
                 }
 
-                memoryStream.Position = 0;
+                foreach(Image image in this.assets.images) {
+                    ZipArchiveEntry imageEntry = archive.CreateEntry($"assets/{image.filename}");
 
-                return memoryStream;
+                    using(Stream imageStream = image.source.StreamSource) {
+                        imageStream.CopyTo(imageEntry.Open());
+                    }
+                }
             }
+
+            memoryStream.Position = 0;
+
+            return memoryStream;
         }
 
         /// <summary>
