@@ -262,7 +262,7 @@ namespace PhysicsEngineCore {
             string[] parts = varName.Split(":");
             object value = this.GetVariable(parts[0], localVariables);
 
-            this.SetObjectProperty(value, parts[1], args[2]);
+            this.SetObjectProperty(value, parts[1], args[1]);
         }
 
         /// <summary>
@@ -334,13 +334,17 @@ namespace PhysicsEngineCore {
         /// <param name="propName">設定するプロパティー</param>
         /// <param name="value">設定する値</param>
         /// <exception cref="Exception">存在しないプロパティー、書き込み不可の時にエラー</exception>
-        private void SetObjectProperty(object obj, string propName, object value) {
-            PropertyInfo? prop = obj.GetType().GetProperty(propName);
-            if(prop == null) throw new CommandException($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
+        private void SetObjectProperty(object obj, string propName, object strValue) {
+            if(double.TryParse(strValue.ToString(), out double value)){
+                PropertyInfo? prop = obj.GetType().GetProperty(propName);
+                if(prop == null) throw new CommandException($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
 
-            if(!prop.CanWrite) throw new CommandException($"プロパティ '{propName}' は書き込み不可です");
+                if(!prop.CanWrite) throw new CommandException($"プロパティ '{propName}' は書き込み不可です");
 
-            prop.SetValue(obj, value);
+                prop.SetValue(obj, value);
+            } else {
+                throw new CommandException($"値 '{strValue}' は数値に変換できませんでした。プロパティ '{propName}' の値は数値である必要があります");
+            }
         }
 
         /// <summary>
