@@ -7,6 +7,20 @@ namespace PhysicsEngineCore{
         private readonly Dictionary<string, object> globalVariables = [];
 
         /// <summary>
+        /// コマンドを複数行実行します
+        /// </summary>
+        /// <param name="commandList">実行するコマンドのリスト</param>
+        public void ExecuteMulti(string commandList) {
+            Dictionary<string, object> localVariables = [];
+
+            string[] commands = commandList.Split(["\n", "\r"], StringSplitOptions.RemoveEmptyEntries);
+
+            foreach(string command in commands) {
+                this.Execute(command, localVariables);
+            }
+        }
+
+        /// <summary>
         /// コマンドを実行します
         /// </summary>
         /// <param name="command">実行するコマンド</param>
