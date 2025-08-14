@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using PhysicsEngineCore.Exceptions;
 
 namespace PhysicsEngineCore {
@@ -258,11 +257,23 @@ namespace PhysicsEngineCore {
         private void HandleUpdateCommand(string[] args, Dictionary<string, object> localVariables) {
             if(args.Length < 2) throw new CommandException("Updateコマンドの引数の数が正しくありません。引数は2つである必要があります", "/update");
 
-            string varName = args[0];
-            string[] parts = varName.Split(":");
-            object value = this.GetVariable(parts[0], localVariables);
+            string fullPropertyPath = args[0];
+            string valueToSet = args[1];
 
-            this.SetObjectProperty(value, parts[1], args[1]);
+            string[] pathParts = fullPropertyPath.Split(':');
+            if(pathParts.Length < 2) throw new CommandException("プロパティパスの形式が正しくありません。'変数名:プロパティ名'の形式で指定してください。", "/update");
+
+            string varName = pathParts[0];
+            object? currentObject = this.GetVariable(varName, localVariables);
+
+            string propertyToSet = pathParts[^1];
+            for(int i = 1;i < pathParts.Length - 1;i++) {
+                currentObject = this.GetObjectProperty(currentObject, pathParts[i]);
+
+                if(currentObject == null) throw new CommandException($"プロパティ'{pathParts[i]}'が見つからないか、nullです。", "/update");
+            }
+
+            this.SetObjectProperty(currentObject, propertyToSet, valueToSet);
         }
 
         /// <summary>
@@ -335,17 +346,35 @@ namespace PhysicsEngineCore {
         /// <param name="value">設定する値</param>
         /// <exception cref="Exception">存在しないプロパティー、書き込み不可の時にエラー</exception>
         private void SetObjectProperty(object obj, string propName, object strValue) {
-            if(double.TryParse(strValue.ToString(), out double value)){
-                PropertyInfo? prop = obj.GetType().GetProperty(propName);
-                if(prop == null) throw new CommandException($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
-
+            PropertyInfo? prop = obj.GetType().GetProperty(propName);
+            if(prop != null) {
                 if(!prop.CanWrite) throw new CommandException($"プロパティ '{propName}' は書き込み不可です");
 
-                prop.SetValue(obj, value);
-            } else {
-                throw new CommandException($"値 '{strValue}' は数値に変換できませんでした。プロパティ '{propName}' の値は数値である必要があります");
+                try {
+                    object convertedValue = Convert.ChangeType(strValue, prop.PropertyType);
+                    prop.SetValue(obj, convertedValue);
+
+                    return;
+                } catch {
+                    throw new CommandException($"値 '{strValue}' をプロパティ '{propName}' の型 '{prop.PropertyType.Name}' に変換できませんでした");
+                }
             }
+
+            FieldInfo? field = obj.GetType().GetField(propName);
+            if(field != null) {
+                try {
+                    object convertedValue = Convert.ChangeType(strValue, field.FieldType);
+                    field.SetValue(obj, convertedValue);
+
+                    return;
+                } catch{
+                    throw new CommandException($"値 '{strValue}' をフィールド '{propName}' の型 '{field.FieldType.Name}' に変換できませんでした");
+                }
+            }
+
+            throw new CommandException($"プロパティまたはフィールド '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
         }
+
 
         /// <summary>
         /// 指定されたIDに関連するオブジェクトを取得します
