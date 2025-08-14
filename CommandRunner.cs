@@ -1,11 +1,17 @@
 ﻿using System.Reflection;
 
 namespace PhysicsEngineCore{
-    class CommandRunner(Engine engine){
+    public class CommandRunner(Engine engine){
         private readonly Engine engine = engine;
 
         private readonly Dictionary<string, object> globalVariables = [];
 
+        /// <summary>
+        /// コマンドを実行します
+        /// </summary>
+        /// <param name="command">実行するコマンド</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">存在しないコマンドの時にエラー</exception>
         public void Execute(string command,Dictionary<string, object> localVariables) {
             string[] parts = command.Split(" ");
             string commandName = parts[0];
@@ -28,7 +34,7 @@ namespace PhysicsEngineCore{
             object? value = this.SolveVariable(args[1], localVariables);
             bool isGlobal = args.Length > 2 && args[2].ToLower() == "global";
 
-            if(value == null) throw new Exception($"' {args[1]} ' を解決できませんでした");
+            if(value == null) throw new Exception($"値 ' {args[1]} ' を解決できませんでした");
 
             if(isGlobal) {
                 this.globalVariables[varName] = value;
@@ -44,7 +50,7 @@ namespace PhysicsEngineCore{
             object? value = this.GetAnyObject(args[1]);
             bool isGlobal = args.Length > 2 && args[2].ToLower() == "global";
 
-            if(value == null) throw new Exception($"' {args[1]} ' を解決できませんでした");
+            if(value == null) throw new Exception($"オブジェクトID ' {args[1]} ' を解決できませんでした");
 
             if(isGlobal) {
                 this.globalVariables[varName] = value;
@@ -54,28 +60,51 @@ namespace PhysicsEngineCore{
         }
 
         private void HandleUpdateCommand(string[] args, Dictionary<string, object> localVariables) {
+            if(args.Length < 2) throw new Exception("Updateコマンドの引数の数が正しくありません。引数は2つである必要があります");
 
         }
 
+        /// <summary>
+        /// 変数または値を解決します
+        /// </summary>
+        /// <param name="varName">解決する変数または値</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <returns>解決したときのオブジェクト</returns>
         private object? SolveVariable(string varName, Dictionary<string, object> localVariables) {
             if(varName.StartsWith("\"") && varName.EndsWith("\"")) {
                 return varName[1..^1];
-            }{
+            }else {
                 string[] parts = varName.Split(":");
-                Object? value;
-
-                if(localVariables.TryGetValue(parts[0], out object? localValue)) {
-                    value = localValue;
-                } else if(this.globalVariables.TryGetValue(parts[0], out object? globalValue)) {
-                    value = globalValue;
-                } else {
-                    throw new Exception($"変数 '{varName}' が存在しませんでした");
-                }
+                object value = this.GetVariable(varName, localVariables);
 
                 return parts.Length > 1 ? this.GetObjectProperty(value, parts[1]) : value;
             }
         }
 
+        /// <summary>
+        /// 変数の値を取得します
+        /// </summary>
+        /// <param name="varName">取得する変数</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <returns>取得したときの変数の値</returns>
+        /// <exception cref="Exception">変数が存在しないときにエラー</exception>
+        private object GetVariable(string varName, Dictionary<string, object> localVariables) {
+            if(localVariables.TryGetValue(varName, out object? localValue)) {
+                return localValue;
+            } else if(this.globalVariables.TryGetValue(varName, out object? globalValue)) {
+                return globalValue;
+            } else {
+                throw new Exception($"変数 '{varName}' が存在しませんでした");
+            }
+        }
+
+        /// <summary>
+        /// オブジェクトのプロパティを取得します
+        /// </summary>
+        /// <param name="obj">取得するオブジェクト</param>
+        /// <param name="propName">取得するプロパティー</param>
+        /// <returns>取得したプロパティーの値</returns>
+        /// <exception cref="Exception">存在しないプロパティーの時にエラー</exception>
         private object? GetObjectProperty(object obj, string propName) {
             PropertyInfo? prop = obj.GetType().GetProperty(propName);
             if(prop == null) throw new Exception($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
@@ -83,6 +112,12 @@ namespace PhysicsEngineCore{
             return prop.GetValue(obj);
         }
 
+        /// <summary>
+        /// 指定されたIDに関連するオブジェクトを取得します
+        /// Object、Ground、Effectの順で優先的に取得されます
+        /// </summary>
+        /// <param name="id">オブジェクトID</param>
+        /// <returns>取得されたオブジェクト</returns>
         private object? GetAnyObject(string id) {
             object? obj = this.engine.GetObject(id);
             object? ground = this.engine.GetGround(id);

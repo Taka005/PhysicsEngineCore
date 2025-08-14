@@ -77,6 +77,11 @@ namespace PhysicsEngineCore {
         public readonly Render render;
 
         /// <summary>
+        /// コマンドランナー
+        /// </summary>
+        public readonly CommandRunner command;
+
+        /// <summary>
         /// コンテンツマネージャー
         /// </summary>
         private readonly ContentManager content = new ContentManager();
@@ -99,6 +104,7 @@ namespace PhysicsEngineCore {
             }
 
             this.render = new Render(renderOption);
+            this.command = new CommandRunner(this);
 
             this.loopTimer = new Timer(this.Loop!, null, Timeout.Infinite, Timeout.Infinite);
         }
