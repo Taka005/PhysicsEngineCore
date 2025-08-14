@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using PhysicsEngineCore.Exceptions;
 
 namespace PhysicsEngineCore {
     public class CommandRunner{
@@ -63,7 +64,7 @@ namespace PhysicsEngineCore {
             } else if(commandName == "/func") {
                 this.HandleFuncCommand([.. parts.Skip(1)], localVariables);
             } else {
-                throw new Exception($"不明なコマンド: {commandName}");
+                throw new CommandException($"不明なコマンド: {commandName}");
             }
         }
 
@@ -74,13 +75,13 @@ namespace PhysicsEngineCore {
         /// <param name="localVariables">ローカル変数の辞書</param>
         /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleSetCommand(string[] args, Dictionary<string, object> localVariables) {
-            if(args.Length < 2) throw new Exception("Setコマンドの引数の数が正しくありません。引数は2つである必要があります");
+            if(args.Length < 2) throw new CommandException("Setコマンドの引数の数が正しくありません。引数は2つである必要があります","/set");
 
             string varName = args[0];
             object? value = this.SolveVariable(args[1], localVariables);
             bool isGlobal = args.Length > 2 && args[2].ToLower() == "global";
 
-            if(value == null) throw new Exception($"値 ' {args[1]} ' を解決できませんでした");
+            if(value == null) throw new CommandException($"値 ' {args[1]} ' を解決できませんでした","/set");
 
             if(isGlobal) {
                 this.globalVariables[varName] = value;
@@ -96,14 +97,14 @@ namespace PhysicsEngineCore {
         /// <param name="localVariables">ローカル変数の辞書</param>
         /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleCalcCommand(string[] args, Dictionary<string, object> localVariables) {
-            if(args.Length != 4) throw new Exception("Setコマンドの引数の数が正しくありません。引数は2つである必要があります");
+            if(args.Length != 4) throw new CommandException("Setコマンドの引数の数が正しくありません。引数は2つである必要があります", "/calc");
 
             string resultVarName = args[0];
             object? strValue = this.SolveVariable(args[1],localVariables);
             string operatorSymbol = args[2];
             object? strValue2 = this.SolveVariable(args[3], localVariables);
 
-            if(strValue == null || strValue2 == null) throw new Exception("値を解決できませんでした");
+            if(strValue == null || strValue2 == null) throw new CommandException("値を解決できませんでした", "/calc");
 
             if(double.TryParse(strValue.ToString(), out double value) && double.TryParse(strValue2.ToString(), out double value2)) {
                 double result = 0;
@@ -121,13 +122,13 @@ namespace PhysicsEngineCore {
 
                         break;
                     case "/":
-                        if(value2 == 0) throw new Exception("0で割ることはできません");
+                        if(value2 == 0) throw new CommandException("0で割ることはできません", "/calc");
 
                         result = value / value2;
 
                         break;
                     case "%":
-                        if(value2 == 0) throw new Exception("0で割ることはできません");
+                        if(value2 == 0) throw new CommandException("0で割ることはできません", "/calc");
 
                         result = value % value2;
 
@@ -137,7 +138,7 @@ namespace PhysicsEngineCore {
 
                         break;
                     default:
-                        throw new Exception("サポートされていない演算子です");
+                        throw new CommandException("サポートされていない演算子です", "/calc");
                 }
 
                 this.SetVariable(resultVarName, result, localVariables);
@@ -151,13 +152,13 @@ namespace PhysicsEngineCore {
         /// <param name="localVariables">ローカル変数の辞書</param>
         /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleFuncCommand(string[] args, Dictionary<string, object> localVariables) {
-            if(args.Length != 3) throw new Exception("Funcコマンドの引数の数が正しくありません。引数は3つである必要があります");
+            if(args.Length != 3) throw new CommandException("Funcコマンドの引数の数が正しくありません。引数は3つである必要があります", "/func");
 
             string resultVarName = args[0];
             string operatorSymbol = args[1].ToLower();
             object? strValue = this.SolveVariable(args[2], localVariables);
 
-            if(strValue == null) throw new Exception("値を解決できませんでした");
+            if(strValue == null) throw new CommandException("値を解決できませんでした", "/func");
 
             if(double.TryParse(strValue.ToString(), out double value)) {
                 double result = 0;
@@ -179,13 +180,13 @@ namespace PhysicsEngineCore {
 
                         break;
                     case "sqrt":
-                        if(value < 0) throw new Exception("負の数の平方根は計算できません");
+                        if(value < 0) throw new CommandException("負の数の平方根は計算できません", "/func");
 
                         result = Math.Sqrt(value);
 
                         break;
                     default:
-                        throw new Exception("サポートされていない関数です");
+                        throw new CommandException("サポートされていない関数です", "/func");
                 }
 
                 this.SetVariable(resultVarName, result, localVariables);
@@ -199,13 +200,13 @@ namespace PhysicsEngineCore {
         /// <param name="localVariables">ローカル変数の辞書</param>
         /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleGetCommand(string[] args, Dictionary<string, object> localVariables) {
-            if(args.Length < 2) throw new Exception("Getコマンドの引数の数が正しくありません。引数は2つである必要があります");
+            if(args.Length < 2) throw new CommandException("Getコマンドの引数の数が正しくありません。引数は2つである必要があります", "/get");
 
             string varName = args[0];
             object? value = this.GetAnyObject(args[1]);
             bool isGlobal = args.Length > 2 && args[2].ToLower() == "global";
 
-            if(value == null) throw new Exception($"オブジェクトID ' {args[1]} ' を解決できませんでした");
+            if(value == null) throw new CommandException($"オブジェクトID ' {args[1]} ' を解決できませんでした", "/get");
 
             if(isGlobal) {
                 this.globalVariables[varName] = value;
@@ -221,7 +222,7 @@ namespace PhysicsEngineCore {
         /// <param name="localVariables">ローカル変数の辞書</param>
         /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleUpdateCommand(string[] args, Dictionary<string, object> localVariables) {
-            if(args.Length < 2) throw new Exception("Updateコマンドの引数の数が正しくありません。引数は2つである必要があります");
+            if(args.Length < 2) throw new CommandException("Updateコマンドの引数の数が正しくありません。引数は2つである必要があります", "/update");
 
             string varName = args[0];
             string[] parts = varName.Split(":");
@@ -260,7 +261,7 @@ namespace PhysicsEngineCore {
             } else if(this.globalVariables.TryGetValue(varName, out object? globalValue)) {
                 return globalValue;
             } else {
-                throw new Exception($"変数 '{varName}' が存在しませんでした");
+                throw new CommandException($"変数 '{varName}' が存在しませんでした");
             }
         }
 
@@ -287,7 +288,7 @@ namespace PhysicsEngineCore {
         /// <exception cref="Exception">存在しないプロパティーの時にエラー</exception>
         private object? GetObjectProperty(object obj, string propName) {
             PropertyInfo? prop = obj.GetType().GetProperty(propName);
-            if(prop == null) throw new Exception($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
+            if(prop == null) throw new CommandException($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
 
             return prop.GetValue(obj);
         }
@@ -301,9 +302,9 @@ namespace PhysicsEngineCore {
         /// <exception cref="Exception">存在しないプロパティー、書き込み不可の時にエラー</exception>
         private void SetObjectProperty(object obj, string propName, object value) {
             PropertyInfo? prop = obj.GetType().GetProperty(propName);
-            if(prop == null) throw new Exception($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
+            if(prop == null) throw new CommandException($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
 
-            if(!prop.CanWrite) throw new Exception($"プロパティ '{propName}' は書き込み不可です");
+            if(!prop.CanWrite) throw new CommandException($"プロパティ '{propName}' は書き込み不可です");
 
             prop.SetValue(obj, value);
         }
