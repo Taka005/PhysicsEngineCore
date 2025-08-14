@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using PhysicsEngineCore.Exceptions;
 
 namespace PhysicsEngineCore {
@@ -70,7 +71,7 @@ namespace PhysicsEngineCore {
                 return "利用可能なコマンド:\n" +
                 "/set <変数名> <値> [global] - 変数を設定します。globalを指定するとグローバル変数になります\n" +
                 "/get <変数名> <オブジェクトID> [global] - オブジェクトのプロパティを取得し、変数に設定します\n" +
-                "/update <変数名> <プロパティ名> <値> - オブジェクトのプロパティを更新します\n" +
+                "/update <変数名:プロパティー名> <値> - オブジェクトのプロパティを更新します\n" +
                 "/calc <結果変数名> <値1> <演算子> <値2> - 数学的な計算を行い、結果を変数に設定します\n" +
                 "/func <結果変数名> <関数名> <値> - 数学関数を適用し、結果を変数に設定します\n" +
                 "/console <変数名> - 変数をコンソールに出力します\n" +
