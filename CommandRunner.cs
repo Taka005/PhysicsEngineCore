@@ -97,10 +97,14 @@ namespace PhysicsEngineCore {
 
             if(value == null) throw new CommandException($"値 ' {args[1]} ' を解決できませんでした","/set");
 
-            if(isGlobal) {
-                this.globalVariables[varName] = value;
+            if(localVariables.ContainsKey(varName) || this.globalVariables.ContainsKey(varName)) {
+                this.SetVariable(varName, value, localVariables);
             } else {
-                localVariables[varName] = value;
+                if(isGlobal) {
+                    this.globalVariables[varName] = value;
+                } else {
+                    localVariables[varName] = value;
+                }
             }
         }
 
