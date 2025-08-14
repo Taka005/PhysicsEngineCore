@@ -46,8 +46,9 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="command">実行するコマンド</param>
         /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <returns>コマンドの実行結果</returns>
         /// <exception cref="Exception">存在しないコマンドの時にエラー</exception>
-        public void Execute(string command,Dictionary<string, object> localVariables) {
+        public string? Execute(string command,Dictionary<string, object> localVariables) {
             string[] parts = command.Split(" ");
             string commandName = parts[0];
 
@@ -59,13 +60,26 @@ namespace PhysicsEngineCore {
                 this.HandleUpdateCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/calc") {
                 this.HandleCalcCommand([.. parts.Skip(1)], localVariables);
-            }else if(commandName == "/clear") {
+            } else if(commandName == "/clear") {
                 this.Clear();
             } else if(commandName == "/func") {
                 this.HandleFuncCommand([.. parts.Skip(1)], localVariables);
+            } else if(commandName == "/console") {
+                return this.HandleConsoleCommand([.. parts.Skip(1)], localVariables);
+            } else if(commandName == "/help") {
+                return "利用可能なコマンド:\n" +
+                "/set <変数名> <値> [global] - 変数を設定します。globalを指定するとグローバル変数になります\n" +
+                "/get <変数名> <オブジェクトID> [global] - オブジェクトのプロパティを取得し、変数に設定します\n" +
+                "/update <変数名> <プロパティ名> <値> - オブジェクトのプロパティを更新します\n" +
+                "/calc <結果変数名> <値1> <演算子> <値2> - 数学的な計算を行い、結果を変数に設定します\n" +
+                "/func <結果変数名> <関数名> <値> - 数学関数を適用し、結果を変数に設定します\n" +
+                "/console <変数名> - 変数をコンソールに出力します\n" +
+                "/clear - グローバル変数をリセットします";
             } else {
                 throw new CommandException($"不明なコマンド: {commandName}");
             }
+
+            return null;
         }
 
         /// <summary>
@@ -191,6 +205,21 @@ namespace PhysicsEngineCore {
 
                 this.SetVariable(resultVarName, result, localVariables);
             }
+        }
+
+        /// <summary>
+        /// Consoleコマンドを制御します
+        /// </summary>
+        /// <param name="args">引数の配列</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
+        private string? HandleConsoleCommand(string[] args, Dictionary<string, object> localVariables) {
+            if(args.Length != 2) throw new CommandException("Consoleコマンドの引数の数が正しくありません。引数は2つである必要があります", "/console");
+            object? varData = this.SolveVariable(args[0], localVariables);
+
+            if(varData == null) throw new CommandException($"変数 '{args[0]}' を解決できませんでした", "/console");
+
+            return varData.ToString();
         }
 
         /// <summary>
