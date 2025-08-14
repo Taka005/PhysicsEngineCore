@@ -7,10 +7,17 @@ namespace PhysicsEngineCore{
         private readonly Dictionary<string, object> globalVariables = [];
 
         /// <summary>
+        /// コマンドを全てリセットします
+        /// </summary>
+        public void Clear() {
+            this.globalVariables.Clear();
+        }
+
+        /// <summary>
         /// コマンドを複数行実行します
         /// </summary>
         /// <param name="commandList">実行するコマンドのリスト</param>
-        public void ExecuteMulti(string commandList) {
+        public void ExecuteMultiLine(string commandList) {
             Dictionary<string, object> localVariables = [];
 
             string[] commands = commandList.Split(["\n", "\r"], StringSplitOptions.RemoveEmptyEntries);
@@ -32,15 +39,23 @@ namespace PhysicsEngineCore{
 
             if(commandName == "/set") {
                 this.HandleSetCommand([.. parts.Skip(1)], localVariables);
-            }else if(commandName == "/get") {
+            } else if(commandName == "/get") {
                 this.HandleGetCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/update") {
                 this.HandleUpdateCommand([.. parts.Skip(1)], localVariables);
+            }else if(commandName == "/calc") {
+                this.HandleCalcCommand([.. parts.Skip(1)], localVariables);
             } else {
                 throw new Exception($"不明なコマンド: {commandName}");
             }
         }
 
+        /// <summary>
+        /// Setコマンドを制御します
+        /// </summary>
+        /// <param name="args">引数の配列</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleSetCommand(string[] args, Dictionary<string, object> localVariables) {
             if(args.Length < 2) throw new Exception("Setコマンドの引数の数が正しくありません。引数は2つである必要があります");
 
@@ -57,6 +72,64 @@ namespace PhysicsEngineCore{
             }
         }
 
+        /// <summary>
+        /// Calcコマンドを制御します
+        /// </summary>
+        /// <param name="args">引数の配列</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
+        private void HandleCalcCommand(string[] args, Dictionary<string, object> localVariables) {
+            if(args.Length != 4) throw new Exception("Setコマンドの引数の数が正しくありません。引数は2つである必要があります");
+
+            string resultVarName = args[0];
+            object? strValue = this.SolveVariable(args[1],localVariables);
+            string operatorSymbol = args[2];
+            object? strValue2 = this.SolveVariable(args[3], localVariables);
+
+            if(strValue == null || strValue2 == null) throw new Exception("値を解決できませんでした");
+
+            if(double.TryParse(strValue.ToString(), out double value) && double.TryParse(strValue.ToString(), out double value2)) {
+                double result = 0;
+                switch(operatorSymbol) {
+                    case "+":
+                        result = value + value2;
+                        break;
+                    case "-":
+                        result = value - value2;
+                        break;
+                    case "*":
+                        result = value * value2;
+                        break;
+                    case "/":
+                        if(value2 == 0) throw new Exception("0で割ることはできません");
+
+                        result = value / value2;
+
+                        break;
+                    case "%":
+                        if(value2 == 0) throw new Exception("0で割ることはできません");
+
+                        result = value % value2;
+
+                        break;
+                    case "^":
+                        result = Math.Pow(value, value2);
+
+                        break;
+                    default:
+                        throw new Exception("サポートされていない演算子です");
+                }
+
+                this.SetVariable(resultVarName, result, localVariables);
+            }
+        }
+
+        /// <summary>
+        /// Getコマンドを制御します
+        /// </summary>
+        /// <param name="args">引数の配列</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleGetCommand(string[] args, Dictionary<string, object> localVariables) {
             if(args.Length < 2) throw new Exception("Getコマンドの引数の数が正しくありません。引数は2つである必要があります");
 
@@ -73,6 +146,12 @@ namespace PhysicsEngineCore{
             }
         }
 
+        /// <summary>
+        /// Updateコマンドを制御します
+        /// </summary>
+        /// <param name="args">引数の配列</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleUpdateCommand(string[] args, Dictionary<string, object> localVariables) {
             if(args.Length < 2) throw new Exception("Updateコマンドの引数の数が正しくありません。引数は2つである必要があります");
 
@@ -118,6 +197,20 @@ namespace PhysicsEngineCore{
         }
 
         /// <summary>
+        /// 変数の値を設定します
+        /// </summary>
+        /// <param name="varName">設定する変数</param>
+        /// <param name="value">設定する値</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        private void SetVariable(string varName, object value, Dictionary<string, object> localVariables) {
+            if(localVariables.ContainsKey(varName)) {
+                localVariables[varName] = value;
+            } else {
+                this.globalVariables[varName] = value;
+            }
+        }
+
+        /// <summary>
         /// オブジェクトのプロパティを取得します
         /// </summary>
         /// <param name="obj">取得するオブジェクト</param>
@@ -154,15 +247,7 @@ namespace PhysicsEngineCore{
         /// <param name="id">オブジェクトID</param>
         /// <returns>取得されたオブジェクト</returns>
         private object? GetAnyObject(string id) {
-            object? obj = this.engine.GetObject(id);
-            object? ground = this.engine.GetGround(id);
-            object? effect = this.engine.GetEffect(id);
-
-            if(obj != null) return obj;
-            if(ground != null) return ground;
-            if(effect != null) return effect;
-
-            return null;
+            return (object?)this.engine.GetObject(id) ?? (object?)this.engine.GetGround(id) ?? this.engine.GetEffect(id);
         }
     }
 }
