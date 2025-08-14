@@ -62,6 +62,11 @@ namespace PhysicsEngineCore{
         private void HandleUpdateCommand(string[] args, Dictionary<string, object> localVariables) {
             if(args.Length < 2) throw new Exception("Updateコマンドの引数の数が正しくありません。引数は2つである必要があります");
 
+            string varName = args[0];
+            string[] parts = varName.Split(":");
+            object value = this.GetVariable(parts[0], localVariables);
+
+            this.SetObjectProperty(value, parts[1], args[2]);
         }
 
         /// <summary>
@@ -75,7 +80,7 @@ namespace PhysicsEngineCore{
                 return varName[1..^1];
             }else {
                 string[] parts = varName.Split(":");
-                object value = this.GetVariable(varName, localVariables);
+                object value = this.GetVariable(parts[0], localVariables);
 
                 return parts.Length > 1 ? this.GetObjectProperty(value, parts[1]) : value;
             }
@@ -110,6 +115,22 @@ namespace PhysicsEngineCore{
             if(prop == null) throw new Exception($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
 
             return prop.GetValue(obj);
+        }
+
+        /// <summary>
+        /// オブジェクトのプロパティを設定します
+        /// </summary>
+        /// <param name="obj">設定するオブジェクト</param>
+        /// <param name="propName">設定するプロパティー</param>
+        /// <param name="value">設定する値</param>
+        /// <exception cref="Exception">存在しないプロパティー、書き込み不可の時にエラー</exception>
+        private void SetObjectProperty(object obj, string propName, object value) {
+            PropertyInfo? prop = obj.GetType().GetProperty(propName);
+            if(prop == null) throw new Exception($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
+
+            if(!prop.CanWrite) throw new Exception($"プロパティ '{propName}' は書き込み不可です");
+
+            prop.SetValue(obj, value);
         }
 
         /// <summary>
