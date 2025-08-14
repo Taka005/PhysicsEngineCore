@@ -78,6 +78,34 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
+        /// 全てのエンティティーの平均位置X座標
+        /// </summary>
+        public double positionX {
+            get {
+                return this.position.X;
+            }
+            set {
+                Vector2 newPosition = new Vector2(value, this.position.Y);
+
+                this.position = newPosition;
+            }
+        }
+
+        /// <summary>
+        /// 全てのエンティティーの平均位置Y座標
+        /// </summary>
+        public double positionY {
+            get {
+                return this.position.Y;
+            }
+            set {
+                Vector2 newPosition = new Vector2(this.position.X, value);
+
+                this.position = newPosition;
+            }
+        }
+
+        /// <summary>
         /// 全てのエンティティーの平均前回位置
         /// </summary>
         public Vector2 prePosition {
@@ -114,6 +142,28 @@ namespace PhysicsEngineCore.Objects {
                 this._entities.ForEach(entity => {
                     entity.velocity = value;
                 });
+            }
+        }
+
+        public double velocityX {
+            get {
+                return this.velocity.X;
+            }
+            set {
+                Vector2 newVelocity = new Vector2(value, this.velocity.Y);
+
+                this.velocity = newVelocity;
+            }
+        }
+
+        public double velocityY {
+            get {
+                return this.velocity.Y;
+            }
+            set {
+                Vector2 newVelocity = new Vector2(this.velocity.X, value);
+
+                this.velocity = newVelocity;
             }
         }
 
