@@ -105,7 +105,7 @@ namespace PhysicsEngineCore {
 
             if(strValue == null || strValue2 == null) throw new Exception("値を解決できませんでした");
 
-            if(double.TryParse(strValue.ToString(), out double value) && double.TryParse(strValue.ToString(), out double value2)) {
+            if(double.TryParse(strValue.ToString(), out double value) && double.TryParse(strValue2.ToString(), out double value2)) {
                 double result = 0;
                 switch(operatorSymbol) {
                     case "+":
@@ -151,7 +151,7 @@ namespace PhysicsEngineCore {
         /// <param name="localVariables">ローカル変数の辞書</param>
         /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private void HandleFuncCommand(string[] args, Dictionary<string, object> localVariables) {
-            if(args.Length != 3) throw new Exception("Funcコマンドの引数の数が正しくありません。引数は2つである必要があります");
+            if(args.Length != 3) throw new Exception("Funcコマンドの引数の数が正しくありません。引数は3つである必要があります");
 
             string resultVarName = args[0];
             string operatorSymbol = args[1].ToLower();
@@ -176,6 +176,12 @@ namespace PhysicsEngineCore {
                         break;
                     case "abs":
                         result = Math.Abs(value);
+
+                        break;
+                    case "sqrt":
+                        if(value < 0) throw new Exception("負の数の平方根は計算できません");
+
+                        result = Math.Sqrt(value);
 
                         break;
                     default:
