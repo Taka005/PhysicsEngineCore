@@ -1,16 +1,29 @@
 ﻿using System.Reflection;
 
 namespace PhysicsEngineCore {
-    public class CommandRunner(Engine engine) {
-        private readonly Engine engine = engine;
+    public class CommandRunner{
+
+        private readonly Engine engine;
 
         private readonly Dictionary<string, object> globalVariables = [];
+
+        public CommandRunner(Engine engine) {
+            this.engine = engine;
+
+            this.Clear();
+        }
 
         /// <summary>
         /// コマンドを全てリセットします
         /// </summary>
         public void Clear() {
             this.globalVariables.Clear();
+
+            this.globalVariables.Add("gravity", this.engine.gravity);
+            this.globalVariables.Add("friction", this.engine.friction);
+            this.globalVariables.Add("pps", this.engine.pps);
+            this.globalVariables.Add("pi", Math.PI);
+            this.globalVariables.Add("e", Math.E);
         }
 
         /// <summary>
