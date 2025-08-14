@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 
-namespace PhysicsEngineCore{
-    public class CommandRunner(Engine engine){
+namespace PhysicsEngineCore {
+    public class CommandRunner(Engine engine) {
         private readonly Engine engine = engine;
 
         private readonly Dictionary<string, object> globalVariables = [];
@@ -43,8 +43,12 @@ namespace PhysicsEngineCore{
                 this.HandleGetCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/update") {
                 this.HandleUpdateCommand([.. parts.Skip(1)], localVariables);
-            }else if(commandName == "/calc") {
+            } else if(commandName == "/calc") {
                 this.HandleCalcCommand([.. parts.Skip(1)], localVariables);
+            }else if(commandName == "/clear") {
+                this.Clear();
+            } else if(commandName == "/func") {
+                this.HandleFuncCommand([.. parts.Skip(1)], localVariables);
             } else {
                 throw new Exception($"不明なコマンド: {commandName}");
             }
@@ -93,12 +97,15 @@ namespace PhysicsEngineCore{
                 switch(operatorSymbol) {
                     case "+":
                         result = value + value2;
+
                         break;
                     case "-":
                         result = value - value2;
+
                         break;
                     case "*":
                         result = value * value2;
+
                         break;
                     case "/":
                         if(value2 == 0) throw new Exception("0で割ることはできません");
@@ -118,6 +125,48 @@ namespace PhysicsEngineCore{
                         break;
                     default:
                         throw new Exception("サポートされていない演算子です");
+                }
+
+                this.SetVariable(resultVarName, result, localVariables);
+            }
+        }
+
+        /// <summary>
+        /// Funcコマンドを制御します
+        /// </summary>
+        /// <param name="args">引数の配列</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
+        private void HandleFuncCommand(string[] args, Dictionary<string, object> localVariables) {
+            if(args.Length != 3) throw new Exception("Funcコマンドの引数の数が正しくありません。引数は2つである必要があります");
+
+            string resultVarName = args[0];
+            string operatorSymbol = args[1].ToLower();
+            object? strValue = this.SolveVariable(args[2], localVariables);
+
+            if(strValue == null) throw new Exception("値を解決できませんでした");
+
+            if(double.TryParse(strValue.ToString(), out double value)) {
+                double result = 0;
+                switch(operatorSymbol) {
+                    case "sin":
+                        result = Math.Sin(value * (Math.PI / 180));
+
+                        break;
+                    case "cos":
+                        result = Math.Cos(value * (Math.PI / 180));
+
+                        break;
+                    case "tan":
+                        result = Math.Tan(value * (Math.PI / 180));
+
+                        break;
+                    case "abs":
+                        result = Math.Abs(value);
+
+                        break;
+                    default:
+                        throw new Exception("サポートされていない関数です");
                 }
 
                 this.SetVariable(resultVarName, result, localVariables);
