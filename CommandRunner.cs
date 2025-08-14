@@ -214,7 +214,7 @@ namespace PhysicsEngineCore {
         /// <param name="localVariables">ローカル変数の辞書</param>
         /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
         private string? HandleConsoleCommand(string[] args, Dictionary<string, object> localVariables) {
-            if(args.Length != 2) throw new CommandException("Consoleコマンドの引数の数が正しくありません。引数は2つである必要があります", "/console");
+            if(args.Length != 1) throw new CommandException("Consoleコマンドの引数の数が正しくありません。引数は1つである必要があります", "/console");
             object? varData = this.SolveVariable(args[0], localVariables);
 
             if(varData == null) throw new CommandException($"変数 '{args[0]}' を解決できませんでした", "/console");
