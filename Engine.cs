@@ -435,6 +435,8 @@ namespace PhysicsEngineCore {
         public IObject? SpawnObject(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
+            if(this.GetObject(option.id) != null) throw new Exception($"ID {option.id} は既に使用されています");
+
             IObject? obj = null;
 
             if(option is CircleOption circleOption) {
@@ -473,6 +475,8 @@ namespace PhysicsEngineCore {
         public IGround? SpawnGround(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
+            if(this.GetGround(option.id) != null) throw new Exception($"ID {option.id} は既に使用されています");
+
             IGround? ground = null;
 
             if(option is LineOption lineOption) {
@@ -506,6 +510,8 @@ namespace PhysicsEngineCore {
         /// <exception cref="Exception">存在しないエフェクトのとき例外</exception>
         public IEffect? SpawnEffect(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
+
+            if(this.GetEffect(option.id) != null) throw new Exception($"ID {option.id} は既に使用されています");
 
             IEffect? effect = null;
 
