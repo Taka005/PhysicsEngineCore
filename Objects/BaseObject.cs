@@ -1,5 +1,4 @@
-﻿using PhysicsEngineCore.Exceptions;
-using PhysicsEngineCore.Objects.Interfaces;
+﻿using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 

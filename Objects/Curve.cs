@@ -383,7 +383,7 @@ namespace PhysicsEngineCore.Objects {
         /// <returns>正しい幅</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static double CheckWidthValue(double width) {
-            if(width < 0) throw new Exception("厚さ(width)は0以上に設定する必要があります");
+            if(width < 0) throw new ArgumentOutOfRangeException("厚さ(width)は0以上に設定する必要があります");
 
             return width;
         }

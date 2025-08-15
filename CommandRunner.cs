@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using PhysicsEngineCore.Exceptions;
 
 namespace PhysicsEngineCore {

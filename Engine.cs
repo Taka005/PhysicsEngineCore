@@ -289,7 +289,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <exception cref="Exception"></exception>
         public void Start() {
-            if(this.isStarted) throw new Exception("既にシステムは開始されています");
+            if(this.isStarted) throw new EngineSystemException("既にシステムは開始しています");
 
             this.content.Sync();
 
@@ -302,7 +302,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <exception cref="Exception"></exception>
         public void Stop() {
-            if(!this.isStarted) throw new Exception("既にシステムは停止しています");
+            if(!this.isStarted) throw new EngineSystemException("既にシステムは停止しています");
 
             this.isStarted = false;
             this.loopTimer.Change(Timeout.Infinite, Timeout.Infinite);
@@ -652,12 +652,12 @@ namespace PhysicsEngineCore {
             try {
                 saveData = JsonSerializer.Deserialize<SaveData>(rawSaveData);
             } catch(JsonException ex) {
-                throw new Exception("セーブデータの形式が不正です", ex);
+                throw new ImportException("セーブデータの形式が不正です", ex);
             }
 
-            if(saveData == null) throw new Exception("破損したセーブデータです");
+            if(saveData == null) throw new ImportException("破損したセーブデータが読み込まれました");
 
-            if(saveData.version != SAVE_DATA_VERSION) throw new Exception($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
+            if(saveData.version != SAVE_DATA_VERSION) throw new ImportException($"システムのバージョンは{SAVE_DATA_VERSION}ですが、{saveData.version}が読み込まれました");
 
             this.Clear(force: true);
 
@@ -700,7 +700,7 @@ namespace PhysicsEngineCore {
 
                 ZipArchiveEntry? mapEntry = archive.GetEntry("map.json");
 
-                if(mapEntry == null) throw new Exception("マップファイルデータが破損しています");
+                if(mapEntry == null) throw new ImportException("マップファイルデータが破損しています");
 
                 this.assets.Clear();
 

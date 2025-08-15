@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Objects;
+﻿using PhysicsEngineCore.Exceptions;
+using PhysicsEngineCore.Objects;
 
 namespace PhysicsEngineCore.Utils {
 
@@ -34,14 +35,13 @@ namespace PhysicsEngineCore.Utils {
         /// <param name="stiffness">接続する剛性</param>
         /// <exception cref="Exception">同じエンティティーのターゲットがある場合に例外</exception>
         public void Add(Entity entity, double distance, double stiffness) {
-            if(this.Get(entity.id) != null) throw new Exception("同じIDのターゲットが既に存在します");
+            if(this.Get(entity.id) != null) throw new DuplicateIdException(entity.id);
 
             Target target = new Target(entity.id, distance, stiffness);
 
             lock(this._targets){
                 this._targets.Add(target);
             }
-            
         }
 
         /// <summary>

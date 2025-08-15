@@ -99,7 +99,7 @@ namespace PhysicsEngineCore.Objects {
                 return this._width;
             }
             set {
-                if(value <= 0) throw new ArgumentException("幅を0以下に設定することはできません");
+                if(value <= 0) throw new ArgumentOutOfRangeException("幅を0以下に設定することはできません");
 
                 this._width = value;
             }
