@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
 using PhysicsEngineCore.Objects;
@@ -35,6 +36,11 @@ namespace PhysicsEngineCore {
         /// 動的トラッキングモードが有効かどうか
         /// </summary>
         public bool isDynamicTrackingMode = false;
+
+        /// <summary>
+        /// 演算更新時に実行されるスクリプト
+        /// </summary>
+        public string updateScript = "";
 
         /// <summary>
         /// ループ用タイマー
@@ -304,6 +310,12 @@ namespace PhysicsEngineCore {
 
                     this.trackingCount %= this.trackingInterval;
                 }
+            }
+
+            try {
+                this.command.ExecuteMultiLine(this.updateScript);
+            } catch(Exception ex) {
+                Debug.WriteLine($"スクリプトの実行中にエラーが発生しました: {ex.Message}");
             }
 
             this.Update();
@@ -667,6 +679,18 @@ namespace PhysicsEngineCore {
                     }
                 }
 
+                ZipArchiveEntry? updateScriptEntry = archive.GetEntry("updateScript.txt");
+
+                if(updateScriptEntry != null) {
+                    using(Stream updateScriptStream = updateScriptEntry.Open()) {
+                        using(StreamReader reader = new StreamReader(updateScriptStream)) {
+                            string rawSaveData = reader.ReadToEnd();
+
+                            this.updateScript = rawSaveData;
+                        }
+                    }
+                }
+
                 using(Stream mapStream = mapEntry.Open()) {
                     using(StreamReader reader = new StreamReader(mapStream)) {
                         string rawSaveData = reader.ReadToEnd();
@@ -728,6 +752,14 @@ namespace PhysicsEngineCore {
 
                 using(StreamWriter writer = new StreamWriter(mapEntry.Open())) {
                     writer.Write(this.Export());
+                }
+
+                if(!string.IsNullOrEmpty(this.updateScript)) {
+                    ZipArchiveEntry updateScriptEntry = archive.CreateEntry("updateScript.txt");
+
+                    using(StreamWriter writer = new StreamWriter(updateScriptEntry.Open())) {
+                        writer.Write(this.updateScript);
+                    }
                 }
 
                 foreach(Image image in this.assets.images) {

@@ -32,6 +32,8 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="commandList">実行するコマンドのリスト</param>
         public void ExecuteMultiLine(string commandList) {
+            if(string.IsNullOrWhiteSpace(commandList)) return;
+
             Dictionary<string, object> localVariables = [];
 
             string[] commands = commandList.Split(["\n", "\r"], StringSplitOptions.RemoveEmptyEntries);
