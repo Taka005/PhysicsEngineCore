@@ -307,7 +307,7 @@ namespace PhysicsEngineCore {
             this.isStarted = false;
             this.loopTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
-             this.content.Sync();
+            this.content.Sync();
         }
 
         /// <summary>
