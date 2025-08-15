@@ -63,6 +63,16 @@ namespace PhysicsEngineCore {
         private double trackingCount = 0;
 
         /// <summary>
+        /// アップデートスクリプトの実行回数
+        /// </summary>
+        private double scriptExecuteCount = 0;
+
+        /// <summary>
+        /// アップデートスクリプトの実行間隔
+        /// </summary>
+        private float _scriptExecuteInterval = 1000;
+
+        /// <summary>
         /// トラッキングの制限数
         /// </summary>
         private int _trackingLimit = 100;
@@ -103,10 +113,11 @@ namespace PhysicsEngineCore {
         /// <param name="option">エンジンの初期化クラス</param>
         public Engine(EngineOption? engineOption,RenderOption? renderOption) : base(engineOption?.pps ?? 180, engineOption?.gravity ?? 500, engineOption?.friction ?? 0) {
             if(engineOption != null) {
-                this._playBackSpeed = CheckPlayBackSpeedValue(engineOption.playBackSpeed);
-                this._trackingInterval = CheckTrackingIntervalValue(engineOption.trackingInterval);
-                this._trackingLimit = CheckTrackingLimitValue(engineOption.trackingLimit);
-                this._movementLimit = CheckMovementLimitValue(engineOption.movementLimit);
+                this.SetPlayBackSpeed(engineOption.playBackSpeed);
+                this.SetTrackingInterval(engineOption.trackingInterval);
+                this.SetScriptExecuteInterval(engineOption.scriptExecutionInterval);
+                this.SetTrackingLimit(engineOption.trackingLimit);
+                this.SetMovementLimit(engineOption.movementLimit);
             }
 
             this.render = new Render(renderOption);
@@ -130,6 +141,15 @@ namespace PhysicsEngineCore {
         public float trackingInterval {
             get {
                 return this._trackingInterval;
+            }
+        }
+
+        /// <summary>
+        /// スクリプトの実行間隔
+        /// </summary>
+        public float scriptExecuteInterval {
+            get {
+                return this._scriptExecuteInterval;
             }
         }
 
@@ -211,6 +231,14 @@ namespace PhysicsEngineCore {
         /// <param name="value">設定するトラッキング間隔</param>
         public void SetTrackingInterval(float value) {
             this._trackingInterval = CheckTrackingIntervalValue(value);
+        }
+
+        /// <summary>
+        /// アップデートスクリプトの実行間隔を設定します
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetScriptExecuteInterval(float value) {
+            this._scriptExecuteInterval = CheckScriptExecuteIntervalValue(value);
         }
 
         /// <summary>
@@ -312,11 +340,18 @@ namespace PhysicsEngineCore {
                 }
             }
 
-            try {
-                this.command.ExecuteMultiLine(this.updateScript);
-            } catch(Exception ex) {
-                Debug.WriteLine($"スクリプトの実行中にエラーが発生しました: {ex.Message}");
+            this.scriptExecuteCount += 1000 / (double)this.pps;
+
+            if(this.scriptExecuteCount >= this.scriptExecuteInterval) {
+                try {
+                    this.command.ExecuteMultiLine(this.updateScript);
+                } catch(Exception ex) {
+                    Debug.WriteLine($"スクリプトの実行中にエラーが発生しました: {ex.Message}");
+                }
+
+                this.scriptExecuteCount %= this.scriptExecuteInterval;
             }
+
 
             this.Update();
         }
@@ -638,6 +673,7 @@ namespace PhysicsEngineCore {
             this.SetPlayBackSpeed(saveData.engine.playBackSpeed);
             this.SetMovementLimit(saveData.engine.movementLimit);
             this.SetTrackingInterval(saveData.engine.trackingInterval);
+            this.SetScriptExecuteInterval(saveData.engine.scriptExecutionInterval);
             this.SetTrackingLimit(saveData.engine.trackingLimit);
 
             this.render.scale = saveData.render.scale;
@@ -712,6 +748,7 @@ namespace PhysicsEngineCore {
                 friction = this.friction,
                 playBackSpeed = this.playBackSpeed,
                 trackingInterval = this.trackingInterval,
+                scriptExecutionInterval = this.scriptExecuteInterval,
                 trackingLimit = this.trackingLimit,
                 movementLimit = this.movementLimit
             };
@@ -931,7 +968,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// 再生速度が正しい値かチェックします
         /// </summary>
-        /// <param name="mass">再生速度</param>
+        /// <param name="playBackSpeed">再生速度</param>
         /// <returns>正しい再生速度</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckPlayBackSpeedValue(float playBackSpeed) {
@@ -943,7 +980,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// トラッキング間隔が正しい値かチェックします
         /// </summary>
-        /// <param name="mass">間隔</param>
+        /// <param name="trackingInterval">間隔</param>
         /// <returns>正しい間隔</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckTrackingIntervalValue(float trackingInterval) {
@@ -953,9 +990,21 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// アップデートスクリプトの実行間隔が正しい値かチェックします
+        /// </summary>
+        /// <param name="trackingInterval">間隔</param>
+        /// <returns>正しい間隔</returns>
+        /// <exception cref="Exception">0未満であったときに例外</exception>
+        private static float CheckScriptExecuteIntervalValue(float scriptExecuteInterval) {
+            if(scriptExecuteInterval < 0) throw new Exception("スクリプトの実行間隔(scriptExecuteInterval)は0以上に設定する必要があります");
+
+            return scriptExecuteInterval;
+        }
+
+        /// <summary>
         /// トラッキング数が正しい値かチェックします
         /// </summary>
-        /// <param name="mass">回数</param>
+        /// <param name="trackingLimit">回数</param>
         /// <returns>正しい回数</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static int CheckTrackingLimitValue(int trackingLimit) {

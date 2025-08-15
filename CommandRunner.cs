@@ -70,13 +70,13 @@ namespace PhysicsEngineCore {
                 return this.HandleConsoleCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/help") {
                 return "利用可能なコマンド:\n" +
-                "/set <変数名> <値|変数> [global] - 変数を設定します。globalを指定するとグローバル変数になります\n" +
-                "/get <変数名> <オブジェクトID> [global] - オブジェクトを取得し、変数に設定します\n" +
-                "/update <変数名:プロパティー名> <値|変数> - オブジェクトのプロパティを更新します\n" +
-                "/calc <結果変数名> <値1|変数1> <演算子> <値2|変数2> - 数学的な計算を行い、計算結果を結果変数に設定します\n" +
-                "/func <結果変数名> <関数名> <値|変数> - 関数を値を入力し、計算結果を結果変数に設定します\n" +
-                "/console <変数名> - 変数をコンソールに出力します\n" +
-                "/clear - グローバル変数をリセットします";
+                    "/set <変数名> <値|変数> [global] - 変数を設定します。globalを指定するとグローバル変数になります\n" +
+                    "/get <変数名> <オブジェクトID> [global] - オブジェクトを取得し、変数に設定します\n" +
+                    "/update <変数名:プロパティー名> <値|変数> - オブジェクトのプロパティを更新します\n" +
+                    "/calc <結果変数名> <値1|変数1> <演算子> <値2|変数2> - 数学的な計算を行い、計算結果を結果変数に設定します\n" +
+                    "/func <結果変数名> <関数名> <値|変数> - 関数を値を入力し、計算結果を結果変数に設定します\n" +
+                    "/console <変数名> - 変数をコンソールに出力します\n" +
+                    "/clear - グローバル変数をリセットします";
             } else {
                 throw new CommandException($"不明なコマンド: {commandName}");
             }
@@ -260,7 +260,9 @@ namespace PhysicsEngineCore {
             if(args.Length < 2) throw new CommandException("Updateコマンドの引数の数が正しくありません。引数は2つである必要があります", "/update");
 
             string fullPropertyPath = args[0];
-            string valueToSet = args[1];
+            object? valueToSet = this.SolveVariable(args[1],localVariables);
+
+            if(valueToSet == null) throw new CommandException($"値 ' {args[1]} ' を解決できませんでした", "/update");
 
             string[] pathParts = fullPropertyPath.Split(":");
             if(pathParts.Length < 2) throw new CommandException("プロパティパスの形式が正しくありません。'変数名:プロパティ名'の形式で指定してください", "/update");
