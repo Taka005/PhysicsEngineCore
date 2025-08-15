@@ -109,6 +109,42 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        public double startX {
+            get {
+                return this.start.X;
+            }
+            set {
+                this.start = new Vector2(value,this.start.Y);
+            }
+        }
+
+        public double startY {
+            get {
+                return this.start.Y;
+            }
+            set {
+                this.start = new Vector2(this.start.X, value);
+            }
+        }
+
+        public double endX {
+            get {
+                return this.end.X;
+            }
+            set {
+                this.end = new Vector2(value, this.end.Y);
+            }
+        }
+
+        public double endY {
+            get {
+                return this.end.Y;
+            }
+            set {
+                this.end = new Vector2(this.end.X, value);
+            }
+        }
+
         /// <summary>
         /// クラスのデータをJSON形式の文字列に変換します
         /// </summary>

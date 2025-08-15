@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Windows.Shapes;
 using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
@@ -135,6 +134,60 @@ namespace PhysicsEngineCore.Objects {
                 this._end = value;
 
                 this.UpdateCenter();
+            }
+        }
+
+        public double startX {
+            get {
+                return this.start.X;
+            }
+            set {
+                this.start = new Vector2(value, this.start.Y);
+            }
+        }
+
+        public double startY {
+            get {
+                return this.start.Y;
+            }
+            set {
+                this.start = new Vector2(this.start.X, value);
+            }
+        }
+
+        public double middleX {
+            get {
+                return this.middle.X;
+            }
+            set {
+                this.middle = new Vector2(value, this.middle.Y);
+            }
+        }
+
+        public double middleY {
+            get {
+                return this.middle.Y;
+            }
+            set {
+                this.middle = new Vector2(this.middle.X, value);
+            }
+        }
+
+        public double endX {
+            get {
+                return this.end.X;
+            }
+            set {
+                this.end = new Vector2(value, this.end.Y);
+            }
+        }
+
+        public double endY {
+            get {
+                return this.end.Y;
+            }
+            set {
+                this.end = new Vector2(this.end.X, value);
             }
         }
 
