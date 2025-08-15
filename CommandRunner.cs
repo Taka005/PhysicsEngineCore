@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using PhysicsEngineCore.Exceptions;
 
 namespace PhysicsEngineCore {
@@ -71,11 +70,11 @@ namespace PhysicsEngineCore {
                 return this.HandleConsoleCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/help") {
                 return "利用可能なコマンド:\n" +
-                "/set <変数名> <値> [global] - 変数を設定します。globalを指定するとグローバル変数になります\n" +
-                "/get <変数名> <オブジェクトID> [global] - オブジェクトのプロパティを取得し、変数に設定します\n" +
-                "/update <変数名:プロパティー名> <値> - オブジェクトのプロパティを更新します\n" +
-                "/calc <結果変数名> <値1> <演算子> <値2> - 数学的な計算を行い、結果を変数に設定します\n" +
-                "/func <結果変数名> <関数名> <値> - 数学関数を適用し、結果を変数に設定します\n" +
+                "/set <変数名> <値|変数> [global] - 変数を設定します。globalを指定するとグローバル変数になります\n" +
+                "/get <変数名> <オブジェクトID> [global] - オブジェクトを取得し、変数に設定します\n" +
+                "/update <変数名:プロパティー名> <値|変数> - オブジェクトのプロパティを更新します\n" +
+                "/calc <結果変数名> <値1|変数1> <演算子> <値2|変数2> - 数学的な計算を行い、計算結果を結果変数に設定します\n" +
+                "/func <結果変数名> <関数名> <値|変数> - 関数を値を入力し、計算結果を結果変数に設定します\n" +
                 "/console <変数名> - 変数をコンソールに出力します\n" +
                 "/clear - グローバル変数をリセットします";
             } else {
@@ -176,14 +175,14 @@ namespace PhysicsEngineCore {
             if(args.Length != 3) throw new CommandException("Funcコマンドの引数の数が正しくありません。引数は3つである必要があります", "/func");
 
             string resultVarName = args[0];
-            string operatorSymbol = args[1].ToLower();
+            string operatorFunc = args[1].ToLower();
             object? strValue = this.SolveVariable(args[2], localVariables);
 
             if(strValue == null) throw new CommandException("値を解決できませんでした", "/func");
 
             if(double.TryParse(strValue.ToString(), out double value)) {
                 double result = 0;
-                switch(operatorSymbol) {
+                switch(operatorFunc) {
                     case "sin":
                         result = Math.Sin(value * (Math.PI / 180));
 
