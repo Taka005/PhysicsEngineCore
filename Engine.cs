@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
+using PhysicsEngineCore.Exceptions;
 using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
@@ -435,7 +436,7 @@ namespace PhysicsEngineCore {
         public IObject? SpawnObject(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
-            if(this.GetObject(option.id) != null) throw new Exception($"ID: {option.id} は既に使用されています");
+            if(this.GetObject(option.id) != null) throw new DuplicateIdException(option.id);
 
             IObject? obj = null;
 
@@ -449,7 +450,7 @@ namespace PhysicsEngineCore {
                 obj = new Triangle(triangleOption);
             }
 
-            if(obj == null) throw new Exception("無効な物体が指定されています");
+            if(obj == null) throw new InvalidObjectException();
 
             if(obj.imageName != null) {
                 Image? image = this.assets.Get(obj.imageName);
@@ -475,7 +476,7 @@ namespace PhysicsEngineCore {
         public IGround? SpawnGround(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
-            if(this.GetGround(option.id) != null) throw new Exception($"ID: {option.id} は既に使用されています");
+            if(this.GetGround(option.id) != null) throw new DuplicateIdException(option.id);
 
             IGround? ground = null;
 
@@ -485,7 +486,7 @@ namespace PhysicsEngineCore {
                 ground = new Curve(curveOption);
             }
 
-            if(ground == null) throw new Exception("無効な物体が指定されています");
+            if(ground == null) throw new InvalidObjectException();
 
             if(ground.imageName != null) {
                 Image? image = this.assets.Get(ground.imageName);
@@ -511,7 +512,7 @@ namespace PhysicsEngineCore {
         public IEffect? SpawnEffect(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
-            if(this.GetEffect(option.id) != null) throw new Exception($"ID: {option.id} は既に使用されています");
+            if(this.GetEffect(option.id) != null) throw new DuplicateIdException(option.id);
 
             IEffect? effect = null;
 
@@ -519,7 +520,7 @@ namespace PhysicsEngineCore {
                 effect = new Booster(boosterOption);
             }
 
-            if(effect == null) throw new Exception("無効な物体が指定されています");
+            if(effect == null) throw new InvalidObjectException();
 
             if(effect.imageName != null) {
                 Image? image = this.assets.Get(effect.imageName);
@@ -978,7 +979,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい再生速度</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckPlayBackSpeedValue(float playBackSpeed) {
-            if(playBackSpeed < 0) throw new Exception("再生速度(playBackSpeed)は0以上に設定する必要があります");
+            if(playBackSpeed < 0) throw new InvalidValueException("再生速度(playBackSpeed)は0以上に設定する必要があります");
 
             return playBackSpeed;
         }
@@ -990,7 +991,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい間隔</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckTrackingIntervalValue(float trackingInterval) {
-            if(trackingInterval < 0) throw new Exception("トラッキング間隔(trackingInterval)は0以上に設定する必要があります");
+            if(trackingInterval < 0) throw new InvalidValueException("トラッキング間隔(trackingInterval)は0以上に設定する必要があります");
 
             return trackingInterval;
         }
@@ -1002,7 +1003,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい間隔</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckScriptExecuteIntervalValue(float scriptExecuteInterval) {
-            if(scriptExecuteInterval < 0) throw new Exception("スクリプトの実行間隔(scriptExecuteInterval)は0以上に設定する必要があります");
+            if(scriptExecuteInterval < 0) throw new InvalidValueException("スクリプトの実行間隔(scriptExecuteInterval)は0以上に設定する必要があります");
 
             return scriptExecuteInterval;
         }
@@ -1014,7 +1015,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい回数</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static int CheckTrackingLimitValue(int trackingLimit) {
-            if(trackingLimit < 0) throw new Exception("トラッキング数(trackingLimit)は0以上に設定する必要があります");
+            if(trackingLimit < 0) throw new InvalidValueException("トラッキング数(trackingLimit)は0以上に設定する必要があります");
 
             return trackingLimit;
         }
@@ -1026,7 +1027,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい距離</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static int CheckMovementLimitValue(int movementLimit) {
-            if(movementLimit < 0) throw new Exception("マップの移動制限(movementLimit)は0以上に設定する必要があります");
+            if(movementLimit < 0) throw new InvalidValueException("マップの移動制限(movementLimit)は0以上に設定する必要があります");
 
             return movementLimit;
         }
