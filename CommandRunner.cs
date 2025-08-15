@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using PhysicsEngineCore.Exceptions;
 
 namespace PhysicsEngineCore {
@@ -262,19 +263,20 @@ namespace PhysicsEngineCore {
             string fullPropertyPath = args[0];
             string valueToSet = args[1];
 
-            string[] pathParts = fullPropertyPath.Split(':');
-            if(pathParts.Length < 2) throw new CommandException("プロパティパスの形式が正しくありません。'変数名:プロパティ名'の形式で指定してください。", "/update");
+            string[] pathParts = fullPropertyPath.Split(":");
+            if(pathParts.Length < 2) throw new CommandException("プロパティパスの形式が正しくありません。'変数名:プロパティ名'の形式で指定してください", "/update");
 
-            object? currentObject = this.GetVariable(pathParts[0], localVariables);
+            object currentObject = this.GetVariable(pathParts[0], localVariables);
 
-            string propertyToSet = pathParts[^1];
             for(int i = 1;i < pathParts.Length - 1;i++) {
-                currentObject = this.GetObjectProperty(currentObject, pathParts[i]);
+                object? nextObject = this.GetObjectProperty(currentObject, pathParts[i]);
 
-                if(currentObject == null) throw new CommandException($"プロパティ'{pathParts[i]}'が見つからないか、nullです。", "/update");
+                if(nextObject == null) throw new CommandException($"プロパティ'{pathParts[i]}'が見つからないか、nullです", "/update");
+
+                currentObject = nextObject;
             }
 
-            this.SetObjectProperty(currentObject, propertyToSet, valueToSet);
+            this.SetObjectProperty(currentObject, pathParts[^1], valueToSet);
         }
 
         /// <summary>
@@ -291,14 +293,13 @@ namespace PhysicsEngineCore {
                 object? value = this.GetVariable(pathParts[0], localVariables);
 
                 if(pathParts.Length > 1) {
-                    string propertyToSet = pathParts[^1];
                     for(int i = 1;i < pathParts.Length - 1;i++) {
                         value = this.GetObjectProperty(value, pathParts[i]);
 
-                        if(value == null) throw new CommandException($"プロパティ'{pathParts[i]}'が見つからないか、nullです。", "/update");
+                        if(value == null) throw new CommandException($"プロパティ'{pathParts[i]}'が見つからないか、nullです");
                     }
 
-                    return value;
+                    return this.GetObjectProperty(value, pathParts[^1]);
                 } else {
                     return value;
                 }

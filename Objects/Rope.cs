@@ -118,12 +118,18 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// オブジェクトの画像名
+        /// </summary>
         public string? imageName {
             get {
                 return this._imageName;
             }
         }
 
+        /// <summary>
+        /// オブジェクトの画像
+        /// </summary>
         public Image? image {
             get {
                 return this._image;
