@@ -82,7 +82,7 @@ namespace PhysicsEngineCore.Objects {
         /// <summary>
         /// 線の長さ
         /// </summary>
-        public double lenght {
+        public double length {
             get {
                 return Vector2.Distance(this.start, this.end);
             }

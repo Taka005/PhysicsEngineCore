@@ -435,6 +435,15 @@ namespace PhysicsEngineCore {
         /// <returns>条件式の評価</returns>
         /// <exception cref="CommandException">不整合な引数の場合にエラー</exception>
         private bool EvaluateCondition(string condition, Dictionary<string, object> localVariables) {
+            bool negate = condition.StartsWith("!");
+            string varName = negate ? condition[1..] : condition;
+
+            if(!varName.Contains("==") && !varName.Contains("!=")) {
+                bool exists = localVariables.ContainsKey(varName) || this.globalVariables.ContainsKey(varName);
+
+                return negate ? !exists : exists;
+            }
+
             string[] parts;
             string op;
 
