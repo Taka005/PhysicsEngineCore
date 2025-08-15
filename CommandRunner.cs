@@ -265,8 +265,7 @@ namespace PhysicsEngineCore {
             string[] pathParts = fullPropertyPath.Split(':');
             if(pathParts.Length < 2) throw new CommandException("プロパティパスの形式が正しくありません。'変数名:プロパティ名'の形式で指定してください。", "/update");
 
-            string varName = pathParts[0];
-            object? currentObject = this.GetVariable(varName, localVariables);
+            object? currentObject = this.GetVariable(pathParts[0], localVariables);
 
             string propertyToSet = pathParts[^1];
             for(int i = 1;i < pathParts.Length - 1;i++) {
@@ -288,10 +287,21 @@ namespace PhysicsEngineCore {
             if(varName.StartsWith("\"") && varName.EndsWith("\"")) {
                 return varName[1..^1];
             }else {
-                string[] parts = varName.Split(":");
-                object value = this.GetVariable(parts[0], localVariables);
+                string[] pathParts = varName.Split(":");
+                object? value = this.GetVariable(pathParts[0], localVariables);
 
-                return parts.Length > 1 ? this.GetObjectProperty(value, parts[1]) : value;
+                if(pathParts.Length > 1) {
+                    string propertyToSet = pathParts[^1];
+                    for(int i = 1;i < pathParts.Length - 1;i++) {
+                        value = this.GetObjectProperty(value, pathParts[i]);
+
+                        if(value == null) throw new CommandException($"プロパティ'{pathParts[i]}'が見つからないか、nullです。", "/update");
+                    }
+
+                    return value;
+                } else {
+                    return value;
+                }
             }
         }
 
@@ -364,6 +374,8 @@ namespace PhysicsEngineCore {
 
             FieldInfo? field = obj.GetType().GetField(propName);
             if(field != null) {
+                if(field.IsInitOnly) throw new CommandException($"フィールド '{propName}' は読み取り専用です");
+
                 try {
                     object convertedValue = Convert.ChangeType(strValue, field.FieldType);
                     field.SetValue(obj, convertedValue);
