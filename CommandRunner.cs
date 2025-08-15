@@ -344,10 +344,14 @@ namespace PhysicsEngineCore {
         /// <returns>取得したプロパティーの値</returns>
         /// <exception cref="Exception">存在しないプロパティーの時にエラー</exception>
         private object? GetObjectProperty(object obj, string propName) {
-            PropertyInfo? prop = obj.GetType().GetProperty(propName);
-            if(prop == null) throw new CommandException($"プロパティ '{propName}' がオブジェクト '{obj.GetType().Name}' に存在しません");
+            Type objType = obj.GetType();
+            PropertyInfo? prop = objType.GetProperty(propName);
+            if(prop != null) return prop.GetValue(obj);
 
-            return prop.GetValue(obj);
+            FieldInfo? field = objType.GetField(propName);
+            if(field != null) return field.GetValue(obj);
+
+            throw new CommandException($"プロパティまたはフィールド '{propName}' がオブジェクト '{objType.Name}' に存在しません");
         }
 
         /// <summary>
