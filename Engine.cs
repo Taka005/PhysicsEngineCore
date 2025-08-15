@@ -194,7 +194,7 @@ namespace PhysicsEngineCore {
         /// <param name="value">設定する値</param>
         /// <exception cref="Exception">1未満の場合にエラー</exception>
         public void SetPps(int value) {
-            if(value <= 0) throw new Exception("ppsは1以上の値に設定する必要があります");
+            if(value <= 0) throw new ArgumentOutOfRangeException(nameof(value), "ppsは1以上の値に設定する必要があります");
 
             this.pps = value;
 
@@ -209,7 +209,7 @@ namespace PhysicsEngineCore {
         /// <param name="value">設定する値</param>
         /// <exception cref="Exception">0未満の場合にエラー</exception>
         public void SetGravity(double value) {
-            if(value < 0) throw new Exception("重力加速度(gravity)は0以上に設定する必要があります");
+            if(value < 0) throw new ArgumentOutOfRangeException(nameof(value), "重力加速度(gravity)は0以上に設定する必要があります");
 
             this.gravity = value;
         }
@@ -506,7 +506,7 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// エフェクトを生成します
         /// </summary>
-        /// <param name="option"エフェクトの初期化オプション></param>
+        /// <param name="option">エフェクトの初期化オプション</param>
         /// <returns>生成したエフェクト</returns>
         /// <exception cref="Exception">存在しないエフェクトのとき例外</exception>
         public IEffect? SpawnEffect(IOption option) {
@@ -979,7 +979,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい再生速度</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckPlayBackSpeedValue(float playBackSpeed) {
-            if(playBackSpeed < 0) throw new InvalidValueException("再生速度(playBackSpeed)は0以上に設定する必要があります");
+            if(playBackSpeed < 0) throw new ArgumentOutOfRangeException(nameof(playBackSpeed), "再生速度(playBackSpeed)は0以上に設定する必要があります");
 
             return playBackSpeed;
         }
@@ -991,7 +991,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい間隔</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckTrackingIntervalValue(float trackingInterval) {
-            if(trackingInterval < 0) throw new InvalidValueException("トラッキング間隔(trackingInterval)は0以上に設定する必要があります");
+            if(trackingInterval < 0) throw new ArgumentOutOfRangeException(nameof(trackingInterval), "トラッキング間隔(trackingInterval)は0以上に設定する必要があります");
 
             return trackingInterval;
         }
@@ -1003,7 +1003,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい間隔</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static float CheckScriptExecuteIntervalValue(float scriptExecuteInterval) {
-            if(scriptExecuteInterval < 0) throw new InvalidValueException("スクリプトの実行間隔(scriptExecuteInterval)は0以上に設定する必要があります");
+            if(scriptExecuteInterval < 0) throw new ArgumentOutOfRangeException(nameof(scriptExecuteInterval), "スクリプトの実行間隔(scriptExecuteInterval)は0以上に設定する必要があります");
 
             return scriptExecuteInterval;
         }
@@ -1015,7 +1015,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい回数</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static int CheckTrackingLimitValue(int trackingLimit) {
-            if(trackingLimit < 0) throw new InvalidValueException("トラッキング数(trackingLimit)は0以上に設定する必要があります");
+            if(trackingLimit < 0) throw new ArgumentOutOfRangeException(nameof(trackingLimit), "トラッキング数(trackingLimit)は0以上に設定する必要があります");
 
             return trackingLimit;
         }
@@ -1027,7 +1027,7 @@ namespace PhysicsEngineCore {
         /// <returns>正しい距離</returns>
         /// <exception cref="Exception">0未満であったときに例外</exception>
         private static int CheckMovementLimitValue(int movementLimit) {
-            if(movementLimit < 0) throw new InvalidValueException("マップの移動制限(movementLimit)は0以上に設定する必要があります");
+            if(movementLimit < 0) throw new ArgumentOutOfRangeException(nameof(movementLimit), "マップの移動制限(movementLimit)は0以上に設定する必要があります");
 
             return movementLimit;
         }

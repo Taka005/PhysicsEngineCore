@@ -50,7 +50,7 @@ namespace PhysicsEngineCore.Objects {
                 return this._id;
             }
             set{
-                if (string.IsNullOrEmpty(value)) throw new ArgumentException("IDは空にできません");
+                if(string.IsNullOrEmpty(value)) throw new ArgumentException("IDは空にできません");
 
                 this._id = value;
             }
@@ -222,7 +222,7 @@ namespace PhysicsEngineCore.Objects {
         /// <returns>正しい幅</returns>
         /// <exception cref="Exception">0未満であった時に例外</exception>
         private static double CheckWidthValue(double width) {
-            if(width < 0) throw new Exception("厚さ(width)は0以上に設定する必要があります");
+            if(width < 0) throw new ArgumentOutOfRangeException(nameof(width), "厚さ(width)は0以上に設定する必要があります");
 
             return width;
         }

@@ -1,4 +1,5 @@
-﻿using PhysicsEngineCore.Objects.Interfaces;
+﻿using PhysicsEngineCore.Exceptions;
+using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
 using PhysicsEngineCore.Utils;
 
@@ -177,7 +178,7 @@ namespace PhysicsEngineCore.Objects {
                 return this._entities.Select(entity => entity.mass).Sum();
             }
             set {
-                if(value < 0) throw new Exception("質量(mass)は0以上に設定する必要があります");
+                if(value < 0) throw new ArgumentOutOfRangeException(nameof(value), "質量(mass)は0以上に設定する必要があります");
 
                 this._entities.ForEach(entity => {
                     entity.mass = value / this.count;
@@ -195,7 +196,7 @@ namespace PhysicsEngineCore.Objects {
                 return _entities.Select(entity => entity.stiffness).Average();
             }
             set {
-                if(value <= 0 || value > 1) throw new Exception("剛性(stiffness)は0超過かつ1以下に設定する必要があります");
+                if(value <= 0 || value > 1) throw new ArgumentOutOfRangeException(nameof(value), "剛性(stiffness)は0超過かつ1以下に設定する必要があります");
 
                 this._entities.ForEach(entity => {
                     entity.stiffness = value;
