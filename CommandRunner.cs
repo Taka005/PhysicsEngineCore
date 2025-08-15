@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using PhysicsEngineCore.Exceptions;
 
 namespace PhysicsEngineCore {
@@ -66,6 +67,8 @@ namespace PhysicsEngineCore {
                 this.Clear();
             } else if(commandName == "/func") {
                 this.HandleFuncCommand([.. parts.Skip(1)], localVariables);
+            }else if(commandName == "/if") {
+                return this.HandleIfCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/console") {
                 return this.HandleConsoleCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/help") {
@@ -75,6 +78,7 @@ namespace PhysicsEngineCore {
                     "/update <変数名:プロパティー名> <値|変数> - オブジェクトのプロパティを更新します\n" +
                     "/calc <結果変数名> <値1|変数1> <演算子> <値2|変数2> - 数学的な計算を行い、計算結果を結果変数に設定します\n" +
                     "/func <結果変数名> <関数名> <値|変数> - 関数を値を入力し、計算結果を結果変数に設定します\n" +
+                    "/if <条件式> <コマンド...> - 条件式が真の場合、指定されたコマンドを実行します\n" +
                     "/console <変数名> - 変数をコンソールに出力します\n" +
                     "/clear - グローバル変数をリセットします";
             } else {
@@ -158,7 +162,7 @@ namespace PhysicsEngineCore {
 
                         break;
                     default:
-                        throw new CommandException("サポートされていない演算子です", "/calc");
+                        throw new CommandException($"サポートされていない演算子です {operatorSymbol}", "/calc");
                 }
 
                 this.SetVariable(resultVarName, result, localVariables);
@@ -206,7 +210,7 @@ namespace PhysicsEngineCore {
 
                         break;
                     default:
-                        throw new CommandException("サポートされていない関数です", "/func");
+                        throw new CommandException($"サポートされていない関数です: {operatorFunc}", "/func");
                 }
 
                 this.SetVariable(resultVarName, result, localVariables);
@@ -278,6 +282,23 @@ namespace PhysicsEngineCore {
             }
 
             this.SetObjectProperty(currentObject, pathParts[^1], valueToSet);
+        }
+
+        /// <summary>
+        /// Ifコマンドを制御します
+        /// </summary>
+        /// <param name="args">引数の配列</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <exception cref="Exception">不整合な引数の場合にエラー</exception>
+        private string? HandleIfCommand(string[] args, Dictionary<string, object> localVariables) {
+            if(args.Length < 3) throw new CommandException("Ifコマンドの引数の数が正しくありません。'/if <条件式> <コマンド...>' の形式で指定してください", "/if");
+
+            string condition = args[0];
+            string commandToExecute = string.Join(" ", args.Skip(1));
+
+            if(!this.EvaluateCondition(condition, localVariables)) return null;
+
+            return this.Execute(commandToExecute, localVariables);
         }
 
         /// <summary>
@@ -404,6 +425,44 @@ namespace PhysicsEngineCore {
         /// <returns>取得されたオブジェクト</returns>
         private object? GetAnyObject(string id) {
             return (object?)this.engine.GetObject(id) ?? (object?)this.engine.GetGround(id) ?? this.engine.GetEffect(id);
+        }
+
+        /// <summary>
+        /// 条件式を評価します
+        /// </summary>
+        /// <param name="condition">評価する条件式</param>
+        /// <param name="localVariables">ローカル変数の辞書</param>
+        /// <returns>条件式の評価</returns>
+        /// <exception cref="CommandException">不整合な引数の場合にエラー</exception>
+        private bool EvaluateCondition(string condition, Dictionary<string, object> localVariables) {
+            string[] parts;
+            string op;
+
+            if(condition.Contains("==")) {
+                parts = condition.Split("==");
+                op = "==";
+            } else if(condition.Contains("!=")) {
+                parts = condition.Split("!=");
+                op = "!=";
+            } else {
+                throw new CommandException($"サポートされていない演算子です: {condition}");
+            }
+
+            if(parts.Length != 2) throw new CommandException("条件式の形式が正しくありません");
+
+            object? left = this.SolveVariable(parts[0], localVariables);
+            object? right = this.SolveVariable(parts[1], localVariables);
+
+            if(left == null || right == null) throw new CommandException("条件式内の値を解決できませんでした");
+
+            string leftStr = left.ToString() ?? "";
+            string rightStr = right.ToString() ?? "";
+
+            return op switch {
+                "==" => leftStr == rightStr,
+                "!=" => leftStr != rightStr,
+                _ => throw new CommandException($"サポートされていない演算子です: {op}"),
+            };
         }
     }
 }
