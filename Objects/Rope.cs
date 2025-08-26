@@ -12,7 +12,6 @@ namespace PhysicsEngineCore.Objects {
         private readonly string _trackingId = IdGenerator.CreateId(Engine.DEFAULT_ID_LENGTH);
         private double _width;
         private string _color;
-        private string? _imageName = null;
         private Image? _image = null;
 
         /// <summary>
@@ -23,7 +22,6 @@ namespace PhysicsEngineCore.Objects {
             this._id = option.id ?? throw new ArgumentException(nameof(option.id));
             this.width = option.width;
             this._color = option.color;
-            this._imageName = option.imageName;
 
             if(option.entities.Count == 0) {
                 double width = option.endX - option.startX;
@@ -119,15 +117,6 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
-        /// オブジェクトの画像名
-        /// </summary>
-        public string? imageName {
-            get {
-                return this._imageName;
-            }
-        }
-
-        /// <summary>
         /// オブジェクトの画像
         /// </summary>
         public Image? image {
@@ -166,7 +155,7 @@ namespace PhysicsEngineCore.Objects {
             return this.id == rope.id &&
                    this.width == rope.width &&
                    this.color == rope.color &&
-                   this.imageName == rope.imageName &&
+                   this.image?.name == rope.image?.name &&
                    this.position.Equals(rope.position) &&
                    this.velocity.Equals(rope.velocity) &&
                    this.mass == rope.mass &&
@@ -191,7 +180,7 @@ namespace PhysicsEngineCore.Objects {
                 mass = this.mass,
                 stiffness = this.stiffness,
                 color = this.color,
-                imageName = this.imageName,
+                imageName = this.image?.name,
                 entities = [.. this.entities.Select(entity => entity.ToOption())]
             };
         }

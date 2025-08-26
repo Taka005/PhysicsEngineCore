@@ -6,7 +6,7 @@ namespace PhysicsEngineCore.Objects.Interfaces {
         string trackingId { get; }
         string color { get; set; }
         double width { get; set; }
-        string? imageName { get; }
+
         Image? image { get; set; }
 
         Vector2 SolvePosition(Vector2 position);

@@ -17,7 +17,6 @@ namespace PhysicsEngineCore.Objects {
         private Vector2 _end;
         private double _radius;
         private double _width;
-        private string? _imageName = null;
         private Image? _image = null;
 
         /// <summary>
@@ -31,7 +30,6 @@ namespace PhysicsEngineCore.Objects {
             this._middle = new Vector2(option.middleX, option.middleY);
             this._end = new Vector2(option.endX, option.endY);
             this._width = CheckWidthValue(option.width);
-            this._imageName = option.imageName;
 
             UpdateCenter();
         }
@@ -137,6 +135,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の始点X座標
+        /// </summary>
         public double startX {
             get {
                 return this.start.X;
@@ -146,6 +147,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の始点Y座標
+        /// </summary>
         public double startY {
             get {
                 return this.start.Y;
@@ -155,6 +159,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の中点X座標
+        /// </summary>
         public double middleX {
             get {
                 return this.middle.X;
@@ -164,6 +171,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の中点Y座標
+        /// </summary>
         public double middleY {
             get {
                 return this.middle.Y;
@@ -173,6 +183,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の終点X座標
+        /// </summary>
         public double endX {
             get {
                 return this.end.X;
@@ -182,6 +195,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の終点Y座標
+        /// </summary>
         public double endY {
             get {
                 return this.end.Y;
@@ -197,15 +213,6 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 center {
             get {
                 return this._center;
-            }
-        }
-
-        /// <summary>
-        /// 地面の画像名
-        /// </summary>
-        public string? imageName {
-            get {
-                return this._imageName;
             }
         }
 
@@ -248,7 +255,7 @@ namespace PhysicsEngineCore.Objects {
 
             return this.id == curve.id &&
                    this.color == curve.color &&
-                   this.imageName == curve.imageName &&
+                   this.image?.name == curve.image?.name &&
                    this.width == curve.width &&
                    this.start.Equals(curve.start) && 
                    this.middle.Equals(curve.middle) &&
@@ -263,7 +270,7 @@ namespace PhysicsEngineCore.Objects {
             return new CurveOption {
                 id = this.id,
                 color = this.color,
-                imageName = this.imageName,
+                imageName = this.image?.name,
                 startX = this.start.X,
                 startY = this.start.Y,
                 middleX = this.middle.X,

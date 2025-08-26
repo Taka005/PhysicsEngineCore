@@ -452,8 +452,8 @@ namespace PhysicsEngineCore {
 
             if(obj == null) throw new InvalidObjectException();
 
-            if(obj.imageName != null) {
-                Image? image = this.assets.Get(obj.imageName);
+            if(option.imageName != null) {
+                Image? image = this.assets.Get(option.imageName);
 
                 if(image != null) {
                     obj.image = image;
@@ -488,8 +488,8 @@ namespace PhysicsEngineCore {
 
             if(ground == null) throw new InvalidObjectException();
 
-            if(ground.imageName != null) {
-                Image? image = this.assets.Get(ground.imageName);
+            if(option.imageName != null) {
+                Image? image = this.assets.Get(option.imageName);
 
                 if(image != null) {
                     ground.image = image;
@@ -522,8 +522,8 @@ namespace PhysicsEngineCore {
 
             if(effect == null) throw new InvalidObjectException();
 
-            if(effect.imageName != null) {
-                Image? image = this.assets.Get(effect.imageName);
+            if(option.imageName != null) {
+                Image? image = this.assets.Get(option.imageName);
 
                 if(image != null) {
                     effect.image = image;

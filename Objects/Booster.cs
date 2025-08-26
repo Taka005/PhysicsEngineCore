@@ -14,7 +14,6 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 start;
         public Vector2 end;
         public Vector2 velocity;
-        private string? _imageName = null;
         private Image? _image = null;
 
         /// <summary>
@@ -27,7 +26,6 @@ namespace PhysicsEngineCore.Objects {
             this.start = new Vector2(option.startX, option.startY);
             this.end = new Vector2(option.endX, option.endY);
             this.velocity = new Vector2(option.velocityX, option.velocityY);
-            this._imageName = option.imageName;
         }
 
         /// <summary>
@@ -64,15 +62,6 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 this._color = value;
-            }
-        }
-
-        /// <summary>
-        /// エフェクトの画像名
-        /// </summary>
-        public string? imageName {
-            get {
-                return this._imageName;
             }
         }
 
@@ -124,7 +113,7 @@ namespace PhysicsEngineCore.Objects {
 
             return this.id == booster.id &&
                    this.color == booster.color &&
-                   this._imageName == booster._imageName &&
+                   this.image?.name == booster.image?.name &&
                    this.start.Equals(booster.start) &&
                    this.end.Equals(booster.end) &&
                    this.velocity.Equals(booster.velocity);
@@ -146,7 +135,7 @@ namespace PhysicsEngineCore.Objects {
             return new BoosterOption {
                 id = this.id,
                 color = this.color,
-                imageName = this._imageName,
+                imageName = this.image?.name,
                 startX = this.start.X,
                 startY = this.start.Y,
                 endX = this.end.X,

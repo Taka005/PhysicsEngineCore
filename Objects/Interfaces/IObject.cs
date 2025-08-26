@@ -5,7 +5,6 @@ namespace PhysicsEngineCore.Objects.Interfaces {
         string id { get; set; }
         string trackingId { get; }
         string color { get; set; }
-        string? imageName { get; }
         Image? image { get; set; }
 
         IObject Clone();

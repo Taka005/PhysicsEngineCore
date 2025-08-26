@@ -14,7 +14,6 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 start;
         public Vector2 end;
         private double _width;
-        private string? _imageName = null;
         private Image? _image = null;
 
         /// <summary>
@@ -27,7 +26,6 @@ namespace PhysicsEngineCore.Objects {
             this.start = new Vector2(option.startX, option.startY);
             this.end = new Vector2(option.endX, option.endY);
             this._width = CheckWidthValue(option.width);
-            this._imageName = option.imageName;
         }
 
         /// <summary>
@@ -89,15 +87,6 @@ namespace PhysicsEngineCore.Objects {
         }
 
         /// <summary>
-        /// 地面の画像名
-        /// </summary>
-        public string? imageName {
-            get {
-                return this._imageName;
-            }
-        }
-
-        /// <summary>
         /// 地面の画像
         /// </summary>
         public Image? image {
@@ -109,6 +98,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の始点X座標
+        /// </summary>
         public double startX {
             get {
                 return this.start.X;
@@ -118,6 +110,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の始点Y座標
+        /// </summary>
         public double startY {
             get {
                 return this.start.Y;
@@ -127,6 +122,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の終点X座標
+        /// </summary>
         public double endX {
             get {
                 return this.end.X;
@@ -136,6 +134,9 @@ namespace PhysicsEngineCore.Objects {
             }
         }
 
+        /// <summary>
+        /// 曲線の終点Y座標
+        /// </summary>
         public double endY {
             get {
                 return this.end.Y;
@@ -164,7 +165,7 @@ namespace PhysicsEngineCore.Objects {
             return this.id == line.id &&
                    this.width == line.width &&
                    this.color == line.color &&
-                   this.imageName == line.imageName &&
+                   this.image?.name == line.image?.name &&
                    this.start.Equals(line.start) &&
                    this.end.Equals(line.end);
         }
@@ -185,7 +186,7 @@ namespace PhysicsEngineCore.Objects {
             return new LineOption {
                 id = this.id,
                 color = this.color,
-                imageName = this.imageName,
+                imageName = this.image?.name,
                 startX = this.start.X,
                 startY = this.start.Y,
                 endX = this.end.X,
