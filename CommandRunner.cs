@@ -8,6 +8,9 @@ namespace PhysicsEngineCore {
 
         private readonly Dictionary<string, object> globalVariables = [];
 
+        private readonly Dictionary<string, PropertyInfo> propertyCache = [];
+        private readonly Dictionary<string, FieldInfo> fieldCache = [];
+
         public CommandRunner(Engine engine) {
             this.engine = engine;
 
@@ -367,11 +370,30 @@ namespace PhysicsEngineCore {
         /// <exception cref="Exception">存在しないプロパティーの時にエラー</exception>
         private object? GetObjectProperty(object obj, string propName) {
             Type objType = obj.GetType();
-            PropertyInfo? prop = objType.GetProperty(propName);
-            if(prop != null) return prop.GetValue(obj);
 
-            FieldInfo? field = objType.GetField(propName);
-            if(field != null) return field.GetValue(obj);
+            string cacheKey = $"{objType.FullName}:{propName}";
+
+            if(propertyCache.TryGetValue(cacheKey, out PropertyInfo? prop)){
+                return prop.GetValue(obj);
+            }
+
+            if(fieldCache.TryGetValue(cacheKey, out FieldInfo? field)){
+                return field.GetValue(obj);
+            }
+
+            prop = objType.GetProperty(propName);
+            if(prop != null){
+                propertyCache[cacheKey] = prop;
+
+                return prop.GetValue(obj);
+            }
+
+            field = objType.GetField(propName);
+            if (field != null){
+                fieldCache[cacheKey] = field;
+
+                return field.GetValue(obj);
+            }
 
             throw new CommandException($"プロパティまたはフィールド '{propName}' がオブジェクト '{objType.Name}' に存在しません");
         }
