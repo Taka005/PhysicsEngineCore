@@ -905,9 +905,9 @@ namespace PhysicsEngineCore {
         /// <param name="posX"></param>
         /// <param name="posY"></param>
         /// <returns></returns>
-        public List<IGround> GetGroundsEdgeAt(double posX, double posY) {
+        public List<(IGround,GroundEdgeType)> GetGroundsEdgeAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
-            List<IGround> targets = [];
+            List<(IGround, GroundEdgeType)> targets = [];
 
             this.content.grounds.ForEach(ground=>{
                 if(ground is Line line) {
@@ -917,12 +917,11 @@ namespace PhysicsEngineCore {
                     double distanceStart = differenceStart.Length();
                     double distanceEnd = differenceEnd.Length();
 
-                    if(
-                        distanceStart > line.width / 2 &&
-                        distanceEnd > line.width / 2
-                    ) return;
-
-                    targets.Add(ground);
+                    if(distanceStart <= line.width / 2){
+                        targets.Add((ground, GroundEdgeType.Start));
+                    }else if(distanceEnd <= line.width / 2){
+                        targets.Add((ground, GroundEdgeType.End));
+                    }                    
                 }else if(ground is Curve curve){
                     Vector2 differenceStart = curve.start - position;
                     Vector2 differenceMiddle = curve.middle - position;
@@ -932,13 +931,13 @@ namespace PhysicsEngineCore {
                     double distanceMiddle = differenceMiddle.Length();
                     double distanceEnd = differenceEnd.Length();
 
-                    if(
-                        distanceStart > curve.width / 2 &&
-                        distanceMiddle > curve.width / 2 &&
-                        distanceEnd > curve.width / 2
-                    ) return;
-
-                    targets.Add(ground);
+                    if(distanceStart <= curve.width / 2){
+                        targets.Add((ground, GroundEdgeType.Start));
+                    }else if(distanceMiddle <= curve.width / 2){
+                        targets.Add((ground, GroundEdgeType.Middle));
+                    }else if(distanceEnd <= curve.width / 2){
+                        targets.Add((ground, GroundEdgeType.End));
+                    }
                 }
             });
 
