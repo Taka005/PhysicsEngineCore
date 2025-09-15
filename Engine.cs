@@ -900,6 +900,52 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// 指定した座標に端があるグラウンドを取得します
+        /// </summary>
+        /// <param name="posX"></param>
+        /// <param name="posY"></param>
+        /// <returns></returns>
+        public List<IGround> GetGroundsEdgeAt(double posX, double posY) {
+            Vector2 position = new Vector2(posX, posY);
+            List<IGround> targets = [];
+
+            this.content.grounds.ForEach(ground=>{
+                if(ground is Line line) {
+                    Vector2 differenceStart = line.start - position;
+                    Vector2 differenceEnd = line.end - position;
+
+                    double distanceStart = differenceStart.Length();
+                    double distanceEnd = differenceEnd.Length();
+
+                    if(
+                        distanceStart > line.width / 2 &&
+                        distanceEnd > line.width / 2
+                    ) return;
+
+                    targets.Add(ground);
+                }else if(ground is Curve curve){
+                    Vector2 differenceStart = curve.start - position;
+                    Vector2 differenceMiddle = curve.middle - position;
+                    Vector2 differenceEnd = curve.end - position;
+
+                    double distanceStart = differenceStart.Length();
+                    double distanceMiddle = differenceMiddle.Length();
+                    double distanceEnd = differenceEnd.Length();
+
+                    if(
+                        distanceStart > curve.width / 2 &&
+                        distanceMiddle > curve.width / 2 &&
+                        distanceEnd > curve.width / 2
+                    ) return;
+
+                    targets.Add(ground);
+                }
+            });
+
+            return targets;
+        }
+
+        /// <summary>
         /// 指定した位置にあるエフェクトを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
