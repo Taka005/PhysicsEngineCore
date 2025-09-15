@@ -74,7 +74,7 @@ namespace PhysicsEngineCore {
             } else if(commandName == "/console") {
                 return this.HandleConsoleCommand([.. parts.Skip(1)], localVariables);
             } else if(commandName == "/help") {
-                return "利用可能なコマンド:\n" +
+                return "利用可能なコマンド\n" +
                     "/set <変数名> <値|変数> [global] - 変数を設定します。globalを指定するとグローバル変数になります\n" +
                     "/get <変数名> <オブジェクトID> [global] - オブジェクトを取得し、変数に設定します\n" +
                     "/update <変数名:プロパティー名> <値|変数> - オブジェクトのプロパティを更新します\n" +
@@ -82,7 +82,8 @@ namespace PhysicsEngineCore {
                     "/func <結果変数名> <関数名> <値|変数> - 関数を値を入力し、計算結果を結果変数に設定します\n" +
                     "/if <条件式> <コマンド...> - 条件式が真の場合、指定されたコマンドを実行します\n" +
                     "/console <変数名> - 変数をコンソールに出力します\n" +
-                    "/clear - グローバル変数をリセットします";
+                    "/clear - グローバル変数をリセットします\n" +
+                    "変数以外は\"\"で囲む必要があります";
             } else {
                 throw new CommandException($"不明なコマンド: {commandName}");
             }
@@ -389,7 +390,7 @@ namespace PhysicsEngineCore {
             }
 
             field = objType.GetField(propName);
-            if (field != null){
+            if(field != null){
                 fieldCache[cacheKey] = field;
 
                 return field.GetValue(obj);
