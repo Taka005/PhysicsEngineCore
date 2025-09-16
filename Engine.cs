@@ -905,9 +905,9 @@ namespace PhysicsEngineCore {
         /// <param name="posX"></param>
         /// <param name="posY"></param>
         /// <returns></returns>
-        public List<(IGround,GroundEdgeType)> GetGroundsEdgeAt(double posX, double posY) {
+        public List<(IGround ground,GroundEdgeType type)> GetGroundsEdgeAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
-            List<(IGround, GroundEdgeType)> targets = [];
+            List<(IGround ground,GroundEdgeType type)> targets = [];
 
             this.content.grounds.ForEach(ground=>{
                 if(ground is Line line) {
