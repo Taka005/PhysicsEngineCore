@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Views.Interfaces;
 
 namespace PhysicsEngineCore.Views {
     class LineVisual : DrawingVisual, IGroundVisual {
-        private Line groundData;
+        public IGround groundData { get; }
         private Brush brush;
         private Pen pen;
 
@@ -17,30 +18,32 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            this.brush = ParseColor.StringToBrush(this.groundData.color);
-            this.pen = new Pen(this.brush, this.groundData.width);
+            if (this.groundData is Line line){
+                this.brush = ParseColor.StringToBrush(line.color);
+                this.pen = new Pen(this.brush, line.width);
 
-            context.DrawLine(
-                this.pen,
-                new Point(this.groundData.start.X, this.groundData.start.Y),
-                new Point(this.groundData.end.X, this.groundData.end.Y)
-            );
+                context.DrawLine(
+                    this.pen,
+                    new Point(line.start.X, line.start.Y),
+                    new Point(line.end.X, line.end.Y)
+                );
 
-            context.DrawEllipse(
-                this.brush,
-                null,
-                new Point(this.groundData.start.X, this.groundData.start.Y),
-                this.groundData.width / 2,
-                this.groundData.width / 2
-            );
+                context.DrawEllipse(
+                    this.brush,
+                    null,
+                    new Point(line.start.X, line.start.Y),
+                    line.width / 2,
+                    line.width / 2
+                );
 
-            context.DrawEllipse(
-                this.brush,
-                null,
-                new Point(this.groundData.end.X, this.groundData.end.Y),
-                this.groundData.width / 2,
-                this.groundData.width / 2
-            );
+                context.DrawEllipse(
+                    this.brush,
+                    null,
+                    new Point(line.end.X, line.end.Y),
+                    line.width / 2,
+                    line.width / 2
+                );
+            }
         }
     }
 }

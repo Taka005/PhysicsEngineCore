@@ -132,6 +132,7 @@ namespace PhysicsEngineCore {
             }
             set {
                 this._isDisplayVector = value;
+
                 this.objectVisual.isDrawVector = value;
             }
         }
