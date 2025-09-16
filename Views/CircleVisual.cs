@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Views.Interfaces;
 
 namespace PhysicsEngineCore.Views {
     class CircleVisual : DrawingVisual, IObjectVisual {
-        private Circle objectData;
+        public IObject objectData { get; }
         private Brush brush;
         private Pen pen;
         private float _opacity = 1;
@@ -35,44 +36,46 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            if(this.objectData.image == null) {
-                this.brush = ParseColor.StringToBrush(this.objectData.color);
+            if(this.objectData is Circle circle){
+                if (circle.image == null) {
+                    this.brush = ParseColor.StringToBrush(circle.color);
 
-                this.brush.Opacity = this.opacity;
+                    this.brush.Opacity = this.opacity;
 
-                this.pen = new Pen(this.brush, 1);
+                    this.pen = new Pen(this.brush, 1);
 
-                context.DrawEllipse(
-                    this.brush,
-                    this.pen,
-                    new Point(this.objectData.position.X, this.objectData.position.Y),
-                    this.objectData.radius - 0.5,
-                    this.objectData.radius - 0.5
-                );
-            } else {
-                TransformGroup transformGroup = new TransformGroup();
+                    context.DrawEllipse(
+                        this.brush,
+                        this.pen,
+                        new Point(circle.position.X, circle.position.Y),
+                        circle.radius - 0.5,
+                        circle.radius - 0.5
+                    );
+                } else {
+                    TransformGroup transformGroup = new TransformGroup();
 
-                double angleRad = Math.Atan2(this.objectData.velocity.Y, -this.objectData.velocity.X);
+                    double angleRad = Math.Atan2(circle.velocity.Y, -circle.velocity.X);
 
-                transformGroup.Children.Add(new RotateTransform(angleRad * 180 / Math.PI, this.objectData.position.X, this.objectData.position.Y));
+                    transformGroup.Children.Add(new RotateTransform(angleRad * 180 / Math.PI, circle.position.X, circle.position.Y));
 
-                context.PushTransform(transformGroup);
-                context.PushOpacity(this.opacity);
-                context.PushClip(new EllipseGeometry(new Point(this.objectData.position.X, this.objectData.position.Y), this.objectData.radius, this.objectData.radius));
+                    context.PushTransform(transformGroup);
+                    context.PushOpacity(this.opacity);
+                    context.PushClip(new EllipseGeometry(new Point(circle.position.X, circle.position.Y), circle.radius, circle.radius));
 
-                context.DrawImage(
-                    this.objectData.image.source,
-                    new Rect(
-                        this.objectData.position.X - this.objectData.radius,
-                        this.objectData.position.Y - this.objectData.radius,
-                        this.objectData.diameter,
-                        this.objectData.diameter
-                    )
-                );
+                    context.DrawImage(
+                        circle.image.source,
+                        new Rect(
+                            circle.position.X - circle.radius,
+                            circle.position.Y - circle.radius,
+                            circle.diameter,
+                            circle.diameter
+                        )
+                    );
 
-                context.Pop();
-                context.Pop();
-                context.Pop();
+                    context.Pop();
+                    context.Pop();
+                    context.Pop();
+                }
             }
         }
     }

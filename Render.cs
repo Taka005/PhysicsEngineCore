@@ -35,7 +35,6 @@ namespace PhysicsEngineCore {
         private readonly ObjectVisual objectVisual = new ObjectVisual();
         private readonly GroundVisual groundVisual = new GroundVisual();
         private readonly EffectVisual effectVisual = new EffectVisual();
-        private readonly VectorVisual vectorVisual = new VectorVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
         private readonly GridVisual gridVisual = new GridVisual();
         public Vector2 currentPosition = new Vector2(0, 0);
@@ -52,7 +51,6 @@ namespace PhysicsEngineCore {
                 this.groundVisual,
                 this.effectVisual,
                 this.objectVisual,
-                this.vectorVisual,
                 this.debugVisual
             };
 
@@ -134,8 +132,7 @@ namespace PhysicsEngineCore {
             }
             set {
                 this._isDisplayVector = value;
-
-                this.vectorVisual.Clear();
+                this.objectVisual.isDrawVector = value;
             }
         }
 
@@ -214,7 +211,6 @@ namespace PhysicsEngineCore {
         public void DrawObject(List<IObject> objects) {
             HashSet<string> currentObjectIds = [.. objects.Select(o => o.trackingId)];
             List<string>? visualsToRemove = [.. this.objectVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];
-            List<VectorData> vectors = [];
 
             foreach(string id in visualsToRemove) {
                 this.objectVisuals.Remove(id);
@@ -225,24 +221,13 @@ namespace PhysicsEngineCore {
             this.objectVisual.Draw(objectVisuals);
 
             foreach(IObject obj in objects) {
-                if(this.objectVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
-                    if(visual is IObjectVisual objectVisual) {
-                        vectors.Add(new VectorData(
-                            obj.position,
-                            obj.velocity
-                        ));
-                    }
-                }else{
+                if(!this.objectVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
                     DrawingVisual? newVisual = this.CreateObjectVisual(obj);
 
                     if(newVisual != null) {
                         this.objectVisuals.Add(obj.trackingId, newVisual);
                     }
                 }
-            }
-
-            if(this.isDisplayVector) {
-                this.vectorVisual.Draw(vectors);
             }
         }
 
@@ -312,7 +297,6 @@ namespace PhysicsEngineCore {
         public void DrawTracking(List<IObject> tracks) {
             HashSet<string> currentObjectIds = [.. tracks.Select(o => o.trackingId)];
             List<string>? visualsToRemove = [.. this.trackingVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];
-            List<VectorData> vectors = [];
 
             foreach(string id in visualsToRemove) {
                 this.visuals.Remove(this.trackingVisuals[id]);

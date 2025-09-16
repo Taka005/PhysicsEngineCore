@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using PhysicsEngineCore.Objects;
+using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Views.Interfaces;
 
 namespace PhysicsEngineCore.Views {
     class TriangleVisual : DrawingVisual, IObjectVisual {
-        private Triangle objectData;
+        public IObject objectData { get; }
         private Brush brush;
         private Pen pen;
         private float _opacity = 1;
@@ -35,59 +36,61 @@ namespace PhysicsEngineCore.Views {
         }
 
         public void Draw(DrawingContext context) {
-            if(this.objectData.image == null) {
-                this.brush = ParseColor.StringToBrush(this.objectData.color);
+            if (this.objectData is Triangle triangle){
+                if (triangle.image == null) {
+                    this.brush = ParseColor.StringToBrush(triangle.color);
 
-                this.brush.Opacity = this.opacity;
+                    this.brush.Opacity = this.opacity;
 
-                this.pen = new Pen(this.brush, this.objectData.entityDiameter);
+                    this.pen = new Pen(this.brush, triangle.entityDiameter);
 
-                this.objectData.entities.ForEach(source => {
-                    context.DrawEllipse(
-                         this.brush,
-                         null,
-                         new Point(source.position.X, source.position.Y),
-                         source.radius,
-                         source.radius
-                     );
+                    triangle.entities.ForEach(source => {
+                        context.DrawEllipse(
+                             this.brush,
+                             null,
+                             new Point(source.position.X, source.position.Y),
+                             source.radius,
+                             source.radius
+                         );
 
-                    this.objectData.entities.ForEach(target => {
-                        if(source.id == target.id) return;
+                        triangle.entities.ForEach(target => {
+                            if(source.id == target.id) return;
 
-                        context.DrawLine(
-                            this.pen,
-                            new Point(source.position.X, source.position.Y),
-                            new Point(target.position.X, target.position.Y)
-                        );
+                            context.DrawLine(
+                                this.pen,
+                                new Point(source.position.X, source.position.Y),
+                                new Point(target.position.X, target.position.Y)
+                            );
+                        });
                     });
-                });
-            } else {
-                TransformGroup transformGroup = new TransformGroup();
+                } else {
+                    TransformGroup transformGroup = new TransformGroup();
 
-                Entity start = this.objectData.entities[1];
-                Entity end = this.objectData.entities[2];
+                    Entity start = triangle.entities[1];
+                    Entity end = triangle.entities[2];
 
-                double angle = (start.position - end.position).Angle();
+                    double angle = (start.position - end.position).Angle();
 
-                angle += Math.PI;
+                    angle += Math.PI;
 
-                transformGroup.Children.Add(new RotateTransform(angle * 180 / Math.PI, this.objectData.position.X, this.objectData.position.Y));
+                    transformGroup.Children.Add(new RotateTransform(angle * 180 / Math.PI, triangle.position.X, triangle.position.Y));
 
-                context.PushTransform(transformGroup);
-                context.PushOpacity(this.opacity);
+                    context.PushTransform(transformGroup);
+                    context.PushOpacity(this.opacity);
 
-                context.DrawImage(
-                    this.objectData.image.source,
-                    new Rect(
-                        this.objectData.position.X - this.objectData.size/2,
-                        this.objectData.position.Y - this.objectData.size/2,
-                        this.objectData.size,
-                        this.objectData.size
-                    )
-                );
+                    context.DrawImage(
+                        triangle.image.source,
+                        new Rect(
+                            triangle.position.X - triangle.size/2,
+                            triangle.position.Y - triangle.size/2,
+                            triangle.size,
+                            triangle.size
+                        )
+                    );
 
-                context.Pop();
-                context.Pop();
+                    context.Pop();
+                    context.Pop();
+                }
             }
         }
     }
