@@ -972,6 +972,35 @@ namespace PhysicsEngineCore {
         }
 
         /// <summary>
+        /// 指定した座標に端があるエフェクトを取得します
+        /// </summary>
+        /// <param name="posX">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
+        /// <returns>存在したエフェクトのリスト</returns>
+        public List<(IEffect effect,EffectEdgeType type)> GetEffectsEdgeAt(double posX, double posY) {
+            Vector2 position = new Vector2(posX, posY);
+            List<(IEffect effect,EffectEdgeType type)> targets = [];
+
+            this.content.effects.ForEach(effect => {
+                if(effect is Booster booster) {
+                    Vector2 differenceStart = booster.start - position;
+                    Vector2 differenceEnd = booster.end - position;
+
+                    double distanceStart = differenceStart.Length();
+                    double distanceEnd = differenceEnd.Length();
+
+                    if(distanceStart <= 1.5){
+                        targets.Add((booster, EffectEdgeType.Start));
+                    }else if(distanceEnd <= 1.5){
+                        targets.Add((booster, EffectEdgeType.End));
+                    }                    
+                }
+            });
+
+            return targets;
+        }
+
+        /// <summary>
         /// 指定した位置にあるエンティティーを取得します
         /// </summary>
         /// <param name="posX">対象のX座標</param>
@@ -1081,6 +1110,11 @@ namespace PhysicsEngineCore {
     public enum GroundEdgeType{
         Start,
         Middle,
+        End
+    }
+
+    public enum EffectEdgeType{
+        Start,
         End
     }
 }
