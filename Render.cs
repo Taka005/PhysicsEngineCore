@@ -162,6 +162,7 @@ namespace PhysicsEngineCore {
                 this._isDebugMode = value;
 
                 this.groundVisual.isDrawEdge = value;
+                this.effectVisual.isDrawEdge = value;
 
                 this.debugVisual.Clear();
             }
