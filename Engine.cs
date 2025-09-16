@@ -902,9 +902,9 @@ namespace PhysicsEngineCore {
         /// <summary>
         /// 指定した座標に端があるグラウンドを取得します
         /// </summary>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
-        /// <returns></returns>
+        /// <param name="posX">対象のX座標</param>
+        /// <param name="posY">対象のY座標</param>
+        /// <returns>存在したグランドのリスト</returns>
         public List<(IGround ground,GroundEdgeType type)> GetGroundsEdgeAt(double posX, double posY) {
             Vector2 position = new Vector2(posX, posY);
             List<(IGround ground,GroundEdgeType type)> targets = [];
@@ -1076,5 +1076,11 @@ namespace PhysicsEngineCore {
 
             return movementLimit;
         }
+    }
+
+    public enum GroundEdgeType{
+        Start,
+        Middle,
+        End
     }
 }
