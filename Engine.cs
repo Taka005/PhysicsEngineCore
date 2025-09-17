@@ -74,6 +74,11 @@ namespace PhysicsEngineCore {
         private float _scriptExecuteInterval = 1000;
 
         /// <summary>
+        /// アップデートスクリプトで発生したエラーメッセージ
+        /// </summary>
+        private string _scriptErrorMessage = "";
+
+        /// <summary>
         /// トラッキングの制限数
         /// </summary>
         private int _trackingLimit = 100;
@@ -185,6 +190,15 @@ namespace PhysicsEngineCore {
                 if(!value) {
                     this.render.ClearTracking();
                 }
+            }
+        }
+
+        /// <summary>
+        /// アップデートスクリプトで発生したエラーメッセージ
+        /// </summary>
+        public string scriptErrorMessage {
+            get {
+                return this._scriptErrorMessage;
             }
         }
 
@@ -347,12 +361,11 @@ namespace PhysicsEngineCore {
                 try {
                     this.command.ExecuteMultiLine(this.updateScript);
                 } catch(Exception ex) {
-                    Debug.WriteLine($"スクリプトの実行中にエラーが発生しました: {ex.Message}");
+                    this._scriptErrorMessage = ex.Message;
                 }
 
                 this.scriptExecuteCount %= this.scriptExecuteInterval;
             }
-
 
             this.Update();
         }
