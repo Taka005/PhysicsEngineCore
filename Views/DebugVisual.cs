@@ -9,7 +9,7 @@ namespace PhysicsEngineCore.Views {
             context.Close();
         }
 
-        public void Draw(double fps,Vector2 currentPosition,int objectCount,int groundCount) {
+        public void Draw(double fps,Vector2 currentPosition,int objectCount,int groundCount,int entityCount) {
             DrawingContext context = this.RenderOpen();
 
             FormattedText fpsText = new FormattedText(
@@ -52,10 +52,21 @@ namespace PhysicsEngineCore.Views {
                 VisualTreeHelper.GetDpi(this).PixelsPerDip
             );
 
+            FormattedText entityCountText = new FormattedText(
+                $"ENTITY COUNT: {entityCount:F0}",
+                System.Globalization.CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface("Arial"),
+                16,
+                Brushes.Black,
+                VisualTreeHelper.GetDpi(this).PixelsPerDip
+            );
+
             context.DrawText(fpsText, new Point(10, 10));
             context.DrawText(mouseText, new Point(10, 30));
             context.DrawText(objectCountText, new Point(10, 50));
             context.DrawText(groundCountText, new Point(10, 70));
+            context.DrawText(entityCountText, new Point(10, 90));
 
             context.Close();
         }

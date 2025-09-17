@@ -147,7 +147,9 @@ namespace PhysicsEngineCore {
             set {
                 this._isDisplayGrid = value;
 
-                this.gridVisual.Clear();
+                if (!value){
+                    this.gridVisual.Clear();
+                }
             }
         }
 
@@ -164,7 +166,9 @@ namespace PhysicsEngineCore {
                 this.groundVisual.isDrawEdge = value;
                 this.effectVisual.isDrawEdge = value;
 
-                this.debugVisual.Clear();
+                if(!value){
+                    this.debugVisual.Clear();
+                }
             }
         }
 
@@ -181,7 +185,7 @@ namespace PhysicsEngineCore {
         /// 基本的なレンダリングの処理を行います
         /// このメソッドはUIスレッドで呼び出される必要があります
         /// </summary>
-        public void Update(int objectCount,int groundCount) {
+        public void Update(int objectCount,int groundCount, int entityCount) {
             foreach(DrawingVisual visual in this.visuals) {
                 if(visual is DebugVisual || visual is GridVisual) continue;
 
@@ -199,7 +203,7 @@ namespace PhysicsEngineCore {
             }
 
             if(this.isDebugMode) {
-                this.debugVisual.Draw(this.fps,this.currentPosition,objectCount,groundCount);
+                this.debugVisual.Draw(this.fps,this.currentPosition,objectCount,groundCount,entityCount);
             }
 
             if(this.isDisplayGrid) {
