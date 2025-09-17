@@ -20,48 +20,48 @@ namespace PhysicsEngineCore.Views{
                                 null,
                                 this.edgePen,
                                 new Point(line.start.X, line.start.Y),
-                                line.width / 2,
-                                line.width / 2
+                                line.width / 2 - 0.5,
+                                line.width / 2 - 0.5
                             );
 
                             context.DrawEllipse(
                                 null,
                                 this.edgePen,
                                 new Point(line.end.X, line.end.Y),
-                                line.width / 2,
-                                line.width / 2
+                                line.width / 2 - 0.5,
+                                line.width / 2 - 0.5
                             );
                         }else if(visual.groundData is Curve curve){
                             context.DrawEllipse(
                                 null,
                                 this.edgePen,
                                 new Point(curve.start.X, curve.start.Y),
-                                curve.width / 2,
-                                curve.width / 2
+                                curve.width / 2 - 0.5,
+                                curve.width / 2 - 0.5
                             );
 
                             context.DrawEllipse(
                                 null,
                                 this.edgePen,
                                 new Point(curve.middle.X, curve.middle.Y),
-                                curve.width / 2,
-                                curve.width / 2
+                                curve.width / 2 - 0.5,
+                                curve.width / 2 - 0.5
                             );
 
                             context.DrawEllipse(
                                 null,
                                 this.edgePen,
                                 new Point(curve.center.X, curve.center.Y),
-                                curve.width / 2,
-                                curve.width / 2
+                                curve.width / 2 - 0.5,
+                                curve.width / 2 - 0.5
                             );
 
                             context.DrawEllipse(
                                 null,
                                 this.edgePen,
                                 new Point(curve.end.X, curve.end.Y),
-                                curve.width / 2,
-                                curve.width / 2
+                                curve.width / 2 - 0.5,
+                                curve.width / 2 - 0.5
                             );
                         }
                     }

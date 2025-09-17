@@ -21,16 +21,16 @@ namespace PhysicsEngineCore.Views {
                                 null,
                                 this.edgePen,
                                 new Point(booster.start.X, booster.start.Y),
-                                1.5,
-                                1.5
+                                1.5 - 0.5,
+                                1.5 - 0.5
                             );
 
                             context.DrawEllipse(
                                 null,
                                 this.edgePen,
                                 new Point(booster.end.X, booster.end.Y),
-                                1.5,
-                                1.5
+                                1.5 - 0.5,
+                                1.5 - 0.5
                             );
                         }
                     }
