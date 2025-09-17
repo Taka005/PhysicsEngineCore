@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
 using PhysicsEngineCore.Exceptions;
@@ -362,9 +361,9 @@ namespace PhysicsEngineCore {
                     this.command.ExecuteMultiLine(this.updateScript);
                 } catch(Exception ex) {
                     this._scriptErrorMessage = ex.Message;
+                }finally{
+                    this.scriptExecuteCount %= this.scriptExecuteInterval;
                 }
-
-                this.scriptExecuteCount %= this.scriptExecuteInterval;
             }
 
             this.Update();
