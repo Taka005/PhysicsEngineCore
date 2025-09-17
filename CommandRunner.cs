@@ -460,7 +460,12 @@ namespace PhysicsEngineCore {
             bool negate = condition.StartsWith("!");
             string varName = negate ? condition[1..] : condition;
 
-            if(!varName.Contains("==") && !varName.Contains("!=")) {
+            if(
+                !varName.Contains("==") &&
+                !varName.Contains("!=") &&
+                !varName.Contains(">") &&
+                !varName.Contains("<")
+            ) {
                 bool exists = localVariables.ContainsKey(varName) || this.globalVariables.ContainsKey(varName);
 
                 return negate ? !exists : exists;
@@ -475,6 +480,12 @@ namespace PhysicsEngineCore {
             } else if(condition.Contains("!=")) {
                 parts = condition.Split("!=");
                 op = "!=";
+            }else if (condition.Contains(">")){
+                parts = condition.Split(">");
+                op = ">";
+            }else if (condition.Contains("<")){
+                parts = condition.Split("<");
+                op = "<";
             } else {
                 throw new CommandException($"サポートされていない演算子です: {condition}");
             }
@@ -486,14 +497,27 @@ namespace PhysicsEngineCore {
 
             if(left == null || right == null) throw new CommandException("条件式内の値を解決できませんでした");
 
-            string leftStr = left.ToString() ?? "";
-            string rightStr = right.ToString() ?? "";
+            if(op == ">" || op == "<"){
+                if(double.TryParse(left.ToString(), out double leftNum) && double.TryParse(right.ToString(), out double rightNum)){
+                    return op switch{
+                        ">" => leftNum > rightNum,
+                        "<" => leftNum < rightNum,
+                        _ => throw new CommandException($"サポートされていない演算子です: {op}"),
+                    };
+                } else {
+                    throw new CommandException("条件式内の値を数値に変換できませんでした");
+                }
+            }else{
+                string leftStr = left.ToString() ?? "";
+                string rightStr = right.ToString() ?? "";
 
-            return op switch {
-                "==" => leftStr == rightStr,
-                "!=" => leftStr != rightStr,
-                _ => throw new CommandException($"サポートされていない演算子です: {op}"),
-            };
+                return op switch{
+                    "==" => leftStr == rightStr,
+                    "!=" => leftStr != rightStr,
+                    _ => throw new CommandException($"サポートされていない演算子です: {op}"),
+                };
+            }
+
         }
     }
 }
