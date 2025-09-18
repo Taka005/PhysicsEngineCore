@@ -464,7 +464,9 @@ namespace PhysicsEngineCore {
                 !varName.Contains("==") &&
                 !varName.Contains("!=") &&
                 !varName.Contains(">") &&
-                !varName.Contains("<")
+                !varName.Contains("<") &&
+                !varName.Contains("<=") &&
+                !varName.Contains(">=")
             ) {
                 bool exists = localVariables.ContainsKey(varName) || this.globalVariables.ContainsKey(varName);
 
@@ -486,6 +488,12 @@ namespace PhysicsEngineCore {
             }else if (condition.Contains("<")){
                 parts = condition.Split("<");
                 op = "<";
+            }else if (condition.Contains("<=")){
+                parts = condition.Split("<=");
+                op = "<=";
+            }else if (condition.Contains(">=")){
+                parts = condition.Split(">=");
+                op = ">=";
             } else {
                 throw new CommandException($"サポートされていない演算子です: {condition}");
             }
@@ -497,11 +505,18 @@ namespace PhysicsEngineCore {
 
             if(left == null || right == null) throw new CommandException("条件式内の値を解決できませんでした");
 
-            if(op == ">" || op == "<"){
+            if(
+                op == ">" ||
+                op == "<" ||
+                op == "<=" ||
+                op == ">="
+            ){
                 if(double.TryParse(left.ToString(), out double leftNum) && double.TryParse(right.ToString(), out double rightNum)){
                     return op switch{
                         ">" => leftNum > rightNum,
                         "<" => leftNum < rightNum,
+                        "<=" => leftNum <= rightNum,
+                        ">=" => leftNum >= rightNum,
                         _ => throw new CommandException($"サポートされていない演算子です: {op}"),
                     };
                 } else {
