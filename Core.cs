@@ -66,17 +66,19 @@ namespace PhysicsEngineCore {
 
             Vector2 difference = target.position - source.position;
 
-            if(
-                Math.Abs(difference.X) >= source.radius + target.radius ||
-                Math.Abs(difference.Y) >= source.radius + target.radius
+            double totalRadius = source.radius + target.radius;
+
+            if (
+                Math.Abs(difference.X) >= totalRadius ||
+                Math.Abs(difference.Y) >= totalRadius
             ) return;
 
             double distanceSquared = difference.LengthSquared();
-            if(distanceSquared > (source.radius + target.radius)*(source.radius + target.radius)) return;
+            if(distanceSquared > totalRadius*totalRadius) return;
 
             double distance = Math.Sqrt(distanceSquared);
 
-            double move = (distance - (source.radius + target.radius)) / (distance * totalMass + CORRECTION_NUMBER) * source.stiffness;
+            double move = (distance - totalRadius) / (distance * totalMass + CORRECTION_NUMBER) * source.stiffness;
             Vector2 correction = difference * move;
 
             source.position += correction * source.invMass;

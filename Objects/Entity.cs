@@ -25,10 +25,10 @@ namespace PhysicsEngineCore.Objects {
         /// </summary>
         public double diameter {
             get {
-                return _diameter;
+                return this._diameter;
             }
             set {
-                _diameter = CheckDiameterValue(value);
+                this._diameter = CheckDiameterValue(value);
             }
         }
 
@@ -37,7 +37,7 @@ namespace PhysicsEngineCore.Objects {
         /// </summary>
         public double radius {
             get {
-                return this._diameter / 2;
+                return this.diameter*0.5;
             }
         }
 
@@ -46,11 +46,11 @@ namespace PhysicsEngineCore.Objects {
         /// </summary>
         public double mass {
             get {
-                return _mass;
+                return this._mass;
             }
             set {
-                _mass = CheckMassValue(value);
-                _invMass = calcInvMass(value);
+                this._mass = CheckMassValue(value);
+                this._invMass = calcInvMass(value);
             }
         }
 
@@ -60,10 +60,10 @@ namespace PhysicsEngineCore.Objects {
         /// </summary>
         public double stiffness {
             get {
-                return _stiffness;
+                return this._stiffness;
             }
             set {
-                _stiffness = CheckStiffnessValue(value);
+                this._stiffness = CheckStiffnessValue(value);
             }
         }
 
@@ -73,7 +73,7 @@ namespace PhysicsEngineCore.Objects {
         /// </summary>
         public double invMass {
             get {
-                return _invMass;
+                return this._invMass;
             }
         }
 
@@ -83,7 +83,7 @@ namespace PhysicsEngineCore.Objects {
         /// </summary>
         public bool isStop {
             get {
-                return position.NearlyEquals(previousPosition);
+                return this.position.NearlyEquals(previousPosition);
             }
         }
 
@@ -133,7 +133,6 @@ namespace PhysicsEngineCore.Objects {
 
             return 1 / mass;
         }
-
 
         /// <summary>
         /// 剛性が正しい値かチェックします
