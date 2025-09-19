@@ -1,6 +1,7 @@
-﻿using PhysicsEngineCore.Utils;
-using PhysicsEngineCore.Objects;
+﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Objects.Interfaces;
+using PhysicsEngineCore.Utils;
+using System.Runtime.CompilerServices;
 
 namespace PhysicsEngineCore {
     /// <summary>
@@ -58,6 +59,7 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="source">対象のエンティティー</param>
         /// <param name="target">対象のエンティティー</param>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         protected void SolvePosition(Entity source, Entity target) {
             double totalMass = source.invMass + target.invMass;
             if(totalMass == 0) return;

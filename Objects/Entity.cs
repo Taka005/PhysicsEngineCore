@@ -15,6 +15,7 @@ namespace PhysicsEngineCore.Objects {
         public Vector2 velocity = new Vector2(option.velocityX, option.velocityY);
         private double _diameter = CheckDiameterValue(option.diameter);
         private double _mass = CheckMassValue(option.mass);
+        private double _invMass = calcInvMass(option.mass);
         private double _stiffness = CheckStiffnessValue(option.stiffness);
         public readonly ConnectionManager connection = new ConnectionManager(option.targets);
         public string parentId = option.parentId ?? throw new ArgumentException(nameof(option.parentId));
@@ -49,6 +50,7 @@ namespace PhysicsEngineCore.Objects {
             }
             set {
                 _mass = CheckMassValue(value);
+                _invMass = calcInvMass(value);
             }
         }
 
@@ -71,9 +73,7 @@ namespace PhysicsEngineCore.Objects {
         /// </summary>
         public double invMass {
             get {
-                if(this.mass == 0) return 0;
-
-                return 1 / this.mass;
+                return _invMass;
             }
         }
 
@@ -122,6 +122,18 @@ namespace PhysicsEngineCore.Objects {
                 targets = this.connection.targets
             };
         }
+
+        /// <summary>
+        /// 質量の逆数を計算します
+        /// </summary>
+        /// <param name="mass">計算する質量</param>
+        /// <returns>計算された逆数の質量</returns>
+        public static double calcInvMass(double mass){
+            if (mass == 0) return 0;
+
+            return 1 / mass;
+        }
+
 
         /// <summary>
         /// 剛性が正しい値かチェックします
