@@ -444,8 +444,117 @@ namespace PhysicsEngineCore {
         /// </summary>
         /// <param name="option">オブジェクトの初期化オプション</param>
         /// <returns>生成したオブジェクト</returns>
-        /// <exception cref="Exception">存在しないオブジェクトのとき例外</exception>
-        public IObject? SpawnObject(IOption option) {
+        public IObject SpawnObject(IOption option) {
+            IObject obj = this.CreateObject(option);
+
+            this.content.AddObject(obj);
+
+            this.content.Sync();
+
+            return obj;
+        }
+
+        /// <summary>
+        /// 複数のオブジェクトを生成します
+        /// </summary>
+        /// <param name="options">オブジェクトの初期化オプションのリスト</param>
+        /// <returns>生成したオブジェクトのリスト</returns>
+        public List<IObject> SpawnObjects(List<IOption> options){
+            List<IObject> objects = [];
+
+            options.ForEach(option =>{
+                IObject obj = this.CreateObject(option);
+
+                this.content.AddObject(obj);
+
+                objects.Add(obj);
+            });
+
+            this.content.Sync();
+
+            return objects;
+        }
+
+        /// <summary>
+        /// グラウンドを生成します
+        /// </summary>
+        /// <param name="option">グラウンドの初期化オプション</param>
+        /// <returns>生成したグラウンド</returns>
+        public IGround SpawnGround(IOption option){
+            IGround ground = this.CreateGround(option);
+
+            this.content.AddGround(ground);
+
+            this.content.Sync();
+
+            return ground;
+        }
+
+        /// <summary>
+        /// 複数のグラウンドを生成します
+        /// </summary>
+        /// <param name="options">グラウンドの初期化オプションのリスト</param>
+        /// <returns>生成したグラウンドのリスト</returns>
+        public List<IGround> SpawnGrounds(List<IOption> options){
+            List<IGround> grounds = [];
+
+            options.ForEach(option =>{
+                IGround ground = this.CreateGround(option);
+
+                this.content.AddGround(ground);
+
+                grounds.Add(ground);
+            });
+
+            this.content.Sync();
+
+            return grounds;
+        }
+
+        /// <summary>
+        /// エフェクトを生成します
+        /// </summary>
+        /// <param name="option">エフェクトの初期化オプション</param>
+        /// <returns>生成したエフェクト</returns>
+        public IEffect SpawnEffect(IOption option){
+            IEffect effect = this.CreateEffect(option);
+
+            this.content.AddEffect(effect);
+
+            this.content.Sync();
+
+            return effect;
+        }
+
+        /// <summary>
+        /// 複数のエフェクトを生成します
+        /// </summary>
+        /// <param name="options">エフェクトの初期化オプションのリスト</param>
+        /// <returns>生成したエフェクトのリスト</returns>
+        public List<IEffect> SpawnEffects(List<IOption> options){
+            List<IEffect> effects = [];
+
+            options.ForEach(option =>{
+                IEffect effect = this.CreateEffect(option);
+
+                this.content.AddEffect(effect);
+
+                effects.Add(effect);
+            });
+
+            this.content.Sync();
+
+            return effects;
+        }
+
+        /// <summary>
+        /// オブジェクトを作成します
+        /// </summary>
+        /// <param name="option">オブジェクトの初期化オプション</param>
+        /// <returns>作成したオブジェクト</returns>
+        /// <exception cref="DuplicateIdException"></exception>
+        /// <exception cref="InvalidObjectException"></exception>
+        public IObject CreateObject(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             if(this.GetObject(option.id) != null) throw new DuplicateIdException(option.id);
@@ -472,20 +581,17 @@ namespace PhysicsEngineCore {
                 }
             }
 
-            this.content.AddObject(obj);
-
-            this.content.Sync();
-
             return obj;
         }
 
         /// <summary>
-        /// グラウンドを生成します
+        /// グラウンドを作成します
         /// </summary>
         /// <param name="option">グラウンドの初期化オプション</param>
-        /// <returns>生成したグラウンド</returns>
-        /// <exception cref="Exception">存在しないグラウンドのとき例外</exception>
-        public IGround? SpawnGround(IOption option) {
+        /// <returns>作成したグラウンド</returns>
+        /// <exception cref="DuplicateIdException"></exception>
+        /// <exception cref="InvalidObjectException"></exception>
+        public IGround CreateGround(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             if(this.GetGround(option.id) != null) throw new DuplicateIdException(option.id);
@@ -507,21 +613,17 @@ namespace PhysicsEngineCore {
                     ground.image = image;
                 }
             }
-
-            this.content.AddGround(ground);
-
-            this.content.Sync();
-
             return ground;
         }
 
         /// <summary>
-        /// エフェクトを生成します
+        /// エフェクトを作成します
         /// </summary>
         /// <param name="option">エフェクトの初期化オプション</param>
-        /// <returns>生成したエフェクト</returns>
-        /// <exception cref="Exception">存在しないエフェクトのとき例外</exception>
-        public IEffect? SpawnEffect(IOption option) {
+        /// <returns>作成したエフェクト</returns>
+        /// <exception cref="DuplicateIdException"></exception>
+        /// <exception cref="InvalidObjectException"></exception>
+        public IEffect CreateEffect(IOption option) {
             if(option.id == null) option.id = IdGenerator.CreateId(DEFAULT_ID_LENGTH);
 
             if(this.GetEffect(option.id) != null) throw new DuplicateIdException(option.id);
@@ -541,10 +643,6 @@ namespace PhysicsEngineCore {
                     effect.image = image;
                 }
             }
-
-            this.content.AddEffect(effect);
-
-            this.content.Sync();
 
             return effect;
         }
