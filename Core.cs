@@ -69,8 +69,10 @@ namespace PhysicsEngineCore {
                 Math.Abs(difference.Y) >= source.radius + target.radius
             ) return;
 
-            double distance = difference.Length();
-            if(distance > source.radius + target.radius) return;
+            double distanceSquared = difference.LengthSquared();
+            if(distanceSquared > (source.radius + target.radius)*(source.radius + target.radius)) return;
+
+            double distance = Math.Sqrt(distanceSquared);
 
             double move = (distance - (source.radius + target.radius)) / (distance * totalMass + CORRECTION_NUMBER) * source.stiffness;
             Vector2 correction = difference * move;
@@ -90,8 +92,11 @@ namespace PhysicsEngineCore {
             Vector2 position = ground.SolvePosition(entity.position);
 
             Vector2 difference = position - entity.position;
-            double distance = difference.Length();
-            if(distance > entity.radius + ground.width / 2) return;
+
+            double distanceSquared = difference.LengthSquared();
+            if(distanceSquared > (entity.radius + ground.width / 2)*(entity.radius + ground.width / 2)) return;
+
+            double distance = Math.Sqrt(distanceSquared);
 
             double move = (distance - (entity.radius + ground.width / 2)) / (distance * entity.invMass + CORRECTION_NUMBER) * entity.stiffness;
             Vector2 correction = difference * move;
