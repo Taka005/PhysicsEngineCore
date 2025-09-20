@@ -98,6 +98,18 @@ namespace PhysicsEngineCore {
 
             Vector2 difference = position - entity.position;
 
+            if(ground is Line line){
+                if(
+                    Math.Abs(difference.X) >= entity.radius + line.width + Math.Abs(line.start.X - line.end.X)||
+                    Math.Abs(difference.Y) >= entity.radius + line.width + Math.Abs(line.start.Y - line.end.Y)
+                ) return;
+            }else if(ground is Curve curve){
+                if(
+                    Math.Abs(difference.X) >= entity.radius + 2*curve.radius + curve.width ||
+                    Math.Abs(difference.Y) >= entity.radius + 2*curve.radius + curve.width
+                ) return;
+            }
+
             double distanceSquared = difference.LengthSquared();
             if(distanceSquared > (entity.radius + ground.width / 2)*(entity.radius + ground.width / 2)) return;
 

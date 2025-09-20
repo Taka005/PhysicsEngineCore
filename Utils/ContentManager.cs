@@ -15,14 +15,22 @@ namespace PhysicsEngineCore.Utils {
         private readonly List<QueueGround> queueGrounds = [];
         private readonly List<QueueEffect> queueEffects = [];
         private readonly object lockObject = new object();
+        private List<Entity>? cacheEntities;
+        private List<IObject>? cacheObjects;
+        private List<IGround>? cacheGrounds;
+        private List<IEffect>? cacheEffects;
 
         /// <summary>
         /// 全てのエンティティー
         /// </summary>
         public List<Entity> entities {
             get {
-                lock(this.lockObject) {
-                    return [.. this._objects.SelectMany(obj => obj.entities)];
+                lock (this.lockObject){
+                    if (this.cacheEntities == null){
+                        this.cacheEntities = [.. this._objects.SelectMany(obj => obj.entities)];
+                    }
+
+                    return this.cacheEntities;
                 }
             }
         }
@@ -66,7 +74,11 @@ namespace PhysicsEngineCore.Utils {
         public List<IObject> objects {
             get {
                 lock(this.lockObject) {
-                    return [.. this._objects];
+                    if (this.cacheObjects == null){
+                        this.cacheObjects = [..this._objects];
+                    }
+
+                    return this.cacheObjects;
                 }
             }
         }
@@ -77,7 +89,11 @@ namespace PhysicsEngineCore.Utils {
         public List<IGround> grounds {
             get {
                 lock(this.lockObject) {
-                    return [.. this._grounds];
+                    if(this.cacheGrounds == null){
+                        this.cacheGrounds = [..this._grounds];
+                    }
+
+                    return this.cacheGrounds;
                 }
             }
         }
@@ -88,7 +104,11 @@ namespace PhysicsEngineCore.Utils {
         public List<IEffect> effects {
             get {
                 lock(this.lockObject) {
-                    return [.. this._effects];
+                    if(this.cacheEffects == null){
+                        this.cacheEffects = [..this._effects];
+                    }
+
+                    return this.cacheEffects;
                 }
             }
         }
@@ -260,9 +280,12 @@ namespace PhysicsEngineCore.Utils {
                     } else if(obj.command == CommandType.Remove) {
                         this._objects.RemoveAll(target => target.id == obj.target.id);
                     }
+
+                    this.cacheEntities = null;
+                    this.cacheObjects = null;
                 }
 
-                foreach(QueueGround ground in currentQueueGrounds) {
+                foreach (QueueGround ground in currentQueueGrounds) {
                     if(ground.command == CommandType.ClearAll) {
                         this._grounds.Clear();
                     }
@@ -273,7 +296,9 @@ namespace PhysicsEngineCore.Utils {
                         this._grounds.Add(ground.target);
                     } else if(ground.command == CommandType.Remove) {
                         this._grounds.RemoveAll(target => target.id == ground.target.id);
-                    }                
+                    }
+
+                    this.cacheGrounds = null;
                 }
 
                 foreach(QueueEffect effect in currentQueueEffects) {
@@ -288,6 +313,8 @@ namespace PhysicsEngineCore.Utils {
                     } else if(effect.command == CommandType.Remove) {
                         this._effects.RemoveAll(target => target.id == effect.target.id);
                     }
+
+                    this.cacheEffects = null;
                 }
             }
         }
