@@ -402,28 +402,34 @@ namespace PhysicsEngineCore {
                 this.UpdatePosition(entity);
             }
 
-            for (int i = 0; i < entities.Count; i++){
+            Parallel.For(0, entities.Count, i => {
                 Entity entity = entities[i];
 
-                foreach (IGround ground in this.content.grounds){
+                foreach (IGround ground in this.content.grounds)
+                {
                     this.SolveGroundPosition(entity, ground);
                 }
 
-                for (int j = i + 1; j < entities.Count; j++){
+                for (int j = i + 1; j < entities.Count; j++)
+                {
                     Entity target = entities[j];
                     this.SolvePosition(entity, target);
                 }
 
-                foreach (Target target in entity.connection.targets){
+                foreach (Target target in entity.connection.targets)
+                {
                     Entity? targetEntity = this.GetEntity(target.entityId);
 
-                    if (targetEntity == null){
+                    if (targetEntity == null)
+                    {
                         entity.connection.Remove(target.entityId);
-                    }else{
+                    }
+                    else
+                    {
                         this.SolveConnection(entity, targetEntity, target.distance, target.stiffness);
                     }
                 }
-            }
+            });
 
             foreach (Entity entity in entities) {
                 this.UpdateSpeed(entity);
@@ -772,17 +778,9 @@ namespace PhysicsEngineCore {
 
             this.Clear(force: true);
 
-            saveData.GetAllObjects().ForEach(obj => {
-                this.SpawnObject(obj);
-            });
-
-            saveData.GetAllGrounds().ForEach(ground => {
-                this.SpawnGround(ground);
-            });
-
-            saveData.GetAllEffects().ForEach(effect => {
-                this.SpawnEffect(effect);
-            });
+            this.SpawnObjects(saveData.GetAllObjects());
+            this.SpawnGrounds(saveData.GetAllGrounds());
+            this.SpawnEffects(saveData.GetAllEffects());
 
             this.pps = saveData.engine.pps;
             this.gravity = saveData.engine.gravity;

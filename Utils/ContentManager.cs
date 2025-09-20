@@ -16,9 +16,6 @@ namespace PhysicsEngineCore.Utils {
         private readonly List<QueueEffect> queueEffects = [];
         private readonly object lockObject = new object();
         private List<Entity>? cacheEntities;
-        private List<IObject>? cacheObjects;
-        private List<IGround>? cacheGrounds;
-        private List<IEffect>? cacheEffects;
 
         /// <summary>
         /// 全てのエンティティー
@@ -74,11 +71,7 @@ namespace PhysicsEngineCore.Utils {
         public List<IObject> objects {
             get {
                 lock(this.lockObject) {
-                    if (this.cacheObjects == null){
-                        this.cacheObjects = [..this._objects];
-                    }
-
-                    return this.cacheObjects;
+                    return [.. this._objects];
                 }
             }
         }
@@ -89,11 +82,7 @@ namespace PhysicsEngineCore.Utils {
         public List<IGround> grounds {
             get {
                 lock(this.lockObject) {
-                    if(this.cacheGrounds == null){
-                        this.cacheGrounds = [..this._grounds];
-                    }
-
-                    return this.cacheGrounds;
+                    return [.. this._grounds];
                 }
             }
         }
@@ -104,11 +93,7 @@ namespace PhysicsEngineCore.Utils {
         public List<IEffect> effects {
             get {
                 lock(this.lockObject) {
-                    if(this.cacheEffects == null){
-                        this.cacheEffects = [..this._effects];
-                    }
-
-                    return this.cacheEffects;
+                    return [.. this._effects];
                 }
             }
         }
@@ -282,7 +267,6 @@ namespace PhysicsEngineCore.Utils {
                     }
 
                     this.cacheEntities = null;
-                    this.cacheObjects = null;
                 }
 
                 foreach (QueueGround ground in currentQueueGrounds) {
@@ -297,8 +281,6 @@ namespace PhysicsEngineCore.Utils {
                     } else if(ground.command == CommandType.Remove) {
                         this._grounds.RemoveAll(target => target.id == ground.target.id);
                     }
-
-                    this.cacheGrounds = null;
                 }
 
                 foreach(QueueEffect effect in currentQueueEffects) {
@@ -313,8 +295,6 @@ namespace PhysicsEngineCore.Utils {
                     } else if(effect.command == CommandType.Remove) {
                         this._effects.RemoveAll(target => target.id == effect.target.id);
                     }
-
-                    this.cacheEffects = null;
                 }
             }
         }
