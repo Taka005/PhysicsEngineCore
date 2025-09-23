@@ -359,6 +359,8 @@ namespace PhysicsEngineCore {
             if(this.scriptExecuteCount >= this.scriptExecuteInterval) {
                 try {
                     this.command.ExecuteMultiLine(this.updateScript);
+
+                    this._scriptErrorMessage = "";
                 } catch(Exception ex) {
                     this._scriptErrorMessage = ex.Message;
                 }finally{
@@ -405,27 +407,21 @@ namespace PhysicsEngineCore {
             Parallel.For(0, entities.Count, i => {
                 Entity entity = entities[i];
 
-                foreach (IGround ground in this.content.grounds)
-                {
+                foreach (IGround ground in this.content.grounds){
                     this.SolveGroundPosition(entity, ground);
                 }
 
-                for (int j = i + 1; j < entities.Count; j++)
-                {
+                for (int j = i + 1; j < entities.Count; j++){
                     Entity target = entities[j];
                     this.SolvePosition(entity, target);
                 }
 
-                foreach (Target target in entity.connection.targets)
-                {
+                foreach (Target target in entity.connection.targets){
                     Entity? targetEntity = this.GetEntity(target.entityId);
 
-                    if (targetEntity == null)
-                    {
+                    if (targetEntity == null){
                         entity.connection.Remove(target.entityId);
-                    }
-                    else
-                    {
+                    }else{
                         this.SolveConnection(entity, targetEntity, target.distance, target.stiffness);
                     }
                 }
@@ -1216,12 +1212,19 @@ namespace PhysicsEngineCore {
         }
     }
 
+    /// <summary>
+    /// 地面の端の種類
+    /// 円は中点も端と見なされます
+    /// </summary>
     public enum GroundEdgeType{
         Start,
         Middle,
         End
     }
 
+    /// <summary>
+    /// エフェクトの端の種類
+    /// </summary>
     public enum EffectEdgeType{
         Start,
         End
