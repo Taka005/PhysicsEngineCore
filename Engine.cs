@@ -282,6 +282,7 @@ namespace PhysicsEngineCore {
                 this.content.RemoveAllGrounds();
                 this.content.RemoveAllEffects();
                 this.ClearTrack();
+                this.updateScript = "";
             }
 
             this.content.Sync();
