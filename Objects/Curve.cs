@@ -253,13 +253,15 @@ namespace PhysicsEngineCore.Objects {
         public bool Equals(IGround target) {
             if(target is not Curve curve) return false;
 
-            return this.id == curve.id &&
-                   this.color == curve.color &&
-                   this.image?.name == curve.image?.name &&
-                   this.width == curve.width &&
-                   this.start.Equals(curve.start) && 
-                   this.middle.Equals(curve.middle) &&
-                   this.end.Equals(curve.end);
+            return (
+                this.id == curve.id &&
+                this.color == curve.color &&
+                this.image?.name == curve.image?.name &&
+                this.width == curve.width &&
+                this.start.Equals(curve.start) && 
+                this.middle.Equals(curve.middle) &&
+                this.end.Equals(curve.end)
+            );
         }
 
         /// <summary>

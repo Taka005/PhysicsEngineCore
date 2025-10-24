@@ -142,14 +142,16 @@ namespace PhysicsEngineCore.Objects {
         public bool Equals(IObject target) {
             if(target is not Circle circle) return false;
 
-            return this.id == circle.id &&
-                   this.diameter == circle.diameter &&
-                   this.color == circle.color &&
-                   this.image?.name == circle.image?.name &&
-                   this.position.Equals(circle.position) &&
-                   this.velocity.Equals(circle.velocity) &&
-                   this.mass == circle.mass &&
-                   this.stiffness == circle.stiffness;
+            return (
+                this.id == circle.id &&
+                this.diameter == circle.diameter &&
+                this.color == circle.color &&
+                this.image?.name == circle.image?.name &&
+                this.position.Equals(circle.position) &&
+                this.velocity.Equals(circle.velocity) &&
+                this.mass == circle.mass &&
+                this.stiffness == circle.stiffness
+            );
         }
 
         /// <summary>

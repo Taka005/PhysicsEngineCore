@@ -156,14 +156,16 @@ namespace PhysicsEngineCore.Objects {
         public bool Equals(IObject target) {
             if(target is not Triangle triangle) return false;
 
-            return this.id == triangle.id &&
-                   this.size == triangle.size &&
-                   this.color == triangle.color &&
-                   this.image?.name == triangle.image?.name &&
-                   this.position.Equals(triangle.position) &&
-                   this.velocity.Equals(triangle.velocity) &&
-                   this.mass == triangle.mass &&
-                   this.stiffness == triangle.stiffness;
+            return (
+                this.id == triangle.id &&
+                this.size == triangle.size &&
+                this.color == triangle.color &&
+                this.image?.name == triangle.image?.name &&
+                this.position.Equals(triangle.position) &&
+                this.velocity.Equals(triangle.velocity) &&
+                this.mass == triangle.mass &&
+                this.stiffness == triangle.stiffness
+            );
         }
 
         /// <summary>

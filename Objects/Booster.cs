@@ -111,12 +111,14 @@ namespace PhysicsEngineCore.Objects {
         public bool Equals(IEffect target) {
             if(target is not Booster booster) return false;
 
-            return this.id == booster.id &&
-                   this.color == booster.color &&
-                   this.image?.name == booster.image?.name &&
-                   this.start.Equals(booster.start) &&
-                   this.end.Equals(booster.end) &&
-                   this.velocity.Equals(booster.velocity);
+            return (
+                this.id == booster.id &&
+                this.color == booster.color &&
+                this.image?.name == booster.image?.name &&
+                this.start.Equals(booster.start) &&
+                this.end.Equals(booster.end) &&
+                this.velocity.Equals(booster.velocity)
+            );
         }
 
         /// <summary>

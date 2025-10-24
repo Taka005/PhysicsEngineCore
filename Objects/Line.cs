@@ -162,12 +162,14 @@ namespace PhysicsEngineCore.Objects {
         public bool Equals(IGround target) {
             if(target is not Line line) return false;
 
-            return this.id == line.id &&
-                   this.width == line.width &&
-                   this.color == line.color &&
-                   this.image?.name == line.image?.name &&
-                   this.start.Equals(line.start) &&
-                   this.end.Equals(line.end);
+            return (
+                this.id == line.id &&
+                this.width == line.width &&
+                this.color == line.color &&
+                this.image?.name == line.image?.name &&
+                this.start.Equals(line.start) &&
+                this.end.Equals(line.end)
+            );
         }
 
         /// <summary>

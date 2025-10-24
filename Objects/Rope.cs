@@ -152,14 +152,16 @@ namespace PhysicsEngineCore.Objects {
         public bool Equals(IObject target) {
             if(target is not Rope rope) return false;
 
-            return this.id == rope.id &&
-                   this.width == rope.width &&
-                   this.color == rope.color &&
-                   this.image?.name == rope.image?.name &&
-                   this.position.Equals(rope.position) &&
-                   this.velocity.Equals(rope.velocity) &&
-                   this.mass == rope.mass &&
-                   this.stiffness == rope.stiffness;
+            return (
+                this.id == rope.id &&
+                this.width == rope.width &&
+                this.color == rope.color &&
+                this.image?.name == rope.image?.name &&
+                this.position.Equals(rope.position) &&
+                this.velocity.Equals(rope.velocity) &&
+                this.mass == rope.mass &&
+                this.stiffness == rope.stiffness
+            );
         }
 
 

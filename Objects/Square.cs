@@ -146,14 +146,16 @@ namespace PhysicsEngineCore.Objects {
         public bool Equals(IObject target) {
             if(target is not Square square) return false;
 
-            return this.id == square.id &&
-                   this.size == square.size &&
-                   this.color == square.color &&
-                   this.image?.name == square.image?.name &&
-                   this.position.Equals(square.position) &&
-                   this.velocity.Equals(square.velocity) &&
-                   this.mass == square.mass &&
-                   this.stiffness == square.stiffness;
+            return (
+                this.id == square.id &&
+                this.size == square.size &&
+                this.color == square.color &&
+                this.image?.name == square.image?.name &&
+                this.position.Equals(square.position) &&
+                this.velocity.Equals(square.velocity) &&
+                this.mass == square.mass &&
+                this.stiffness == square.stiffness
+            );
         }
 
         /// <summary>
