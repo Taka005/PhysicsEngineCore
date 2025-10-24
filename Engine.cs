@@ -618,6 +618,7 @@ namespace PhysicsEngineCore {
                     ground.image = image;
                 }
             }
+
             return ground;
         }
 
