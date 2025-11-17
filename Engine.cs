@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Text.Json;
 using PhysicsEngineCore.Exceptions;
@@ -804,23 +805,31 @@ namespace PhysicsEngineCore {
         /// <param name="fileStream">マップの圧縮ストリーム</param>
         /// <exception cref="Exception">破損時にエラー</exception>
         public void ImportMap(FileStream fileStream) {
-            using(ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read)) {
+            using (ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Read)) {
 
                 ZipArchiveEntry? mapEntry = archive.GetEntry("map.json");
 
-                if(mapEntry == null) throw new ImportException("マップファイルデータが破損しています");
+                if (mapEntry == null) throw new ImportException("マップファイルデータが破損しています");
+
+                using (Stream mapStream = mapEntry.Open()) {
+                    using (StreamReader reader = new StreamReader(mapStream)) {
+                        string rawSaveData = reader.ReadToEnd();
+
+                        this.Import(rawSaveData);
+                    }
+                }
 
                 this.assets.Clear();
 
-                foreach(ZipArchiveEntry entry in archive.Entries) {
+                foreach (ZipArchiveEntry entry in archive.Entries) {
                     bool isInAssetsFolder = entry.FullName.StartsWith("assets/", StringComparison.OrdinalIgnoreCase) || entry.FullName.StartsWith("assets\\", StringComparison.OrdinalIgnoreCase);
 
-                    if(entry.FullName.EndsWith("/") || entry.FullName.EndsWith("\\")) continue;
+                    if (entry.FullName.EndsWith("/") || entry.FullName.EndsWith("\\")) continue;
 
                     bool isImageFile = AssetsManager.imageExtensions.Any(ext => entry.FullName.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
-                    if(isInAssetsFolder && isImageFile) {
-                        using(Stream entryStream = entry.Open()) {
-                            using(MemoryStream memoryStream = new MemoryStream()) {
+                    if (isInAssetsFolder && isImageFile){
+                        using (Stream entryStream = entry.Open()){
+                            using (MemoryStream memoryStream = new MemoryStream()){
                                 entryStream.CopyTo(memoryStream);
                                 memoryStream.Position = 0;
 
@@ -832,21 +841,12 @@ namespace PhysicsEngineCore {
 
                 ZipArchiveEntry? updateScriptEntry = archive.GetEntry("updateScript.txt");
 
-                if(updateScriptEntry != null) {
-                    using(Stream updateScriptStream = updateScriptEntry.Open()) {
-                        using(StreamReader reader = new StreamReader(updateScriptStream)) {
+                if (updateScriptEntry != null){
+                    using (Stream updateScriptStream = updateScriptEntry.Open()){
+                        using (StreamReader reader = new StreamReader(updateScriptStream)){
                             string rawSaveData = reader.ReadToEnd();
-
                             this.updateScript = rawSaveData;
                         }
-                    }
-                }
-
-                using(Stream mapStream = mapEntry.Open()) {
-                    using(StreamReader reader = new StreamReader(mapStream)) {
-                        string rawSaveData = reader.ReadToEnd();
-
-                        this.Import(rawSaveData);
                     }
                 }
             }
