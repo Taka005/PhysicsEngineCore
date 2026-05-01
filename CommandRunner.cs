@@ -206,6 +206,10 @@ namespace PhysicsEngineCore {
                         result = Math.Abs(value);
 
                         break;
+                    case "arctan":
+                        result = Math.Atan(value) * (180 / Math.PI);
+
+                        break;
                     case "sqrt":
                         if(value < 0) throw new CommandException("負の数の平方根は計算できません", "/func");
 
