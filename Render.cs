@@ -1,9 +1,9 @@
 ﻿using PhysicsEngineCore.Objects;
 using PhysicsEngineCore.Objects.Interfaces;
 using PhysicsEngineCore.Options;
+using PhysicsEngineCore.Renders;
 using PhysicsEngineCore.Utils;
 using PhysicsEngineCore.Views;
-using PhysicsEngineCore.Views.Interfaces;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
@@ -28,13 +28,8 @@ namespace PhysicsEngineCore {
         private int _frameCount = 0;
         private double _fps = 0;
         private readonly VisualCollection visuals;
-        private readonly Dictionary<string, DrawingVisual> objectVisuals = [];
-        private readonly Dictionary<string, DrawingVisual> groundVisuals = [];
-        private readonly Dictionary<string, DrawingVisual> effectVisuals = [];
-        private readonly Dictionary<string, DrawingVisual> trackingVisuals = [];
-        private readonly ObjectVisual objectVisual = new ObjectVisual();
-        private readonly GroundVisual groundVisual = new GroundVisual();
-        private readonly EffectVisual effectVisual = new EffectVisual();
+        private readonly DrawingVisual mainSceneVisual = new DrawingVisual();
+        private readonly DrawingVisual trackingVisual = new DrawingVisual();
         private readonly DebugVisual debugVisual = new DebugVisual();
         private readonly GridVisual gridVisual = new GridVisual();
         public Vector2 currentPosition = new Vector2(0, 0);
@@ -48,9 +43,8 @@ namespace PhysicsEngineCore {
 
             this.visuals = new VisualCollection(this) {
                 this.gridVisual,
-                this.groundVisual,
-                this.effectVisual,
-                this.objectVisual,
+                this.trackingVisual,
+                this.mainSceneVisual,
                 this.debugVisual
             };
 
@@ -58,8 +52,8 @@ namespace PhysicsEngineCore {
             this.translateTransform = new TranslateTransform(this.offsetX, this.offsetY);
             this.scaleTransform = new ScaleTransform(this.scale, this.scale);
 
-            transformGroup.Children.Add(this.scaleTransform);
-            transformGroup.Children.Add(this.translateTransform);
+            this.transformGroup.Children.Add(this.scaleTransform);
+            this.transformGroup.Children.Add(this.translateTransform);
 
             this.stopwatch.Start();
         }
@@ -132,8 +126,6 @@ namespace PhysicsEngineCore {
             }
             set {
                 this._isDisplayVector = value;
-
-                this.objectVisual.isDrawVector = value;
             }
         }
 
@@ -163,9 +155,6 @@ namespace PhysicsEngineCore {
             set {
                 this._isDebugMode = value;
 
-                this.groundVisual.isDrawEdge = value;
-                this.effectVisual.isDrawEdge = value;
-
                 if(!value){
                     this.debugVisual.Clear();
                 }
@@ -181,152 +170,109 @@ namespace PhysicsEngineCore {
             }
         }
 
-        /// <summary>
-        /// 基本的なレンダリングの処理を行います
-        /// このメソッドはUIスレッドで呼び出される必要があります
-        /// </summary>
-        public void Update(int objectCount,int groundCount, int entityCount) {
-            foreach(DrawingVisual visual in this.visuals) {
-                if(visual is DebugVisual || visual is GridVisual) continue;
 
-                visual.Transform = this.transformGroup;
+        /// <summary>
+        /// 物体の描画を更新します
+        /// UIスレッドで呼び出す必要があります
+        /// </summary>
+        /// <param name="objects">物体のリスト</param>
+        /// <param name="grounds">地面のリスト</param>
+        /// <param name="effects">エフェクトのリスト</param>
+        public void Update(List<IObject> objects, List<IGround> grounds, List<IEffect> effects){
+            UpdateFps();
+
+            using (DrawingContext context = this.mainSceneVisual.RenderOpen()){
+                context.PushTransform(this.transformGroup);
+
+                DrawGrounds(context, grounds);
+                DrawEffects(context, effects);
+                DrawObjects(context, objects);
+
+                context.Pop();
             }
 
+            if (this.isDebugMode){
+                this.debugVisual.Draw(this.fps, this.currentPosition, objects.Count, grounds.Count, effects.Count);
+            }
+
+            if (this.isDisplayGrid){
+                this.gridVisual.Draw(this.gridInterval, this.scale, this.offsetX, this.offsetY);
+            }
+        }
+        
+        /// <summary>
+        /// 追跡中のオブジェクトの描画を更新します
+        /// UIスレッドで呼び出す必要があります
+        /// </summary>
+        /// <param name="tracks">追跡中のオブジェクトのリスト</param>
+        public void DrawTracking(List<IObject> tracks){
+            using (DrawingContext context = this.trackingVisual.RenderOpen()){
+                context.PushTransform(this.transformGroup);
+                context.PushOpacity(0.2);
+
+                DrawObjects(context, tracks);
+
+                context.Pop();
+                context.Pop();
+            }
+        }
+
+        private void DrawObjects(DrawingContext context,List<IObject> objects){
+            foreach (IObject obj in objects){
+                if(obj is Circle circle){
+                    ObjectRender.DrawCircle(context, circle);
+                } else if(obj is Square square){
+                    ObjectRender.DrawSquare(context, square);
+                } else if(obj is Triangle triangle){
+                    ObjectRender.DrawTriangle(context, triangle);
+                } else if(obj is Rope rope){
+                    ObjectRender.DrawRope(context, rope);
+                }
+
+                if (this.isDisplayVector){
+                    ObjectRender.DrawVector(context, obj);
+                }
+            }
+        }
+
+        private void DrawGrounds(DrawingContext context, List<IGround> grounds){
+            foreach(IGround ground in grounds) {
+                if(ground is Line line) {
+                    GroundRender.DrawLine(context, line);
+                } else if(ground is Curve curve) {
+                    GroundRender.DrawCurve(context, curve);
+                }
+
+                if (this.isDebugMode){
+                    GroundRender.DrawEdge(context, ground);
+                }
+            }
+        }
+
+        private void DrawEffects(DrawingContext context, List<IEffect> effects){
+            foreach(IEffect effect in effects) {
+                if(effect is Booster booster) {
+                    EffectRender.DrawBooster(context, booster);
+                }
+
+                if (this.isDebugMode){
+                    EffectRender.DrawEdge(context, effect);
+                }
+            }
+        }
+
+        /// <summary>
+        /// FPSを更新します
+        /// </summary>
+        private void UpdateFps(){
             TimeSpan currentTime = this.stopwatch.Elapsed;
 
-             this._frameCount++;
+            this._frameCount++;
 
-            if((currentTime - this._lastFpsUpdateTime).TotalSeconds >= 1){
+            if ((currentTime - this._lastFpsUpdateTime).TotalSeconds >= 1){
                 this._fps = _frameCount / (currentTime - this._lastFpsUpdateTime).TotalSeconds;
                 this._lastFpsUpdateTime = currentTime;
                 this._frameCount = 0;
-            }
-
-            if(this.isDebugMode) {
-                this.debugVisual.Draw(this.fps,this.currentPosition,objectCount,groundCount,entityCount);
-            }
-
-            if(this.isDisplayGrid) {
-                this.gridVisual.Draw(this.gridInterval,this.scale,this.offsetX,this.offsetY);
-            }
-        }
-
-        /// <summary>
-        /// 物理エンジンのオブジェクトデータを受け取り、描画を更新します
-        /// このメソッドはUIスレッドで呼び出される必要があります
-        /// </summary>
-        /// <param name="objects">描画するオブジェクトのリスト</param>
-        public void DrawObject(List<IObject> objects) {
-            HashSet<string> currentObjectIds = [.. objects.Select(o => o.trackingId)];
-            List<string>? visualsToRemove = [.. this.objectVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];
-
-            foreach(string id in visualsToRemove) {
-                this.objectVisuals.Remove(id);
-            }
-
-            List<IObjectVisual> objectVisuals = [.. objects.Where(obj => this.objectVisuals.ContainsKey(obj.trackingId)).Select(obj => this.objectVisuals[obj.trackingId]).OfType<IObjectVisual>()];
-
-            this.objectVisual.Draw(objectVisuals);
-
-            foreach(IObject obj in objects) {
-                if(!this.objectVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
-                    DrawingVisual? newVisual = this.CreateObjectVisual(obj);
-
-                    if(newVisual != null) {
-                        this.objectVisuals.Add(obj.trackingId, newVisual);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 物理エンジンのオブジェクトデータを受け取り、描画を更新します
-        /// このメソッドはUIスレッドで呼び出される必要があります
-        /// </summary>
-        /// <param name="grounds">描画する地面のリスト</param>
-        public void DrawGround(List<IGround> grounds) {
-            HashSet<string> currentGrounds = [.. grounds.Select(ground => ground.trackingId)];
-            List<string>? visualsToRemove = [.. this.groundVisuals.Keys.Where(id => !currentGrounds.Contains(id))];
-
-            foreach(string id in visualsToRemove) {
-                this.groundVisuals.Remove(id);
-            }
-            
-            List<IGroundVisual> groundVisuals = [.. grounds.Where(ground => this.groundVisuals.ContainsKey(ground.trackingId)).Select(ground=> this.groundVisuals[ground.trackingId]).OfType<IGroundVisual>()];
-
-            this.groundVisual.Draw(groundVisuals);
-
-            foreach(IGround ground in grounds) {
-                if(!this.groundVisuals.TryGetValue(ground.trackingId, out DrawingVisual? visual)) {
-                    DrawingVisual? newVisual = this.CreateGroundVisual(ground);
-
-                    if(newVisual != null) {
-                        newVisual.CacheMode = new BitmapCache();
-                        this.groundVisuals.Add(ground.trackingId, newVisual);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 物理エンジンのエフェクトデータを受け取り、描画を更新します
-        /// このメソッドはUIスレッドで呼び出される必要があります
-        /// </summary>
-        /// <param name="effects">描画する地面のエフェクト</param>
-        public void DrawEffect(List<IEffect> effects) {
-            HashSet<string> currentEffectIds = [.. effects.Select(obj => obj.trackingId)];
-            List<string>? visualsToRemove = [.. this.effectVisuals.Keys.Where(id => !currentEffectIds.Contains(id))];
-
-            foreach(string id in visualsToRemove) {
-                this.effectVisuals.Remove(id);
-            }
-
-            List<IEffectVisual> effectVisuals = [.. effects.Where(effect => this.effectVisuals.ContainsKey(effect.trackingId)).Select(effect=> this.effectVisuals[effect.trackingId]).OfType<IEffectVisual>()];
-
-            this.effectVisual.Draw(effectVisuals);
-
-            foreach(IEffect effect in effects) {
-                if(!this.effectVisuals.TryGetValue(effect.trackingId, out DrawingVisual? visual)) {
-                    DrawingVisual? newVisual = this.CreateEffectVisual(effect);
-
-                    if(newVisual != null) {
-                        newVisual.CacheMode = new BitmapCache();
-                        this.effectVisuals.Add(effect.trackingId, newVisual);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 物理エンジンのオブジェクトデータを受け取り、描画します
-        /// このメソッドはUIスレッドで呼び出される必要があります
-        /// </summary>
-        /// <param name="tracks">描画するオブジェクトのリスト</param>
-        public void DrawTracking(List<IObject> tracks) {
-            HashSet<string> currentObjectIds = [.. tracks.Select(o => o.trackingId)];
-            List<string>? visualsToRemove = [.. this.trackingVisuals.Keys.Where(id => !currentObjectIds.Contains(id))];
-
-            foreach(string id in visualsToRemove) {
-                this.visuals.Remove(this.trackingVisuals[id]);
-                this.trackingVisuals.Remove(id);
-            }
-
-            foreach(IObject obj in tracks) {
-                if(!this.trackingVisuals.TryGetValue(obj.trackingId, out DrawingVisual? visual)) {
-                    DrawingVisual? newVisual = this.CreateObjectVisual(obj);
-
-                    if(newVisual != null) {
-                        this.trackingVisuals.Add(obj.trackingId, newVisual);
-                        this.visuals.Add(newVisual);
-                        newVisual.Transform = this.transformGroup;
-                        newVisual.CacheMode = new BitmapCache();
-
-                        if(newVisual is IObjectVisual trackingVisual) {
-                            trackingVisual.opacity = 0.2f;
-                            trackingVisual.DrawOwn();
-                        }
-                    }
-                }
             }
         }
 
@@ -334,54 +280,7 @@ namespace PhysicsEngineCore {
         /// 追跡中のオブジェクトの描画をクリアします
         /// </summary>
         public void ClearTracking() {
-            List<string>? visualsToRemove = [.. this.trackingVisuals.Keys];
-
-            foreach(string id in visualsToRemove) {
-                this.visuals.Remove(this.trackingVisuals[id]);
-                this.trackingVisuals.Remove(id);
-            }
-        }
-
-        /// <summary>
-        /// オブジェクトの種類に基づいて適切なDrawingVisualを作成
-        /// </summary>
-        private DrawingVisual? CreateObjectVisual(IObject obj) {
-            if(obj is Circle circle) {
-                return new CircleVisual(circle);
-            } else if(obj is Rope rope) {
-                return new RopeVisual(rope);
-            } else if(obj is Square square) {
-                return new SquareVisual(square);
-            } else if(obj is Triangle triangle) {
-                return new TriangleVisual(triangle);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// 地面の種類に基づいて適切なDrawingVisualを作成
-        /// </summary>
-        private DrawingVisual? CreateGroundVisual(IGround obj) {
-            if(obj is Line line) {
-                return new LineVisual(line);
-            } else if(obj is Curve curve) {
-                return new CurveVisual(curve);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// エフェクトの種類に基づいて適切なDrawingVisualを作成
-        /// </summary>
-        /// <returns></returns>
-        private DrawingVisual? CreateEffectVisual(IEffect effect) {
-            if(effect is Booster booster) {
-                return new BoosterVisual(booster);
-            }
-
-            return null;
+            this.trackingVisual.RenderOpen().Close();
         }
 
         /// <summary>
