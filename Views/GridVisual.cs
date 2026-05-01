@@ -6,8 +6,7 @@ namespace PhysicsEngineCore.Views {
         private readonly Pen pen = new Pen(Brushes.LightGray,0.5);
 
         public void Clear() {
-            DrawingContext context = this.RenderOpen();
-            context.Close();
+            this.RenderOpen().Close();
         }
 
         public void Draw(double gridInterval,double scale,double offsetX,double offsetY) {

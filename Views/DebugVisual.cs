@@ -5,8 +5,7 @@ using PhysicsEngineCore.Utils;
 namespace PhysicsEngineCore.Views {
     public class DebugVisual : DrawingVisual{
         public void Clear() {
-            DrawingContext context = this.RenderOpen();
-            context.Close();
+            this.RenderOpen().Close();
         }
 
         public void Draw(double fps,Vector2 currentPosition,int objectCount,int groundCount,int entityCount) {
